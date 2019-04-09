@@ -1,5 +1,4 @@
 
-
 [![N|Solid](https://i2.wp.com/www.kaldata.com/wp-content/uploads/2018/06/Telerik_Academy_Logo2x.png)](https://telerikacademy.com)
 
 [![N|Solid](https://fitsmallbusiness.com/wp-content/uploads/2018/11/Paysafe-logo.gif)](https://www.paysafe.com/na-en/)
@@ -35,20 +34,20 @@ Your project should meet the following requirements (these requirements will be 
 
 -	Use **IntelliJ IDEA**
 -	For the web application (UI) you can choose from two tasks
---	Use **SpringBoot** Framework
---	You may use **Thymeleaf** template engine for generating the UI
--- Research and build Single Page Application to serve the UI with JavaScript library of your choice. Please, keep in mind that we have not covered this in our sessions, so it is totally up to you how to implement the authentication and other SPA specifics that depend on the library you choose.
+ -	Use **SpringBoot** Framework
+ -	You may use **Thymeleaf** template engine for generating the UI
+ - Research and build Single Page Application to serve the UI with JavaScript library of your choice. Please, keep in mind that we have not covered this in our sessions, so it is totally up to you how to implement the authentication and other SPA specifics that depend on the library you choose.
 -	Use **MySQL (MariaDB)** as database back-end 
---	Use **Hibernate** to access your database
---	Using **repositories and/or service layer** is a must
+ -	Use **Hibernate** to access your database
+ -	Using **repositories and/or service layer** is a must
 And of course Dillinger itself is open source with a [public repository][dill]
  on GitHub.
 -	Create beautiful and interactive web UI
---	You may use **Bootstrap** or **Materialize**
---	You may change the standard theme and modify it to apply own web design and visual styles 
+ -	You may use **Bootstrap** or **Materialize**
+ -	You may change the standard theme and modify it to apply own web design and visual styles 
 -	Apply **error handling** and **data validation** to avoid crashes when invalid data is entered (both client-side and server-side) 
 -	Use **Spring Security** for managing users and roles
---	Your registered users should have at least one of the two roles: **customer** and **administrator**
+ -	Your registered users should have at least one of the two roles: **customer** and **administrator**
 -	Create **unit tests** for your "business" functionality following the best practices for writing unit tests (**at least 80% code coverage**) 
 -	Use **Inversion of Control** principle and **Dependency Injection** technique
 -	Follow **OOP** best practices and **SOLID** principles
