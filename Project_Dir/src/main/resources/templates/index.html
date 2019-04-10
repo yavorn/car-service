@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<meta charset="UTF-8">
 	<title>Home Page</title>
@@ -10,11 +11,11 @@
 <h1>Home Page</h1>
 
 <p>Hello to the home page!!!</p>
-<p>
-	<a th:href="@{/admin}">Admin Portal</a>
-</p>
 <form th:action="@{/logout}" method="post">
 	<input type="submit" value="Logout">
 </form>
+<p sec:authorize="hasRole('ROLE_ADMIN')">
+	<a th:href="@{/admin}">Admin Portal</a>
+</p>
 </body>
 </html>
