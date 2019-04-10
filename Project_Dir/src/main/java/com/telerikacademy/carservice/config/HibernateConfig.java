@@ -1,4 +1,4 @@
-package com.team5.beertag.config;
+package package com.telerikacademy.carservice.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +29,7 @@ public class HibernateConfig {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("com.team6.carservice.models");
+        sessionFactory.setPackagesToScan("com.telerikacademy.carservice.models");
         sessionFactory.setHibernateProperties(hibernateProperties());
 
         return sessionFactory;
