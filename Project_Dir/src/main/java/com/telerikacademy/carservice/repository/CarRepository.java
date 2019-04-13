@@ -1,12 +1,14 @@
 package com.telerikacademy.carservice.repository;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Scanner;
+import com.telerikacademy.carservice.models.Models;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public class CarRepository {
+
+@Repository
+public interface CarRepository extends JpaRepository<Models, Integer> {
+
+    Models findModelsByModelID(Long id);
 
 
 }

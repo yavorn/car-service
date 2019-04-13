@@ -16,7 +16,7 @@ public class Models {
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     @Column(name = "model_id")
-    private int modelID;
+    private Long modelID;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "make_id")
@@ -34,11 +34,11 @@ public class Models {
         this.modelName = modelName;
     }
 
-    public int getModelID() {
+    public Long getModelID() {
         return modelID;
     }
 
-    public void setModelID(int modelID) {
+    public void setModelID(Long modelID) {
         this.modelID = modelID;
     }
 

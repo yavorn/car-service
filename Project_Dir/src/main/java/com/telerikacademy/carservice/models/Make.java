@@ -16,7 +16,7 @@ public class Make {
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     @Column(name = "make_id")
-    private int makeID;
+    private Long makeID;
 
     @Column(name = "make_name")
     @Size(min = 1, max = 30, message = "Incorrect size for make name.")
@@ -30,11 +30,11 @@ public class Make {
         this.makeName = makeName;
     }
 
-    public int getMakeID() {
+    public Long getMakeID() {
         return makeID;
     }
 
-    public void setMakeID(int makeID) {
+    public void setMakeID(Long makeID) {
         this.makeID = makeID;
     }
 
