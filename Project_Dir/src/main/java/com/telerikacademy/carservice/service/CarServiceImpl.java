@@ -5,6 +5,8 @@ import com.telerikacademy.carservice.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CarServiceImpl implements CarService {
 
@@ -23,5 +25,11 @@ public class CarServiceImpl implements CarService {
         model  = carRepository.findModelsByModelID(id);
 
         return model ;
+    }
+
+    @Override
+    public List<Models> getAllModels() {
+
+        return carRepository.findAll();
     }
 }

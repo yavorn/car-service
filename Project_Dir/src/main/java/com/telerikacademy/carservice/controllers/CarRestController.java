@@ -25,7 +25,7 @@ private CarService carService;
         this.carService = carService;
     }
 
-    @GetMapping("/models/{id}")
+    @GetMapping("/model/{id}")
     public Models getModelByID(@PathVariable Long id){
     Models model = carService.getById(id);
     return model;

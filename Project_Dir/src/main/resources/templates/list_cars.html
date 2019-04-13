@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>List of Cars</title>
+</head>
+<body>
+
+
+
+<tr th:each="model : ${carModels}">
+    <p>
+    <td th:text="${model.getMake().getMakeName()}"> </td>
+    <td th:text="${model.getModelName()}"> </td>
+</p>
+
+
+</tr>
+
+</body>
+</html>
