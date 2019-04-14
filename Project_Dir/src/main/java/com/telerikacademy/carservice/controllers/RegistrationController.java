@@ -25,13 +25,19 @@ public class RegistrationController {
     @GetMapping("/register")
     public String showRegister(Model model) {
         model.addAttribute("user", new User());
-        return "register";
+        return "register-customer";
     }
 
     @PostMapping("/register")
     public String registerCustomer(@ModelAttribute User user) {
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("USER");
         return getUser(user, authorities);
+    }
+
+    @GetMapping("register-admin")
+    public String showAdminRegister(Model model) {
+        model.addAttribute("admin", new User());
+        return "register-admin";
     }
 
     @PostMapping("/register-admin")
