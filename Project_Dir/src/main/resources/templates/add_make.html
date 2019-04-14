@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Add new Make</title>
+</head>
+<body>
+
+
+<form action="#" th:action="@{/cars/add_make}" th:object="${make}" method="post">
+    <ul>
+        <li th:errors="*{makeName}" style="color: red"/>
+    </ul>
+    <table>
+        <tr>
+            <td><label th:text="#{label.makelName}">Make Name</label></td>
+            <td><input type="text" th:field="*{makeName}"/></td>
+        </tr>
+
+        <tr>
+            <td><input type="submit" value="Save"/></td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

@@ -1,13 +1,14 @@
 package com.telerikacademy.carservice.controllers;
 
+import com.telerikacademy.carservice.models.Make;
 import com.telerikacademy.carservice.models.Models;
 import com.telerikacademy.carservice.service.CarService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -15,7 +16,7 @@ import java.io.InputStreamReader;
 import java.util.Scanner;
 
 @Controller
-@RequestMapping("/car")
+@RequestMapping("/cars")
 public class CarController {
 
     private CarService carService;
@@ -39,4 +40,19 @@ public class CarController {
 
     }
 
+    @GetMapping("/add_make")
+    public String addMakeForm(Model model) {
+
+        model.addAttribute("make", new Make());
+        return "add_make";
+    }
+    @PostMapping("/add_make")
+    public String addBeer(@Valid @ModelAttribute Make make , BindingResult bindingErrors) {
+
+        if(bindingErrors.hasErrors()) {
+            return "add_beer";
+        }
+        carService.addMake(make);
+        return "redirect:/cars";
+    }
 }
