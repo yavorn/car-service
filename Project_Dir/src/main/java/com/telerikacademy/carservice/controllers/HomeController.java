@@ -15,4 +15,9 @@ public class HomeController {
     public String showAdminPortal() {
         return "admin";
     }
+
+    @GetMapping("/access-denied")
+    public String showAccessDenied() {
+        return "access-denied";
+    }
 }
