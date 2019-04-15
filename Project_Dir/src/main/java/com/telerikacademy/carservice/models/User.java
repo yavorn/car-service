@@ -8,7 +8,7 @@ public class User {
     @Size(min = 2, max = 15, message = "Username must be between 2 and 15 characters")
     private String username;
 
-    @NotNull(message = "Username is mandatory.")
+    @NotNull(message = "Password is mandatory.")
     @Size(min = 5, max = 10, message = "Password must be between 5 and 10 characters")
     private String password;
 
