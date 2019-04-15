@@ -17,6 +17,11 @@ public class ProcedureServiceImpl implements ProcedureService {
         return procedureRepository.findAll();
     }
 
+    public Procedure getProcedureByID(int procedureID) {
+
+        return procedureRepository.findProcedureByProcedureID(procedureID);
+    }
+
     public void addProcedure(Procedure procedure) {
         procedureRepository.save(procedure);
     }
