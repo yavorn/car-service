@@ -1,4 +1,4 @@
-package com.telerikacademy.carservice.service;
+package com.telerikacademy.carservice.models.contracts;
 
 import com.telerikacademy.carservice.models.Customer;
 
