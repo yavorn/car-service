@@ -12,6 +12,11 @@
 <h2>List of All Cars</h2>
 </p>
 
+p>
+<a th:href="@{add-car}" th:text="#{label.addCar}">Add Beer</a>
+
+</p>
+
 <tr th:each="model : ${carModels}">
     <p>
     <td th:text="${model.getMake().getMakeName()}"> </td>

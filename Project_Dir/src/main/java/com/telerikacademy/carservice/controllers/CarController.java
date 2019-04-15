@@ -9,11 +9,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Scanner;
 
 @Controller
 @RequestMapping("/cars")
@@ -36,23 +31,41 @@ public class CarController {
     @GetMapping
     public String listCars(Model model){
         model.addAttribute("carModels", carService.getAllModels());
-        return "list_cars";
+        return "list-cars";
 
     }
 
-    @GetMapping("/add_make")
+    @GetMapping("/add-make")
     public String addMakeForm(Model model) {
 
         model.addAttribute("make", new Make());
-        return "add_make";
+        return "add-make";
     }
-    @PostMapping("/add_make")
-    public String addBeer(@Valid @ModelAttribute Make make , BindingResult bindingErrors) {
+    @PostMapping("/add-make")
+    public String addMake(@Valid @ModelAttribute Make make , BindingResult bindingErrors) {
 
         if(bindingErrors.hasErrors()) {
-            return "add_beer";
+            return "add-make";
         }
         carService.addMake(make);
+        return "redirect:/cars";
+    }
+
+
+    @GetMapping("/add-car")
+    public String addModelForm(Model model) {
+
+        model.addAttribute("car", new Models());
+        model.addAttribute("allMakes", carService.getAllMakes());
+        return "add-car";
+    }
+    @PostMapping("/add-car")
+    public String addModel(@Valid @ModelAttribute Models models , BindingResult bindingErrors) {
+
+        if(bindingErrors.hasErrors()) {
+            return "add-car";
+        }
+        carService.addModel(models);
         return "redirect:/cars";
     }
 }
