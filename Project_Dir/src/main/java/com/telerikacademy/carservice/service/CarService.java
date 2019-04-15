@@ -6,8 +6,8 @@ import com.telerikacademy.carservice.models.Models;
 import java.util.List;
 
 public interface CarService {
-    void addMake(Make make);
-    void addModel(Models model);
+    Make addMake(Make make);
+    Models addModel(Models model);
 
     Models getById(Long id);
     List<Models> getAllModels();

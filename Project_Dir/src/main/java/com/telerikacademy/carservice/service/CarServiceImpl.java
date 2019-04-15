@@ -22,14 +22,15 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void addMake(Make make) {
+    public Make addMake(Make make) {
 
-         makeRepository.save(make);
+        return makeRepository.save(make);
     }
 
     @Override
-    public void addModel(Models model) {
+    public Models addModel(Models model) {
 
+        return modelsRepository.save(model);
     }
 
     @Override

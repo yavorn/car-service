@@ -4,10 +4,7 @@ import com.telerikacademy.carservice.models.Make;
 import com.telerikacademy.carservice.models.Models;
 import com.telerikacademy.carservice.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -44,6 +41,12 @@ private CarService carService;
         Models model = carService.getById(id);
         return model;
     }
+
+    @PostMapping("/addNewCar")
+    public Models addNewBeer(@RequestBody Models model){
+        return carService.addModel(model);
+    }
+
 
 
 }
