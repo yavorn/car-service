@@ -68,4 +68,11 @@ public class CarController {
         carService.addModel(models);
         return "redirect:/cars";
     }
+
+    @GetMapping("/delete_model/{id}")
+    public String deleteModelByID (@PathVariable Long id) {
+
+        carService.deleteModel(id);
+        return "redirect:/cars";
+    }
 }
