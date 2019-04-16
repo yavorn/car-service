@@ -2,18 +2,32 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>New User Registration</title>
+	<title>New Customer Registration</title>
 </head>
 <body>
-<h1>Register New User</h1>
-<form th:action="@{/register}" th:object="${user}" method="post">
-<p>
-	Username: <input type="text" th:field="*{username}">
-</p>
-<p>
-	Password: <input type="text" th:field="*{password}">
-</p>
-<input type="submit" value="Send">
+<h1>Register New Customer</h1>
+<form th:action="@{/register-customer}" th:object="${customer}" method="post">
+	<p>
+		Username: <label>
+		<input type="text" th:field="*{email}">
+	</label>
+	</p>
+	<p>
+		Password: <label>
+		<input type="text" th:field="*{customerPassword}">
+	</label>
+	</p>
+	<p>
+		Phone: <label>
+		<input type="text" th:field="*{phone}">
+	</label>
+	</p>
+	<p>
+		Name: <label>
+		<input type="text" th:field="*{name}">
+	</label>
+	</p>
+	<input type="submit" value="Send">
 </form>
 </body>
 </html>

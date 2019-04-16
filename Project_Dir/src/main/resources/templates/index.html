@@ -9,10 +9,14 @@
 <body>
 <h1>Home Page</h1>
 <p>Welcome to the home page!!!</p>
+<p>
+	User:<span sec:authentication="name"/><br/>
+	Role(s):<span sec:authentication="principal.authorities"/>
+</p>
 <form th:action="@{/logout}" method="post">
 	<input type="submit" value="Logout">
 </form>
-<p sec:authorize="hasRole('ROLE_ADMIN')">
+<p sec:authorize="hasRole('ADMIN')">
 	<a th:href="@{/admin}">Admin Portal</a>
 </p>
 </body>

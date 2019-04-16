@@ -1,6 +1,9 @@
 package com.telerikacademy.carservice.controllers;
 
+import com.telerikacademy.carservice.exceptions.UsernameExistsException;
+import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.User;
+import com.telerikacademy.carservice.models.contracts.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -16,22 +19,24 @@ import java.util.List;
 @Controller
 public class RegistrationController {
     private UserDetailsManager userDetailsManager;
+    private CustomerService customerService;
 
     @Autowired
-    public RegistrationController(UserDetailsManager userDetailsManager) {
+    public RegistrationController(UserDetailsManager userDetailsManager, CustomerService customerService) {
         this.userDetailsManager = userDetailsManager;
+        this.customerService = customerService;
     }
 
-    @GetMapping("/register")
+    @GetMapping("/register-customer")
     public String showRegister(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("customer", new Customer());
         return "register-customer";
     }
 
-    @PostMapping("/register")
-    public String registerCustomer(@ModelAttribute User user) {
-        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("USER");
-        return getUser(user, authorities);
+    @PostMapping("/register-customer")
+    public String registerNewCustomer(@ModelAttribute Customer customer) throws UsernameExistsException {
+        customerService.registerNewUserAccount(customer);
+        return "register-confirmation";
     }
 
     @GetMapping("register-admin")
