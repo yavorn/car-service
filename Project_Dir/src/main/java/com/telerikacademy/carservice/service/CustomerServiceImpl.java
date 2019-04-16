@@ -32,7 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer registerNewUserAccount(@ModelAttribute Customer customer) throws UsernameExistsException {
        Customer existingCustomer = customerRepository.findCustomerByEmail(customer.getEmail());
-        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("USER");
+        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
 
        if (existingCustomer != null) {
            throw new UsernameExistsException(String.format("User with username %s already exists", customer.getEmail()));
