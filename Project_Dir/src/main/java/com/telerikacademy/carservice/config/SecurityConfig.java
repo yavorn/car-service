@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
@@ -39,6 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+
         http.authorizeRequests()
                 .antMatchers("/").hasRole("USER")
                 .antMatchers("/admin", "/register-customer", "register-admin").hasRole("ADMIN")
@@ -47,16 +50,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/authenticateUser")
+                .defaultSuccessUrl("/", true)
                 .permitAll()
-            .and()
-            .exceptionHandling().accessDeniedPage("/access-denied");
+                .and()
+                .logout()
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()
+                .and()
+                .exceptionHandling()
+                .accessDeniedPage("/access-denied")
+                .and()
+                .httpBasic();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.jdbcAuthentication().dataSource(securityDataSource);
-        auth.inMemoryAuthentication()
-                .withUser(User.withUsername("admin").password("{noop}pass1").roles("USER", "ADMIN"))
-                .withUser(User.withUsername("gosho").password("{noop}pass1").roles("USER"));
+        auth.jdbcAuthentication().dataSource(securityDataSource);
     }
 }
