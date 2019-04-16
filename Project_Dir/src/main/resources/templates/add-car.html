@@ -9,7 +9,7 @@
 <body>
 
 
-<form action="#" th:action="@{/cars/add-car}" th:object="${car}" method="post">
+<form action="#" th:action="@{/add-car}" th:object="${car}" method="post">
     <ul>
         <li th:errors="*{make.makeName}" style="color: red"/>
         <li th:errors="*{modelName}" style="color: red"/>
@@ -23,7 +23,7 @@
             <td>
                 <div class="form-group">
                     <select th:field="*{make}" class="form-control" id="style">
-                        <!--<option th:value="NONE">-&#45;&#45; Select -&#45;&#45;</option>-->
+                        <option th:text="NONE" th:value="0">--- Select ---</option>
                         <option th:each="make : ${allMakes}"
                                 th:value="${make.getMakeID()}"
                                 th:text="${make.getMakeName()}">Wireframe

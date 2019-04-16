@@ -43,7 +43,7 @@ private CarService carService;
     }
 
     @PostMapping("/addNewCar")
-    public Models addNewBeer(@RequestBody Models model){
+    public Models addNewModel(@RequestBody Models model){
         return carService.addModel(model);
     }
 
