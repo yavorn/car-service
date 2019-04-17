@@ -63,8 +63,13 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void deleteAllByMake_MakeID(Long id) {
-        modelsRepository.deleteModelsByMake_MakeID(id);
+    public void deleteAllModelsByMakeID(List<Models> modelsToDelete) {
+
+        for (Models model :  modelsToDelete ) {
+
+            modelsRepository.deleteById(model.getModelID());
+        }
+
     }
 
     public void deleteModel(Long id) {
@@ -73,5 +78,10 @@ public class CarServiceImpl implements CarService {
 //            throw new ModelNotFoundException(id);
 //        }
         modelsRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Models> findModelsByMakeID(Long id) {
+        return modelsRepository.findModelsByMake_MakeID(id);
     }
 }

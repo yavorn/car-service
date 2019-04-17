@@ -35,6 +35,13 @@ public class CarController {
 
     }
 
+    @GetMapping("/models-from-make/{id}")
+    public String listModelsFromMake(Model model, @PathVariable Long id){
+        model.addAttribute("modelsFromMake", carService.findModelsByMakeID(id));
+        return "list-models-from-make";
+
+    }
+
     @GetMapping("/add-make")
     public String addMakeForm(Model model) {
 
@@ -71,7 +78,7 @@ public class CarController {
 
     @GetMapping("/delete_make/{id}")
     public String deleteMakeByID (@PathVariable Long id) {
-
+        carService.deleteAllModelsByMakeID(carService.findModelsByMakeID(id));
         carService.deleteMake(id);
         return "redirect:/cars";
     }
@@ -79,7 +86,8 @@ public class CarController {
 //    @GetMapping("/delete_models_by_makeID/{id}")
 //    public String deleteModelsByMakeID (@PathVariable Long id) {
 //
-//        carService.deleteAllByMake_MakeID(id);
+//        carService.deleteAllModelsByMakeID(carService.findModelsByMakeID(id));
+//
 //        return "redirect:/cars";
 //    }
 
