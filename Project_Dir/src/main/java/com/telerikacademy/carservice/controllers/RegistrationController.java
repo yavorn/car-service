@@ -3,7 +3,6 @@ package com.telerikacademy.carservice.controllers;
 import com.telerikacademy.carservice.exceptions.UsernameExistsException;
 import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerDto;
-import com.telerikacademy.carservice.models.User;
 import com.telerikacademy.carservice.service.contracts.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,24 +35,21 @@ public class RegistrationController {
 
     @PostMapping("/register-customer")
     public String registerNewCustomer(@ModelAttribute CustomerDto customerDto) throws UsernameExistsException {
-        customerService.addCustomer(customerDto);
+        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
+        customerService.addCustomer(customerDto, authorities);
         return "register-confirmation";
     }
 
     @GetMapping("register-admin")
     public String showAdminRegister(Model model) {
-        model.addAttribute("admin", new User());
+        model.addAttribute("admin", new Customer());
         return "register-admin";
     }
 
     @PostMapping("/register-admin")
-    public String registerAdministrator(@ModelAttribute User user) {
-        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("USER", "ADMIN");
-        org.springframework.security.core.userdetails.User newUser = new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                "{noop}" + user.getPassword(),
-                authorities);
-        userDetailsManager.createUser(newUser);
+    public String registerAdministrator(@ModelAttribute CustomerDto customerDto) throws UsernameExistsException {
+        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
+        customerService.addAdmin(customerDto, authorities);
         return "register-confirmation";
     }
 }

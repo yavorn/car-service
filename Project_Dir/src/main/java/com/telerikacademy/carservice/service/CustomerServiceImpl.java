@@ -7,7 +7,6 @@ import com.telerikacademy.carservice.models.CustomerDto;
 import com.telerikacademy.carservice.service.contracts.CustomerService;
 import com.telerikacademy.carservice.repository.CustomerRepository;
 import com.telerikacademy.carservice.service.contracts.PassayService;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -44,13 +42,22 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void addCustomer(CustomerDto customerDto) throws UsernameExistsException {
-       Customer existingCustomer = customerRepository.findCustomerByEmail(customerDto.getEmail());
+    public void addCustomer(CustomerDto customerDto, List<GrantedAuthority> authorities) throws UsernameExistsException {
+        createCustomerOrAdmin(customerDto, authorities);
+    }
+
+    @Override
+    public void addAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) throws UsernameExistsException {
+        createCustomerOrAdmin(customerDto, authorities);
+    }
+
+
+    private void createCustomerOrAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) throws UsernameExistsException {
+        Customer existingCustomer = customerRepository.findCustomerByEmail(customerDto.getEmail());
 
         if (existingCustomer != null) {
             throw new UsernameExistsException(String.format("User with username %s already exists", customerDto.getEmail()));
         }
-
 
         String password = passwordService.generateRandomPassword();
         String passwordEncoded = passwordEncoder.encode(password);
@@ -61,8 +68,6 @@ public class CustomerServiceImpl implements CustomerService {
         newCustomer.setPhone(customerDto.getPhone());
         newCustomer.setName(customerDto.getName());
 
-
-        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
         User newUser = new User(customerDto.getEmail(),passwordEncoded,authorities);
 
         try {
