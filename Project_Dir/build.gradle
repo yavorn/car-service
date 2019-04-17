@@ -25,4 +25,7 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'mysql:mysql-connector-java'
+
+    //password
+    compile group: 'org.passay', name: 'passay', version: '1.4.0'
 }
