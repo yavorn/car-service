@@ -9,5 +9,5 @@ import java.util.List;
 public interface CustomerService {
     List<Customer> getAllCustomers();
 
-    Customer registerNewUserAccount(@ModelAttribute Customer customer) throws UsernameExistsException;
+    Customer registerNewCustomerAccount(@ModelAttribute Customer customer) throws UsernameExistsException;
 }

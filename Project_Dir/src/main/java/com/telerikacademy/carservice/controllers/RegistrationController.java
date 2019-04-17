@@ -35,7 +35,7 @@ public class RegistrationController {
 
     @PostMapping("/register-customer")
     public String registerNewCustomer(@ModelAttribute Customer customer) throws UsernameExistsException {
-        customerService.registerNewUserAccount(customer);
+        customerService.registerNewCustomerAccount(customer);
         return "register-confirmation";
     }
 
@@ -48,10 +48,6 @@ public class RegistrationController {
     @PostMapping("/register-admin")
     public String registerAdministrator(@ModelAttribute User user) {
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("USER", "ADMIN");
-        return getUser(user, authorities);
-    }
-
-    private String getUser(@ModelAttribute User user, List<GrantedAuthority> authorities) {
         org.springframework.security.core.userdetails.User newUser = new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 "{noop}" + user.getPassword(),

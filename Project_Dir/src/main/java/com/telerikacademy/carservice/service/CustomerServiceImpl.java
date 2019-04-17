@@ -30,7 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer registerNewUserAccount(@ModelAttribute Customer customer) throws UsernameExistsException {
+    public Customer registerNewCustomerAccount(@ModelAttribute Customer customer) throws UsernameExistsException {
        Customer existingCustomer = customerRepository.findCustomerByEmail(customer.getEmail());
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
 
