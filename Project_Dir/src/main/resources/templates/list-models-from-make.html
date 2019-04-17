@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>List of Models from a Make</title>
+</head>
+<body>
+
+<p>
+<h2>List of Models from Make</h2>
+</p>
+
+
+<tr th:each="model : ${modelsFromMake}">
+    <p>
+    <td th:text="${model.getMake().getMakeName()}"> </td>
+    <td th:text="${model.getModelName()}"> </td>
+    </p>
+
+
+</tr>
+
+</body>
+</html>
