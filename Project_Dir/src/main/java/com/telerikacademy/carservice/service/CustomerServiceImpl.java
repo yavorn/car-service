@@ -6,12 +6,13 @@ import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerDto;
 import com.telerikacademy.carservice.service.contracts.CustomerService;
 import com.telerikacademy.carservice.repository.CustomerRepository;
+import com.telerikacademy.carservice.service.contracts.EmailService;
 import com.telerikacademy.carservice.service.contracts.PassayService;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
@@ -26,14 +27,18 @@ public class CustomerServiceImpl implements CustomerService {
     private UserDetailsManager userDetailsManager;
     private PasswordEncoder passwordEncoder;
     private PassayService passwordService;
+    private EmailService emailService;
+    private SimpleMailMessage emailTemplate;
 
     @Autowired
     public CustomerServiceImpl (CustomerRepository customerRepository, UserDetailsManager userDetailsManager,
-                                PasswordEncoder passwordEncoder, PassayService passwordService) {
+                                PasswordEncoder passwordEncoder, PassayService passwordService, EmailService emailService, SimpleMailMessage emailTemplate) {
         this.customerRepository = customerRepository;
         this.userDetailsManager = userDetailsManager;
         this.passwordEncoder = passwordEncoder;
         this.passwordService = passwordService;
+        this.emailService = emailService;
+        this.emailTemplate = emailTemplate;
     }
 
     @Override
@@ -73,6 +78,8 @@ public class CustomerServiceImpl implements CustomerService {
         try {
             userDetailsManager.createUser(newUser);
             customerRepository.saveAndFlush(newCustomer);
+            emailService.sendSimpleMessageUsingTemplateWhenCreatingCustomer(newCustomer.getEmail(),
+                    emailTemplate, newCustomer.getName(), newCustomer.getEmail(), newCustomer.getCustomerPassword());
         } catch (HibernateException he) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
