@@ -53,4 +53,12 @@ public class CarServiceImpl implements CarService {
 
         return modelsRepository.findAll();
     }
+
+    public void deleteModel(Long id) {
+        Models model =  modelsRepository.findModelsByModelID(id);
+        if (model == null) {
+            //throw new ModelNotFoundException(id);
+        }
+        modelsRepository.deleteById(id);
+    }
 }
