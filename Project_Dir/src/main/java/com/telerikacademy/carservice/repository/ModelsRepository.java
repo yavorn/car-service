@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 public interface ModelsRepository extends JpaRepository<Models, Long> {
 
     Models findModelsByModelID(Long id);
+    void deleteModelsByMake_MakeID(Long id);
+    void deleteAllByMake_MakeID(Long id);
 
 
 }

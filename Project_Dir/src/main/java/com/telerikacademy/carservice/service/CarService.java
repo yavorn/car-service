@@ -12,6 +12,8 @@ public interface CarService {
     Models getById(Long id);
     List<Models> getAllModels();
     List<Make> getAllMakes();
+    void deleteMake(Long id);
+    void deleteAllByMake_MakeID(Long id);
     void deleteModel(Long id);
 
 

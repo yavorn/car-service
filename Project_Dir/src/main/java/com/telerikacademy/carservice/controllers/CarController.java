@@ -60,14 +60,28 @@ public class CarController {
         return "add-car";
     }
     @PostMapping("/add-car")
-    public String addModel(@Valid @ModelAttribute Models models , BindingResult bindingErrors) {
+    public String addModel(@Valid @ModelAttribute Models model , BindingResult bindingErrors) {
 
         if(bindingErrors.hasErrors()) {
             return "add-car";
         }
-        carService.addModel(models);
+        carService.addModel(model);
         return "redirect:/cars";
     }
+
+    @GetMapping("/delete_make/{id}")
+    public String deleteMakeByID (@PathVariable Long id) {
+
+        carService.deleteMake(id);
+        return "redirect:/cars";
+    }
+
+//    @GetMapping("/delete_models_by_makeID/{id}")
+//    public String deleteModelsByMakeID (@PathVariable Long id) {
+//
+//        carService.deleteAllByMake_MakeID(id);
+//        return "redirect:/cars";
+//    }
 
     @GetMapping("/delete_model/{id}")
     public String deleteModelByID (@PathVariable Long id) {

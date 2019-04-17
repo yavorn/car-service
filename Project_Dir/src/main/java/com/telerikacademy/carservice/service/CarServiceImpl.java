@@ -54,11 +54,24 @@ public class CarServiceImpl implements CarService {
         return modelsRepository.findAll();
     }
 
+    public void deleteMake(Long id) {
+        Make make =  makeRepository.findMakeByMakeID(id);
+//        if (model == null) {
+//            throw new ModelNotFoundException(id);
+//        }
+       makeRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAllByMake_MakeID(Long id) {
+        modelsRepository.deleteModelsByMake_MakeID(id);
+    }
+
     public void deleteModel(Long id) {
         Models model =  modelsRepository.findModelsByModelID(id);
-        if (model == null) {
-            //throw new ModelNotFoundException(id);
-        }
+//        if (model == null) {
+//            throw new ModelNotFoundException(id);
+//        }
         modelsRepository.deleteById(id);
     }
 }
