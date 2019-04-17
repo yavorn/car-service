@@ -1,4 +1,4 @@
-package com.telerikacademy.carservice.models.contracts;
+package com.telerikacademy.carservice.service.contracts;
 
 import com.telerikacademy.carservice.exceptions.UsernameExistsException;
 import com.telerikacademy.carservice.models.Customer;

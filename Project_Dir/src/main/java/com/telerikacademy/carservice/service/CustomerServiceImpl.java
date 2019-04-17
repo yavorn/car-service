@@ -2,7 +2,7 @@ package com.telerikacademy.carservice.service;
 
 import com.telerikacademy.carservice.exceptions.UsernameExistsException;
 import com.telerikacademy.carservice.models.Customer;
-import com.telerikacademy.carservice.models.contracts.CustomerService;
+import com.telerikacademy.carservice.service.contracts.CustomerService;
 import com.telerikacademy.carservice.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
