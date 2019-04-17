@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 import javax.validation.constraints.DecimalMin;
 
 @Entity
-@Table(name = "procedure")
+@Table(name = "`procedure`")
 public class Procedure {
 
     public Procedure(){
