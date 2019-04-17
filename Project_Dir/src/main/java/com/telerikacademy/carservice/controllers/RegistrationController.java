@@ -2,6 +2,7 @@ package com.telerikacademy.carservice.controllers;
 
 import com.telerikacademy.carservice.exceptions.UsernameExistsException;
 import com.telerikacademy.carservice.models.Customer;
+import com.telerikacademy.carservice.models.CustomerDto;
 import com.telerikacademy.carservice.models.User;
 import com.telerikacademy.carservice.service.contracts.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,8 @@ public class RegistrationController {
     }
 
     @PostMapping("/register-customer")
-    public String registerNewCustomer(@ModelAttribute Customer customer) throws UsernameExistsException {
-        customerService.registerNewCustomerAccount(customer);
+    public String registerNewCustomer(@ModelAttribute CustomerDto customerDto) throws UsernameExistsException {
+        customerService.addCustomer(customerDto);
         return "register-confirmation";
     }
 

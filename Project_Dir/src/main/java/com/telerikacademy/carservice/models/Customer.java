@@ -19,7 +19,7 @@ public class Customer {
 
     @Column(name = "customerPassword")
     @NotNull(message = "Password is mandatory.")
-    @Size(min = 5, max = 10, message = "Password must be between 5 and 10 characters")
+    @Size(min = 5, max = 68, message = "Password must be between 5 and 10 characters")
     private String customerPassword;
 
     @Column(name = "phone")
