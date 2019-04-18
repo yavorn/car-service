@@ -16,6 +16,7 @@ public class EmailServiceImpl implements EmailService {
         this.emailSender = emailSender;
     }
 
+
     public void sendSimpleMessage(String to, String subject, String text) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -30,12 +31,25 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
+    public void sendSimpleMessageForPasswordResetUsingTemplate(String to, String subject, String text) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(text);
+
+        try {
+            emailSender.send(message);
+        } catch (MailException ex) {
+            ex.getMessage();
+        }
+    }
+
+    @Override
     public void sendSimpleMessageUsingTemplateWhenCreatingCustomer(String to, SimpleMailMessage template, String... templateArgs) {
             SimpleMailMessage message = new SimpleMailMessage();
             String text = String.format(template.getText(), templateArgs);
 
             message.setTo(to);
-            message.setFrom("Team 6 Car Service");
             message.setText(text);
             emailSender.send(message);
     }
