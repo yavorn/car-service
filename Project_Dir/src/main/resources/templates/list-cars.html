@@ -12,14 +12,17 @@
 <h2>List of All Cars</h2>
 </p>
 
-<p>
-    <a th:href="@{cars/add-make}" th:text="#{label.addMake}">Add Car</a>
+<form th:action="@{/cars/add-make}" method="get">
+    <input type="submit" value="Add new Make" />
+</form>
 
-</p>
-<p>
-<a th:href="@{cars/add-car}" th:text="#{label.addCar}">Add Car</a>
 
-</p>
+<form th:action="@{/cars/add-car}" method="get">
+    <input type="submit" value="Add new Car" />
+</form>
+
+
+
 
 <tr th:each="model : ${carModels}">
     <p>
