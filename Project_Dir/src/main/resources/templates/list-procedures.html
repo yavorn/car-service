@@ -3,17 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>Procedures</title>
+
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+
+    <script src="webjars/jquery/3.3.1/jquery.min.js"></script>
+
+   <!--/ <script src="js/procedures.js"></script>-->
+    <script th:src="@{/js/procedures.js}"></script>
+    <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
 </head>
 <body>
 <h2>All Procedures</h2>
+<br>
 
-<tr th:each="model : ${procedures}">
-    <p>
-    <td th:text="${model.getProcedureName()}"> </td>
-    </p>
+<div class="container body-content">
+    <div class="page-header">
+        <label class="heading">History</label>
+        <div class="form-group">
+            <fieldset>
+                <form action="" class="form-group" method="post">
+                    <div class="table-responsive">
+                        <div class="table-responsive">
 
+                            <table id="procedures-table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Procedure</th>
+                                    <th>Price</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="model : ${procedures}">
+                                    <td th:text="${model.getProcedureID()}"> </td>
+                                    <td th:text="${model.getProcedureName()}"> </td>
+                                    <td th:text="${model.getProcedurePrice()}"> </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>            <!--END OF FORM ^^-->
+            </fieldset>
+        </div>
+        <hr />
+    </div>
+</div>
 
-</tr>
+<a th:href="@{procedures/add-procedure}" th:text="#{label.addProcedure}">Add Procedure</a>
 
 
 </body>
