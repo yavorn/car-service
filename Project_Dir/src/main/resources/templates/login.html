@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<title>Login</title>
@@ -21,6 +21,10 @@
 		<input type="password" id="password" name="password">
 	</p>
 	<input type="submit" value="Login">
+</form>
+<form th:action="@{reset-password}" method="get">
+	<p>Forgot password?</p>
+	<input type="submit" value="Reset">
 </form>
 </body>
 </html>

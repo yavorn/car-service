@@ -4,8 +4,8 @@ import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import com.telerikacademy.carservice.exceptions.UsernameExistsException;
 import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerDto;
-import com.telerikacademy.carservice.service.contracts.CustomerService;
 import com.telerikacademy.carservice.repository.CustomerRepository;
+import com.telerikacademy.carservice.service.contracts.CustomerService;
 import com.telerikacademy.carservice.service.contracts.EmailService;
 import com.telerikacademy.carservice.service.contracts.PassayService;
 import org.hibernate.HibernateException;
@@ -56,7 +56,40 @@ public class CustomerServiceImpl implements CustomerService {
         createCustomerOrAdmin(customerDto, authorities);
     }
 
+    @Override
+    public void resetPassword(String email) {
+        Customer customer = customerRepository.findCustomerByEmail(email);
 
+        if (customer == null) {
+            throw new DatabaseItemNotFoundException(email);
+        }
+
+        String generatedNewPassword = passwordService.generateRandomPassword();
+        String passwordEncoded = passwordEncoder.encode(generatedNewPassword);
+
+        try {
+            customer.setCustomerPassword(generatedNewPassword);
+            customerRepository.userToUpdatePassword(passwordEncoded, customer.getEmail());
+            customerRepository.saveAndFlush(customer);
+            emailService.sendSimpleMessageForPasswordResetUsingTemplate(customer.getEmail(),
+                    "Password reset",
+                    String.format("Dear Customer,\n\n " +
+                            "Please find your temporary password: %s\n\n " +
+                            "Best Regards,\n " +
+                            "Team 6 Car Service",
+                            generatedNewPassword));
+        } catch (HibernateException he) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Failed to access database."
+            );
+        } catch (DatabaseItemNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage()
+            );
+        }
+    }
     private void createCustomerOrAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) throws UsernameExistsException {
         Customer existingCustomer = customerRepository.findCustomerByEmail(customerDto.getEmail());
 

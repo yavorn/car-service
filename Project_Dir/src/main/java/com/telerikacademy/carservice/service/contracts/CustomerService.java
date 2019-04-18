@@ -15,4 +15,6 @@ public interface CustomerService {
     void addCustomer(CustomerDto customerDto, List<GrantedAuthority> authorities) throws UsernameExistsException;
 
     void addAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) throws UsernameExistsException;
+
+    void resetPassword(String username);
 }
