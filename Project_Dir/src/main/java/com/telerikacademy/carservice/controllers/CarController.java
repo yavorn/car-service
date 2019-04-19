@@ -23,7 +23,7 @@ public class CarController {
     @GetMapping("/model/{id}")
     public String modelDetails(Model model, @PathVariable Long id){
 
-        Models carModel = carService.getById(id);
+        Models carModel = carService.getModelById(id);
         model.addAttribute("modelOfCar", carModel);
         return "car";
     }
@@ -59,6 +59,27 @@ public class CarController {
     }
 
 
+    @GetMapping("/edit-make/{id}")
+    public String getEditMake(@PathVariable Long id, Model model) {
+        Make make = carService.getMakeById(id);
+        model.addAttribute("editMake", make);
+
+        return "edit-make";
+    }
+
+
+    @PostMapping("/edit-make/{id}")
+    public String editMake(@ModelAttribute Make make, @PathVariable Long id){
+        carService.editMake(id, make);
+
+        return "redirect:/cars";
+
+    }
+
+
+
+
+
     @GetMapping("/add-car")
     public String addModelForm(Model model) {
 
@@ -75,6 +96,25 @@ public class CarController {
         carService.addModel(model);
         return "redirect:/cars";
     }
+
+    @GetMapping("/edit-carModel/{id}")
+    public String getEditModel(@PathVariable Long id, Model model) {
+        Models carModel = carService.getModelById(id);
+        model.addAttribute("editCarModel", carModel);
+        model.addAttribute("allMakes", carService.getAllMakes());
+
+        return "edit-carModel";
+    }
+
+
+    @PostMapping("/edit-carModel/{id}")
+    public String editModel(@ModelAttribute Models carModel, @PathVariable Long id){
+        carService.editModel(id, carModel);
+
+        return "redirect:/cars";
+
+    }
+
 
 //    @GetMapping("/delete_make/{id}")
 //    public String deleteMakeByID (@PathVariable Long id) {

@@ -7,9 +7,12 @@ import java.util.List;
 
 public interface CarService {
     void addMake(Make make);
+    void editMake(Long id, Make make);
     void addModel(Models model);
+    void editModel(Long id, Models model);
 
-    Models getById(Long id);
+    Make getMakeById(Long id);
+    Models getModelById(Long id);
     List<Models> getAllModels();
     List<Make> getAllMakes();
 //    void deleteMake(Long id);

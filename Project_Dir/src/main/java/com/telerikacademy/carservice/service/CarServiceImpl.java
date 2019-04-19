@@ -58,6 +58,16 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    public void editMake(Long id, Make newMake) {
+
+        Make makeToUpdate = makeRepository.findMakeByMakeID(id);
+        makeToUpdate.setMakeName(newMake.getMakeName());
+
+        makeRepository.save(makeToUpdate);
+
+    }
+
+    @Override
     public void addModel(Models model) {
 
         try {
@@ -85,7 +95,43 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Models getById(Long id) {
+    public void editModel(Long id, Models newModel) {
+        Models modelToUpdate = modelsRepository.findModelsByModelID(id);
+        modelToUpdate.setModelName(newModel.getModelName());
+        modelToUpdate.setMake(newModel.getMake());
+
+        modelsRepository.save(modelToUpdate);
+    }
+
+    @Override
+    public Make getMakeById(Long id) {
+        try {
+            List<Make> existingMakes = getAllMakes()
+                    .stream()
+                    .filter(carMake -> carMake.getMakeID().equals(id))
+                    .collect(Collectors.toList());
+
+            if (existingMakes.size() == 0) {
+                throw new DatabaseItemNotFoundException("Car Make", id);
+            }
+            return makeRepository.findMakeByMakeID(id);
+
+        }  catch (HibernateException he) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Failed to access database."
+            );
+
+        } catch (DatabaseItemNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage()
+            );
+        }
+    }
+
+    @Override
+    public Models getModelById(Long id) {
 
         try {
             List<Models> existingModels = getAllModels()
@@ -174,7 +220,7 @@ public class CarServiceImpl implements CarService {
             List<Models> existingModels = getAllModels();
 
             if (existingModels.size() == 0) {
-                throw new DatabaseItemNotFoundException("Car model from Make", id);
+                throw new DatabaseItemNotFoundException("Car models from Make", id);
             }
             return modelsRepository.findModelsByMake_MakeID(id);
 

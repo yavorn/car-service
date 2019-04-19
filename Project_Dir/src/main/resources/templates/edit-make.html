@@ -4,15 +4,15 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Add new Make</title>
+    <title>Edit Make</title>
 </head>
 <body>
 
 <p>
-<h2>Add New Make</h2>
+<h2>Edit Make</h2>
 </p>
 
-<form action="#" th:action="@{/cars/add-make}" th:object="${make}" method="post">
+<form action="#" th:action="@{'/cars/edit-make/' + ${editMake.getMakeID()}}" th:object="${editMake}" method="post">
     <ul>
         <li th:errors="*{makeName}" style="color: red"/>
     </ul>

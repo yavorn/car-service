@@ -4,15 +4,15 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Add Car</title>
+    <title>Edit Car Model</title>
 </head>
 <body>
-
 <p>
-<h2>Add New Car</h2>
+<h2>Edit Car Model</h2>
 </p>
 
-<form action="#" th:action="@{/cars/add-car}" th:object="${car}" method="post">
+
+<form action="#" th:action="@{'/cars/edit-carModel/' + ${editCarModel.getModelID()}}" th:object="${editCarModel}" method="post">
     <ul>
         <li th:errors="*{make.makeName}" style="color: red"/>
         <li th:errors="*{modelName}" style="color: red"/>
@@ -49,6 +49,7 @@
 
 
 </form>
+
 
 
 

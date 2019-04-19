@@ -33,7 +33,7 @@ private CarService carService;
 
     @GetMapping("/model/{id}")
     public Models getModelByID(@PathVariable Long id){
-        Models model = carService.getById(id);
+        Models model = carService.getModelById(id);
         return model;
     }
 
