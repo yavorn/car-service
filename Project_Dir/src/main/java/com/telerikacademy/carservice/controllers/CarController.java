@@ -2,7 +2,7 @@ package com.telerikacademy.carservice.controllers;
 
 import com.telerikacademy.carservice.models.Make;
 import com.telerikacademy.carservice.models.Models;
-import com.telerikacademy.carservice.service.CarService;
+import com.telerikacademy.carservice.service.contracts.CarService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -76,25 +76,19 @@ public class CarController {
         return "redirect:/cars";
     }
 
-    @GetMapping("/delete_make/{id}")
-    public String deleteMakeByID (@PathVariable Long id) {
-        carService.deleteAllModelsByMakeID(carService.findModelsByMakeID(id));
-        carService.deleteMake(id);
-        return "redirect:/cars";
-    }
-
-//    @GetMapping("/delete_models_by_makeID/{id}")
-//    public String deleteModelsByMakeID (@PathVariable Long id) {
-//
+//    @GetMapping("/delete_make/{id}")
+//    public String deleteMakeByID (@PathVariable Long id) {
 //        carService.deleteAllModelsByMakeID(carService.findModelsByMakeID(id));
-//
+//        carService.deleteMake(id);
 //        return "redirect:/cars";
 //    }
-
-    @GetMapping("/delete_model/{id}")
-    public String deleteModelByID (@PathVariable Long id) {
-
-        carService.deleteModel(id);
-        return "redirect:/cars";
-    }
+//
+//
+//
+//    @GetMapping("/delete_model/{id}")
+//    public String deleteModelByID (@PathVariable Long id) {
+//
+//        carService.deleteModel(id);
+//        return "redirect:/cars";
+//    }
 }

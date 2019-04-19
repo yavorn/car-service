@@ -6,6 +6,7 @@ import com.telerikacademy.carservice.models.Make;
 import com.telerikacademy.carservice.models.Models;
 import com.telerikacademy.carservice.repository.MakeRepository;
 import com.telerikacademy.carservice.repository.ModelsRepository;
+import com.telerikacademy.carservice.service.contracts.CarService;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Make addMake(Make make) {
+    public void addMake(Make make) {
 
 
         try {
@@ -40,7 +41,7 @@ public class CarServiceImpl implements CarService {
             if (existingMakes.size() != 0) {
                 throw new DatabaseItemAlreadyExists("Car Make");
             }
-            return makeRepository.save(make);
+             makeRepository.save(make);
 
 
         } catch (HibernateException he) {
@@ -57,7 +58,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Models addModel(Models model) {
+    public void addModel(Models model) {
 
         try {
             List<Models> existingModels = getAllModels()
@@ -68,7 +69,7 @@ public class CarServiceImpl implements CarService {
             if (existingModels.size() != 0) {
                 throw new DatabaseItemAlreadyExists("Car Model");
             }
-            return modelsRepository.save(model);
+             modelsRepository.save(model);
 
         } catch (HibernateException he) {
             throw new ResponseStatusException(
@@ -87,6 +88,14 @@ public class CarServiceImpl implements CarService {
     public Models getById(Long id) {
 
         try {
+            List<Models> existingModels = getAllModels()
+                    .stream()
+                    .filter(carModel -> carModel.getModelID().equals(id))
+                    .collect(Collectors.toList());
+
+            if (existingModels.size() == 0) {
+                throw new DatabaseItemNotFoundException("Car model", id);
+            }
             return modelsRepository.findModelsByModelID(id);
 
         }  catch (HibernateException he) {
@@ -132,34 +141,54 @@ public class CarServiceImpl implements CarService {
         }
     }
 
-    public void deleteMake(Long id) {
-        Make make =  makeRepository.findMakeByMakeID(id);
-//        if (model == null) {
-//            throw new ModelNotFoundException(id);
+//    public void deleteMake(Long id) {
+//        Make make =  makeRepository.findMakeByMakeID(id);
+////        if (model == null) {
+////            throw new ModelNotFoundException(id);
+////        }
+//       makeRepository.deleteById(id);
+//    }
+
+//    @Override
+//    public void deleteAllModelsByMakeID(List<Models> modelsToDelete) {
+//
+//        for (Models model :  modelsToDelete ) {
+//
+//            modelsRepository.deleteById(model.getModelID());
 //        }
-       makeRepository.deleteById(id);
-    }
+//
+//    }
 
-    @Override
-    public void deleteAllModelsByMakeID(List<Models> modelsToDelete) {
-
-        for (Models model :  modelsToDelete ) {
-
-            modelsRepository.deleteById(model.getModelID());
-        }
-
-    }
-
-    public void deleteModel(Long id) {
-        Models model =  modelsRepository.findModelsByModelID(id);
-//        if (model == null) {
-//            throw new ModelNotFoundException(id);
-//        }
-        modelsRepository.deleteById(id);
-    }
+//    public void deleteModel(Long id) {
+//        Models model =  modelsRepository.findModelsByModelID(id);
+////        if (model == null) {
+////            throw new ModelNotFoundException(id);
+////        }
+//        modelsRepository.deleteById(id);
+//    }
 
     @Override
     public List<Models> findModelsByMakeID(Long id) {
-        return modelsRepository.findModelsByMake_MakeID(id);
+
+        try {
+            List<Models> existingModels = getAllModels();
+
+            if (existingModels.size() == 0) {
+                throw new DatabaseItemNotFoundException("Car model from Make", id);
+            }
+            return modelsRepository.findModelsByMake_MakeID(id);
+
+        }  catch (HibernateException he) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Failed to access database."
+            );
+
+        } catch (DatabaseItemNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage()
+            );
+        }
     }
 }

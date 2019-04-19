@@ -2,16 +2,11 @@ package com.telerikacademy.carservice.controllers;
 
 import com.telerikacademy.carservice.models.Make;
 import com.telerikacademy.carservice.models.Models;
-import com.telerikacademy.carservice.service.CarService;
+import com.telerikacademy.carservice.service.contracts.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Scanner;
 
 
 @RestController
@@ -43,8 +38,8 @@ private CarService carService;
     }
 
     @PostMapping("/addNewCar")
-    public Models addNewBeer(@RequestBody Models model){
-        return carService.addModel(model);
+    public void addNewBeer(@RequestBody Models model){
+         carService.addModel(model);
     }
 
 
