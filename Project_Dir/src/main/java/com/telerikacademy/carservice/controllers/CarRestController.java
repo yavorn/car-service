@@ -38,8 +38,8 @@ private CarService carService;
     }
 
     @PostMapping("/addNewCar")
-    public void addNewBeer(@RequestBody Models model){
-         carService.addModel(model);
+    public Models addNewModel(@RequestBody Models model){
+         return carService.addModel(model);
     }
 
 

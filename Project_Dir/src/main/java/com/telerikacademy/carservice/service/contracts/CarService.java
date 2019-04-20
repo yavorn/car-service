@@ -8,7 +8,7 @@ import java.util.List;
 public interface CarService {
     void addMake(Make make);
     void editMake(Long id, Make make);
-    void addModel(Models model);
+    Models addModel(Models model);
     void editModel(Long id, Models model);
 
     Make getMakeById(Long id);

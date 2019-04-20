@@ -40,7 +40,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
 
         http.authorizeRequests()
                 .antMatchers("/reset-password", "/reset-password-confirmation").permitAll()
@@ -64,7 +63,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .accessDeniedPage("/access-denied")
                 .and()
-                .httpBasic();
+                .httpBasic()
+        .and().csrf().disable();
     }
 
     @Override

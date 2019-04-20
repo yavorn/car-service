@@ -68,7 +68,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void addModel(Models model) {
+    public Models addModel(Models model) {
 
         try {
             List<Models> existingModels = getAllModels()
@@ -79,7 +79,7 @@ public class CarServiceImpl implements CarService {
             if (existingModels.size() != 0) {
                 throw new DatabaseItemAlreadyExists("Car Model");
             }
-             modelsRepository.save(model);
+           return   modelsRepository.save(model);
 
         } catch (HibernateException he) {
             throw new ResponseStatusException(
