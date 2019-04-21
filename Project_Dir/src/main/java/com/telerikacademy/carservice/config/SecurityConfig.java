@@ -1,13 +1,16 @@
 package com.telerikacademy.carservice.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -38,33 +41,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/reset-password", "/reset-password-confirmation").permitAll()
-                .antMatchers("/").hasRole("USER")
-                .antMatchers("/admin", "/register-customer", "register-admin", "/cars/edit-make/*").hasRole("ADMIN")
-                .anyRequest().authenticated()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                    .antMatchers("/reset-password", "/reset-password-confirmation").permitAll()
+                    .antMatchers("/").hasRole("USER")
+                    .antMatchers("/admin", "/register-customer", "register-admin", "/cars/edit-make/*").hasRole("ADMIN")
+                    .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/authenticateUser")
-                .defaultSuccessUrl("/", true)
-                .permitAll()
+                    .formLogin()
+                    .loginPage("/login")
+                    .loginProcessingUrl("/authenticateUser")
+                    .defaultSuccessUrl("/", true)
+                    .permitAll()
                 .and()
-                .logout()
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
+                    .logout()
+                    .invalidateHttpSession(true)
+                    .clearAuthentication(true)
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/login?logout")
+                    .permitAll()
                 .and()
-                .exceptionHandling()
-                .accessDeniedPage("/access-denied")
+                    .exceptionHandling()
+                    .accessDeniedPage("/access-denied")
                 .and()
-                .httpBasic()
-        .and().csrf().disable();
+                    .httpBasic()
+                .and()
+                    .csrf().disable();
     }
 
     @Override

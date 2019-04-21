@@ -1,4 +1,4 @@
-package com.telerikacademy.carservice.service;
+package com.telerikacademy.carservice.service.contracts;
 
 
 
