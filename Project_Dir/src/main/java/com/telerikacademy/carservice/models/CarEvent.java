@@ -14,8 +14,9 @@ public class CarEvent {
 
     }
 
-    public CarEvent(LocalDate date, @DecimalMin(value = "0.0", message = "Price should be a positive number") double totalPrice, int finalized) {
+    public CarEvent(LocalDate date, CustomerCars customerCar, @DecimalMin(value = "0.0", message = "Price should be a positive number") double totalPrice, int finalized) {
         this.date = date;
+        this.customerCar = customerCar;
         this.totalPrice = totalPrice;
         this.finalized = finalized;
     }
@@ -24,6 +25,10 @@ public class CarEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "car_event_id")
     private int carEventID;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "customer_car_id")
+    private CustomerCars customerCar;
 
     @DateTimeFormat(pattern="yyyy-MM-dd")
     @Column(name ="date")
@@ -35,6 +40,15 @@ public class CarEvent {
 
     @Column(name = "finalized")
     private int finalized;
+
+    public CustomerCars getCustomerCar() {
+        return customerCar;
+    }
+
+    public void setCustomerCar(CustomerCars customerCar) {
+        this.customerCar = customerCar;
+    }
+
 
     public int getCarEventID() {
         return carEventID;

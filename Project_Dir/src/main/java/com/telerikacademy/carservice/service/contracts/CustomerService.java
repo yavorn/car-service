@@ -2,6 +2,7 @@ package com.telerikacademy.carservice.service.contracts;
 
 import com.telerikacademy.carservice.exceptions.UsernameExistsException;
 import com.telerikacademy.carservice.models.Customer;
+import com.telerikacademy.carservice.models.CustomerCars;
 import com.telerikacademy.carservice.models.CustomerDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -17,4 +18,10 @@ public interface CustomerService {
     void addAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) throws UsernameExistsException;
 
     void resetPassword(String username);
+
+    List<Integer> listOfYears();
+
+    CustomerCars getCustomerCarById(Long id);
+
+    List<CustomerCars> getAllCustomerCars();
 }

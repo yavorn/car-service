@@ -8,6 +8,12 @@
 </head>
 <body>
 
+<p>
+<h2>Customer Car Details</h2>
+</p>
+
+<table>
+    <thead>
 <tr>
     <th align="left" th:text="#{label.customerName}"></th>
     <td  th:text="${customerCar.getCustomerID().getName()}">name</td>
@@ -36,6 +42,10 @@
     <th align="left" th:text="#{label.VINnumber}"></th>
     <td  th:text="${customerCar.getVINnumber()}">name</td>
 </tr>
+
+    </thead>
+</table>
+
 
 </body>
 </html>

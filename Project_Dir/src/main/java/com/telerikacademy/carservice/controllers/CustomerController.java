@@ -2,7 +2,6 @@ package com.telerikacademy.carservice.controllers;
 
 import com.telerikacademy.carservice.models.CustomerCars;
 import com.telerikacademy.carservice.models.Models;
-import com.telerikacademy.carservice.service.CarEventService;
 import com.telerikacademy.carservice.service.contracts.CarService;
 import com.telerikacademy.carservice.service.contracts.CustomerService;
 import com.telerikacademy.carservice.service.contracts.ProcedureVisitService;
@@ -22,18 +21,23 @@ import java.util.Scanner;
 @RequestMapping("/customer")
 public class CustomerController {
 
-    //private CarService carService;
+
     private CustomerService customerService;
-   // private CarEventService carEventService;
-    //private ProcedureVisitService procedureVisitService;
 
 
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
 
+    @GetMapping("/car")
+    public String listCustomersCars(Model model){
+        model.addAttribute("customersCars", customerService.getAllCustomerCars());
+        return "list-customers-cars";
+    }
+
+
     @GetMapping("/car/{id}")
-    public String customerCarDetails(Model model, @PathVariable Long id){
+    public String customerCarByID(Model model, @PathVariable Long id){
 
         CustomerCars customerCarr = customerService.getCustomerCarById(id);
         model.addAttribute("customerCar", customerCarr);

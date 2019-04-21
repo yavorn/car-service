@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>List of Customers Cars</title>
+</head>
+<body>
+
+<p>
+<h2>List of Customers Cars</h2>
+</p>
+
+<tr th:each="customer : ${customersCars}">
+    <table>
+        <thead>
+        <tr>
+            <th align="left" th:text="#{label.customerName}"></th>
+            <td  th:text="${customer.getCustomerID().getName()}">name</td>
+        </tr>
+
+        <tr>
+            <th align="left" th:text="#{label.makeName}"></th>
+            <td  th:text="${customer.getModelID().getMake().getMakeName()}">name</td>
+        </tr>
+        <tr>
+            <th align="left" th:text="#{label.modelName}"></th>
+            <td  th:text="${customer.getModelID().getModelName()}">name</td>
+        </tr>
+
+        <tr>
+            <th align="left" th:text="#{label.year}"></th>
+            <td  th:text="${customer.getYearOfProduction()}">name</td>
+        </tr>
+
+        <tr>
+            <th align="left" th:text="#{label.licensePlate}"></th>
+            <td  th:text="${customer.getLicensePlate()}">name</td>
+        </tr>
+
+        <tr>
+            <th align="left" th:text="#{label.VINnumber}"></th>
+            <td  th:text="${customer.getVINnumber()}">name</td>
+        </tr>
+
+        </thead>
+    </table>
+<br>
+<br>
+</tr>
+
+</body>
+</html>
