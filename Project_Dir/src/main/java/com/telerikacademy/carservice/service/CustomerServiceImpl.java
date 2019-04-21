@@ -74,9 +74,9 @@ public class CustomerServiceImpl implements CustomerService {
             emailService.sendSimpleMessageForPasswordResetUsingTemplate(customer.getEmail(),
                     "Password reset",
                     String.format("Dear Customer,\n\n " +
-                            "Please find your temporary password: %s\n\n " +
-                            "Best Regards,\n " +
-                            "Team 6 Car Service",
+                                    "Please find your temporary password: %s\n\n " +
+                                    "Best Regards,\n " +
+                                    "Team 6 Car Service",
                             generatedNewPassword));
         } catch (HibernateException he) {
             throw new ResponseStatusException(

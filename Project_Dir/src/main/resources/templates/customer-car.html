@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Car Details</title>
+</head>
+<body>
+
+<tr>
+    <th align="left" th:text="#{label.customerName}"></th>
+    <td  th:text="${customerCar.getCustomerID().getName()}">name</td>
+</tr>
+
+<tr>
+    <th align="left" th:text="#{label.makeName}"></th>
+    <td  th:text="${customerCar.getModelID().getMake().getMakeName()}">name</td>
+</tr>
+<tr>
+    <th align="left" th:text="#{label.modelName}"></th>
+    <td  th:text="${customerCar.getModelID().getModelName()}">name</td>
+</tr>
+
+<tr>
+    <th align="left" th:text="#{label.year}"></th>
+    <td  th:text="${customerCar.getYearOfProduction()}">name</td>
+</tr>
+
+<tr>
+    <th align="left" th:text="#{label.licensePlate}"></th>
+    <td  th:text="${customerCar.getLicensePlate()}">name</td>
+</tr>
+
+<tr>
+    <th align="left" th:text="#{label.VINnumber}"></th>
+    <td  th:text="${customerCar.getVINnumber()}">name</td>
+</tr>
+
+</body>
+</html>
