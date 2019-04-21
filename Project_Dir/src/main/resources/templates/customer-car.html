@@ -46,6 +46,51 @@
     </thead>
 </table>
 
+<p>
+<h2>Car Events</h2>
+</p>
+
+<tr th:each="event : ${listCustomerCarEvents}">
+    <table>
+        <thead>
+        <tr>
+            <th align="left" th:text="#{label.date}"></th>
+            <td  th:text="${event.getDate()}">Date</td>
+        </tr>
+
+        <tr th:each="procedure : ${listProcedureVisit}">
+            <table>
+                <thead>
+                <tr>
+                    <th align="left" th:text="#{label.procedure}"></th>
+                    <td  th:text="${procedure.getProcedure().getProcedureName()}">Procedure</td>
+                </tr>
+
+                <tr>
+                    <th align="left" th:text="#{label.price}"></th>
+                    <td  th:text="${procedure.getProcedure().getProcedurePrice()}">Price</td>
+                </tr>
+
+                </thead>
+            </table>
+
+        </tr>
+
+        <tr>
+            <th align="left" th:text="#{label.totalPrice}"></th>
+            <td  th:text="${event.getTotalPrice()}">TotalPrice</td>
+        </tr>
+
+
+
+
+        </thead>
+    </table>
+    <br>
+    <br>
+    <br>
+</tr>
+
 
 </body>
 </html>

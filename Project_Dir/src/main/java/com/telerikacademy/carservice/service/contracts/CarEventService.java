@@ -10,6 +10,9 @@ public interface CarEventService {
     List<CarEvent> getAllCarEvents();
 
     CarEvent getCarEventByID(int CarEventID);
+    List<CarEvent> getCarEventByCustomerCarID(Long id);
+
+    Long getCarEventIDbyCustomerCarID(Long id);
 
     void addCarEvent(CarEvent CarEvent);
 
