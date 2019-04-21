@@ -2,7 +2,7 @@ package com.telerikacademy.carservice.controllers;
 
 
 import com.telerikacademy.carservice.models.Procedure;
-import com.telerikacademy.carservice.service.ProcedureService;
+import com.telerikacademy.carservice.service.contracts.ProcedureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -3,6 +3,7 @@ package com.telerikacademy.carservice.service;
 
 import com.telerikacademy.carservice.models.CarEvent;
 import com.telerikacademy.carservice.repository.CarEventRepository;
+import com.telerikacademy.carservice.service.contracts.CarEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

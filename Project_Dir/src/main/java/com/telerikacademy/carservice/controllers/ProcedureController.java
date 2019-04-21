@@ -1,7 +1,7 @@
 package com.telerikacademy.carservice.controllers;
 
 import com.telerikacademy.carservice.models.Procedure;
-import com.telerikacademy.carservice.service.ProcedureService;
+import com.telerikacademy.carservice.service.contracts.ProcedureService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
