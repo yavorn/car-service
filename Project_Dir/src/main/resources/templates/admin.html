@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8" >
+	<meta charset="UTF-8">
 	<title>Admin</title>
 </head>
 <body>
 <h1>Admin Portal</h1>
 <p>Hello to the admin portal!</p>
-<p>
-	<a th:href="@{/register-customer}">Register New User</a>
-</p>
-<p>
-	<a th:href="@{/register-admin}">Register New Admin</a>
-</p>
+<form th:action="@{/register-customer}" method="get">
+	<input type="submit" value="Add customer">
+	<!--<a th:href="@{/register-customer}">Register New User</a>-->
+</form>
+<form th:action="@{/register-admin}" method="get">
+	<input type="submit" value="Add admin">
+	<!--<a th:href="@{/register-admin}">Register New Admin</a>-->
+</form>
+<form th:action="@{/cars/add-make}" method="get">
+	<input type="submit" value="Add new Make"/>
+</form>
+<form th:action="@{/cars/add-car}" method="get">
+	<input type="submit" value="Add new Car Model"/>
+</form>
 <p>
 	<a th:href="@{/}">Home</a>
 </p>

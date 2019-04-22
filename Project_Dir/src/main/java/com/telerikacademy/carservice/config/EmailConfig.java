@@ -18,7 +18,7 @@ public class EmailConfig {
                         "Username: %s\n" +
                         "Password: %s\n\n" +
                         "Best Regards,\n" +
-                        "The Team 6 Car service Team\n");
+                        "Team 6 Car Service\n");
         return message;
     }
 }

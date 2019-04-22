@@ -14,8 +14,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Customer findCustomerByEmail(String email);
 
+    //todo: Redundant as we will not keep customer/user passwords in this format. To be removed before project defence!!
     @Transactional
     @Modifying
     @Query(value = "update users set password = :password where username = :username", nativeQuery = true)
-    void userToUpdatePassword(@Param(value = "password") String password, @Param(value = "username") String username);
+    void updatePassword(@Param(value = "password") String password, @Param(value = "username") String username);
 }
