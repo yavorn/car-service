@@ -24,7 +24,7 @@ public class CarEventServiceImpl implements CarEventService {
     }
 
     @Override
-    public CarEvent getCarEventByID(int carEventID) {
+    public CarEvent getCarEventByID(Long carEventID) {
         return carEventRepository.findCarEventByCarEventID(carEventID);
     }
 
@@ -58,13 +58,14 @@ public class CarEventServiceImpl implements CarEventService {
 
     }
 
+
     @Override
     public void addCarEvent(CarEvent carEvent) {
         carEventRepository.save(carEvent);
     }
 
     @Override
-    public void deleteCarEvent(int carEventID) {
+    public void deleteCarEvent(Long carEventID) {
         carEventRepository.deleteById(carEventID);
     }
 

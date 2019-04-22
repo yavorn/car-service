@@ -7,10 +7,10 @@ import java.util.List;
 public interface ProcedureService {
     List<Procedure> getAllProcedures();
 
-    Procedure getProcedureByID(int procedureID);
+    Procedure getProcedureByID(Long procedureID);
 
     void addProcedure(Procedure procedure);
 
-    void deleteProcedure(int procedureID);
+    void deleteProcedure(Long procedureID);
 
 }

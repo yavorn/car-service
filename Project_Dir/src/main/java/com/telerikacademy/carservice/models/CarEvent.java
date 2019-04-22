@@ -24,7 +24,7 @@ public class CarEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "car_event_id")
-    private int carEventID;
+    private Long carEventID;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "customer_car_id")
@@ -50,11 +50,11 @@ public class CarEvent {
     }
 
 
-    public int getCarEventID() {
+    public Long getCarEventID() {
         return carEventID;
     }
 
-    public void setCarEventID(int carEventID) {
+    public void setCarEventID(Long carEventID) {
         this.carEventID = carEventID;
     }
 

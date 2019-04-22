@@ -31,7 +31,7 @@ public class ProcedureServiceImpl implements ProcedureService {
     }
 
 
-    public Procedure getProcedureByID(int procedureID) {
+    public Procedure getProcedureByID(Long procedureID) {
         try {
             return procedureRepository.findProcedureByProcedureID(procedureID);
         } catch (HibernateException he) {
@@ -57,7 +57,7 @@ public class ProcedureServiceImpl implements ProcedureService {
     }
 
 
-    public void deleteProcedure(int procedureID) {
+    public void deleteProcedure(Long procedureID) {
         try {
             procedureRepository.deleteById(procedureID);
         } catch (DatabaseItemNotFoundException e) {

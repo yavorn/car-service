@@ -3,8 +3,8 @@ package com.telerikacademy.carservice.repository;
 import com.telerikacademy.carservice.models.Procedure;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProcedureRepository extends JpaRepository<Procedure, Integer> {
+public interface ProcedureRepository extends JpaRepository<Procedure, Long> {
 
-    Procedure findProcedureByProcedureID(Integer id);
+    Procedure findProcedureByProcedureID(Long id);
 
 }

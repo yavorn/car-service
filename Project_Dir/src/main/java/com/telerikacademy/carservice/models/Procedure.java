@@ -22,7 +22,7 @@ public class Procedure {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "procedure_id")
-    private int procedureID;
+    private Long procedureID;
 
     @Size(min = 3, max = 40, message = "Procedure name must be between 3 and 40 symbols")
     @Column(name = "procedure_name")
@@ -32,11 +32,11 @@ public class Procedure {
     @Column(name = "procedure_price")
     private double procedurePrice;
 
-    public int getProcedureID() {
+    public Long getProcedureID() {
         return procedureID;
     }
 
-    public void setProcedureID(int procedureID) {
+    public void setProcedureID(Long procedureID) {
         this.procedureID = procedureID;
     }
 

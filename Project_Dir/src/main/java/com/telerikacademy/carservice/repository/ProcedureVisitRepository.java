@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ProcedureVisitRepository extends JpaRepository<ProcedureVisit, Integer> {
+public interface ProcedureVisitRepository extends JpaRepository<ProcedureVisit, Long> {
     List<ProcedureVisit> findAllByCarEvent_CustomerCar_CustomerCarID(Long id);
+
     List<ProcedureVisit> findAllByCarEvent_CarEventID(Long id);
 
 }

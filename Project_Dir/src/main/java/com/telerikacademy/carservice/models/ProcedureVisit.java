@@ -19,7 +19,7 @@ public class ProcedureVisit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "procedure_visit_id")
-    private int procedureVisitID;
+    private Long procedureVisitID;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "car_event_id")
@@ -30,11 +30,11 @@ public class ProcedureVisit {
     @JoinColumn(name = "procedure_id")
     private Procedure procedure;
 
-    public int getProcedureVisitID() {
+    public Long getProcedureVisitID() {
         return procedureVisitID;
     }
 
-    public void setProcedureVisitID(int procedureVisitID) {
+    public void setProcedureVisitID(Long procedureVisitID) {
         this.procedureVisitID = procedureVisitID;
     }
 
