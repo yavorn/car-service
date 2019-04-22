@@ -5,31 +5,19 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
     public class CustomerDto {
-        @NotNull
+        @NotNull(message = "Email is required")
         @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.(?:[a-zA-Z]{2,6})$",
                 message = "Please provide a valid email address!")
-        @Size(
-                min = 5,
-                max = 255,
-                message = "The customer email address length must be min {min} characters and max {max} characters!")
+        @Size(min = 1, message = "Email is required")
         private String email;
 
-        @NotNull
-        @Size(
-                min = 5,
-                max = 60,
-                message = "The customer name length must be min {min} characters and max {max} characters!")
+        private String password;
+
+        private String confirmedPassword;
+
         private String name;
 
-        @NotNull
-        @Pattern(regexp = "[0-9+]*",
-                message = "The customer phone number must contain only digits!")
-        @Size(
-                min = 5,
-                max = 30,
-                message = "The customer phone number length must be min {min} characters and max {max} characters!")
         private String phone;
-
 
         public CustomerDto() {
         }
@@ -56,5 +44,21 @@ import javax.validation.constraints.Size;
 
         public void setEmail(String email) {
             this.email = email;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public String getConfirmedPassword() {
+            return confirmedPassword;
+        }
+
+        public void setConfirmedPassword(String confirmedPassword) {
+            this.confirmedPassword = confirmedPassword;
         }
     }
