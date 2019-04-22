@@ -25,7 +25,7 @@ public class ProcedureRestController {
     }
 
     @GetMapping("/{procedureID}")
-    public Procedure getProcedureById(@PathVariable int procedureID) {
+    public Procedure getProcedureById(@PathVariable Long procedureID) {
         return ProcedureService.getProcedureByID(procedureID);
     }
 
@@ -36,7 +36,7 @@ public class ProcedureRestController {
     }
 
     @DeleteMapping("/delete/{procedureID}")
-    public void deleteProcedure(@PathVariable int procedureID) {
+    public void deleteProcedure(@PathVariable Long procedureID) {
         ProcedureService.deleteProcedure(procedureID);
     }
 

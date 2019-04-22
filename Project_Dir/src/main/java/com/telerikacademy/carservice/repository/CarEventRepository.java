@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface CarEventRepository extends JpaRepository<CarEvent, Integer> {
+public interface CarEventRepository extends JpaRepository<CarEvent, Long> {
 
     CarEvent findCarEventByCarEventID(Long id);
 
