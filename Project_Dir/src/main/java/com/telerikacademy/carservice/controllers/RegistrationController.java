@@ -27,17 +27,17 @@ public class RegistrationController {
         this.customerService = customerService;
     }
 
-    @GetMapping("/register-customer")
+    @GetMapping("/customer")
     public String showRegister(Model model) {
         model.addAttribute("customer", new Customer());
-        return "register-customer";
+        return "customer";
     }
 
-    @PostMapping("/register-customer")
+    @PostMapping("/customer")
     public String registerNewCustomer(@ModelAttribute CustomerDto customerDto) throws UsernameExistsException {
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
         customerService.addCustomer(customerDto, authorities);
-        return "register-confirmation";
+        return "new-customer-confirmation";
     }
 
     @GetMapping("register-admin")
@@ -50,6 +50,6 @@ public class RegistrationController {
     public String registerAdministrator(@ModelAttribute CustomerDto customerDto) throws UsernameExistsException {
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
         customerService.addAdmin(customerDto, authorities);
-        return "register-confirmation";
+        return "new-customer-confirmation";
     }
 }
