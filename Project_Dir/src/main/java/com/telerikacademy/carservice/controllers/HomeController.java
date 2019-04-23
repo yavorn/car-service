@@ -11,9 +11,9 @@ public class HomeController {
         return "index";
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/admin-portal")
     public String showAdminPortal() {
-        return "admin";
+        return "admin-portal";
     }
 
     @GetMapping("/access-denied")
