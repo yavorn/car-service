@@ -42,7 +42,7 @@ public class ProcedureVisitServiceImpl implements ProcedureVisitService {
             if (existingProcedureVisit.size() == 0) {
                 throw new DatabaseItemNotFoundException("Procedure visit", id);
             }
-            return procedureVisitRepository.findAllByCarEvent_CarEventID(id);
+            return procedureVisitRepository.findAllByCarEvent_CustomerCar_CustomerCarID(id);
 
         }  catch (HibernateException he) {
             throw new ResponseStatusException(

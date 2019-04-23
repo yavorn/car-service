@@ -60,7 +60,7 @@
 
         <tr th:each="procedure : ${listProcedureVisit}">
             <table>
-                <thead>
+                <thead th:if="${event.getCarEventID() == procedure.getCarEvent().getCarEventID()}">
                 <tr>
                     <th align="left" th:text="#{label.procedure}"></th>
                     <td  th:text="${procedure.getProcedure().getProcedureName()}">Procedure</td>
