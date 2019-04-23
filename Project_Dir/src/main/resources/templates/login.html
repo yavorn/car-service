@@ -22,9 +22,8 @@
 	</p>
 	<input type="submit" value="Login">
 </form>
-<form th:action="@{reset-password}" method="get">
-	<p>Forgot password?</p>
-	<input type="submit" value="Reset">
-</form>
+<p>
+	<a th:href="@{/reset-password}">Forgot password?</a>
+</p>
 </body>
 </html>
