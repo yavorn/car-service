@@ -80,7 +80,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         try {
             customer.setCustomerPassword(generatedNewPassword);
-            customerRepository.userToUpdatePassword(passwordEncoded, customer.getEmail());
+            customerRepository.updatePassword(passwordEncoded, customer.getEmail());
             customerRepository.saveAndFlush(customer);
             emailService.sendSimpleMessageForPasswordResetUsingTemplate(customer.getEmail(),
                     "Password reset",
