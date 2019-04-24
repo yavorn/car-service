@@ -161,7 +161,7 @@ public class CarServiceImpl implements CarService {
     public List<Make> getAllMakes() {
 
         try {
-            return makeRepository.findAll();
+            return makeRepository.findAllByMakeNameOrderByMakeNameAsc();
 
         } catch (HibernateException he) {
             throw new ResponseStatusException(

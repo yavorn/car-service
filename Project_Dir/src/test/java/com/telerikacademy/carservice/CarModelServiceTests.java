@@ -66,9 +66,9 @@ public class CarModelServiceTests {
     }
 
     @Test
-    public void getAllCarMakes_shouldReturnTwoCarMakes_whenTwoCarMakesAreAvailable() {
+    public void getAllMakes_shouldReturnTwoCarMakes_whenTwoCarMakesAreAvailable() {
         // Arrange
-        when(mockMakeRepository.findAll())
+        when(mockMakeRepository.findAllByMakeNameOrderByMakeNameAsc())
                 .thenReturn(carMakes);
 
         // Act
@@ -78,8 +78,45 @@ public class CarModelServiceTests {
         Assert.assertEquals(2, result.size());
         Assert.assertEquals("Audi", result.get(0).getMakeName());
         Assert.assertEquals("Seat", result.get(1).getMakeName());
-        verify(mockMakeRepository, Mockito.times(1)).findAll();
+        verify(mockMakeRepository, Mockito.times(1)).findAllByMakeNameOrderByMakeNameAsc();
     }
+
+
+    @Test
+    public void getAllModels_shouldReturnTwoCarModels_whenTwoCarModelsAreAvailable() {
+        // Arrange
+        when(mockModelsRepository.findAll())
+                .thenReturn(carModels);
+
+        // Act
+        List<Models> result = carService.getAllModels();
+
+        // Assert
+        Assert.assertEquals(2, result.size());
+        Assert.assertEquals("A6", result.get(0).getModelName());
+        Assert.assertEquals("Leon", result.get(1).getModelName());
+        verify(mockModelsRepository, Mockito.times(1)).findAll();
+    }
+
+
+
+//    @Test
+//    public void getModelById_shouldReturnModelWithIdOne_whenArgumentIsSetToOne() {
+//        //Arrange
+//        when(mockModelsRepository.findModelsByModelID((long)1)).thenReturn(carModelA6);
+//
+//        // Act
+//        Models carModel = carService.getModelById((long)1);
+//
+//        // Assert
+//        Assert.assertEquals(java.util.Optional.of(1), carModel.getModelID());
+//        Assert.assertEquals("Audi", carModel.getMake().getMakeName());
+//        verify(mockModelsRepository, Mockito.times(1)).findModelsByModelID((long)1);
+//    }
+
+
+
+
 
 
 }
