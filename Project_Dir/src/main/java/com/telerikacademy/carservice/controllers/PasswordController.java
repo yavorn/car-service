@@ -11,23 +11,23 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class ResetPasswordController {
+public class PasswordController {
     private CustomerService customerService;
 
     @Autowired
-    public ResetPasswordController(CustomerService customerService){
+    public PasswordController(CustomerService customerService){
         this.customerService = customerService;
     }
 
-    @GetMapping("/reset-password")
+    @GetMapping("/password")
     public String showResetPassword(Model model){
         model.addAttribute("customerDto", new CustomerDto());
-        return "reset-password";
+        return "password";
     }
 
-    @PostMapping("/reset-password")
+    @PostMapping("/password")
     public String resetPassword(@ModelAttribute CustomerDto customerDto) throws DatabaseItemNotFoundException {
         customerService.resetPassword(customerDto.getEmail());
-        return "reset-password-confirmation";
+        return "password-confirmation";
     }
 }

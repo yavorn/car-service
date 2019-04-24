@@ -9,27 +9,18 @@
 <body>
 <h1>Home Page</h1>
 <p>Welcome to the home page!!!</p>
-
-
-<form th:action="@{/cars/add-make}" method="get">
-	<input type="submit" value="Add new Make" />
-</form>
-
-
-<form th:action="@{/cars/add-car}" method="get">
-	<input type="submit" value="Add new Car Model" />
-</form>
-
-
 <p>
-	User:<span sec:authentication="name"/><br/>
-	Role(s):<span sec:authentication="principal.authorities"/>
+	User: <span sec:authentication="name"/><br/>
+	Role(s): <span sec:authentication="principal.authorities"/>
+</p>
+<p sec:authorize="hasRole('ROLE_ADMIN')">
+	<a th:href="@{/admin-portal}">Admin Portal</a>
+</p>
+<p>
+	<a th:href="@{/password}">Change password</a>
 </p>
 <form th:action="@{/logout}" method="post">
 	<input type="submit" value="Logout">
 </form>
-<p sec:authorize="hasRole('ROLE_ADMIN')">
-	<a th:href="@{/admin}">Admin Portal</a>
-</p>
 </body>
 </html>

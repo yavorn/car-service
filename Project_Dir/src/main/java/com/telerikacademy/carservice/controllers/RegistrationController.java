@@ -40,13 +40,13 @@ public class RegistrationController {
         return "new-customer-confirmation";
     }
 
-    @GetMapping("register-admin")
+    @GetMapping("/admin")
     public String showAdminRegister(Model model) {
         model.addAttribute("admin", new Customer());
-        return "register-admin";
+        return "admin";
     }
 
-    @PostMapping("/register-admin")
+    @PostMapping("/admin")
     public String registerAdministrator(@ModelAttribute CustomerDto customerDto) throws UsernameExistsException {
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
         customerService.addAdmin(customerDto, authorities);
