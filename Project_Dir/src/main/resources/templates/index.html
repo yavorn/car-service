@@ -16,6 +16,9 @@
 <p sec:authorize="hasRole('ROLE_ADMIN')">
 	<a th:href="@{/admin-portal}">Admin Portal</a>
 </p>
+<p>
+	<a th:href="@{/password}">Change password</a>
+</p>
 <form th:action="@{/logout}" method="post">
 	<input type="submit" value="Logout">
 </form>
