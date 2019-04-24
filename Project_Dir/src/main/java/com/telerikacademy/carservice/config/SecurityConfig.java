@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                     .antMatchers("/password", "/password-confirmation").permitAll()
                     .antMatchers("/").hasRole("USER")
-                    .antMatchers("/admin", "/register-customer", "register-admin", "/cars/edit-make/*").hasRole("ADMIN")
+                    .antMatchers("/admin-portal", "/customer", "admin", "/cars/edit-make/*").hasRole("ADMIN")
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
