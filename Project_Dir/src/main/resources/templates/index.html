@@ -22,14 +22,14 @@
 
 
 <p>
-	User:<span sec:authentication="name"/><br/>
-	Role(s):<span sec:authentication="principal.authorities"/>
+	User: <span sec:authentication="name"/><br/>
+	Role(s): <span sec:authentication="principal.authorities"/>
 </p>
 <form th:action="@{/logout}" method="post">
 	<input type="submit" value="Logout">
 </form>
 <p sec:authorize="hasRole('ROLE_ADMIN')">
-	<a th:href="@{/admin}">Admin Portal</a>
+	<a th:href="@{/admin-portal}">Admin Portal</a>
 </p>
 </body>
 </html>
