@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                    .antMatchers("/reset-password", "/reset-password-confirmation").permitAll()
+                    .antMatchers("/password", "/password-confirmation").permitAll()
                     .antMatchers("/").hasRole("USER")
                     .antMatchers("/admin", "/register-customer", "register-admin", "/cars/edit-make/*").hasRole("ADMIN")
                     .anyRequest().authenticated()
