@@ -8,7 +8,6 @@ import com.telerikacademy.carservice.service.contracts.CarEventService;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -17,8 +16,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class CarEventServiceImpl implements CarEventService {
+
+    private CarEventRepository carEventRepository;
+
     @Autowired
-    CarEventRepository carEventRepository;
+    public CarEventServiceImpl(CarEventRepository carEventRepository) {
+        this.carEventRepository = carEventRepository;
+    }
 
     public List<CarEvent> getAllCarEvents() {
         return carEventRepository.findAll();
