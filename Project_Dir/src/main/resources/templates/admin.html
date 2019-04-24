@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Register New Admin</h1>
-<form th:action="@{/register-admin}" th:object="${admin}" method="post">
+<form th:action="@{/admin}" th:object="${admin}" method="post">
 	<p>
 		Username: <label>
 		<input type="text" th:field="*{email}">
