@@ -42,12 +42,76 @@ table {
     border-spacing: 0;
 }
 
+/*home page*/
 .error {
     color: red;
 }
 
-h1 {
-    color: #7887e6;
+body{
+    margin:0;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size:17px;
+    color:#1BBBF5;
+    line-height:1.6;
+}
+
+#h1-title {
+    font-family: "Copperplate Gothic Bold";
+    font-size: 35px;
+    color: silver;
+}
+#login-body {
+    background-image: url(/images/lambo.jpg);
+    background-size:cover;
+    background-position:center;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:left;
+    align-items: normal;
+    text-align:center;
+    padding:0 20px;
+}
+
+/*input[type=text] {*/
+    /*background-color: black;*/
+    /*border: 2px whitesmoke;*/
+    /*color: whitesmoke;*/
+/*}*/
+
+/*input[type=password] {*/
+    /*background-color: black;*/
+    /*border: 2px whitesmoke;*/
+    /*color: whitesmoke;*/
+/*}*/
+
+/*input[type=button], input[type=submit], input[type=reset] {*/
+    /*background-color: #575555;*/
+    /*border: 20px whitesmoke;*/
+    /*color: whitesmoke;*/
+    /*padding: 16px 32px;*/
+    /*text-decoration: none;*/
+    /*margin: 4px 2px;*/
+    /*cursor: pointer;*/
+/*}*/
+
+#login-body {
+    color: #1BBBF5;
+    text-align: -webkit-center;
+}
+
+#login-form {
+    justify-content: left;
+    width: 100%;
+    padding: 12px 20px;
+    box-sizing: border-box;
+}
+
+.login-form-input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
 }
 
 footer {
