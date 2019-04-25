@@ -87,7 +87,6 @@ public class CustomerServiceImpl implements CustomerService {
         String passwordEncoded = passwordEncoder.encode(generatedNewPassword);
 
         try {
-            customer.setCustomerPassword(generatedNewPassword);
             customerRepository.updatePassword(passwordEncoded, customer.getEmail());
             customerRepository.saveAndFlush(customer);
             emailService.sendSimpleMessageForPasswordResetUsingTemplate(customer.getEmail(),
@@ -148,7 +147,6 @@ public class CustomerServiceImpl implements CustomerService {
 
         Customer newCustomer = new Customer();
         newCustomer.setEmail(customerDto.getEmail());
-        newCustomer.setCustomerPassword(password);
         newCustomer.setPhone(customerDto.getPhone());
         newCustomer.setName(customerDto.getName());
 
@@ -158,7 +156,7 @@ public class CustomerServiceImpl implements CustomerService {
             userDetailsManager.createUser(newUser);
             customerRepository.saveAndFlush(newCustomer);
             emailService.sendSimpleMessageUsingTemplateWhenCreatingCustomer(newCustomer.getEmail(),
-                    emailTemplate, newCustomer.getName(), newCustomer.getEmail(), newCustomer.getCustomerPassword());
+                    emailTemplate, newCustomer.getName(), newCustomer.getEmail(), password);
         } catch (HibernateException he) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
