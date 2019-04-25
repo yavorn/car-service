@@ -51,7 +51,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void testGetAllCustomers_ShouldReturn_WhenValidArgsPassed() throws Exception {
+    public void testGetAllCustomers_ShouldReturn_WhenValidArgsPassed() {
         when(customerRepository.findAll()).thenReturn(Arrays.<Customer>asList(
                 new Customer("email", "phone", "name"),
                 new Customer("email1", "phone", "name1")));
@@ -61,7 +61,17 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void testFindByEmail_ShouldReturn_WhenValidArgsPassed() throws Exception {
+    public void testGetAllCustomers_ShouldReturn_WhenInvalidArgsPassed() {
+        when(customerRepository.findAll()).thenReturn(Arrays.<Customer>asList(
+                new Customer("email", "phone", "name"),
+                new Customer("email1", "phone", "name1")));
+
+        List<Customer> result = customerServiceImpl.getAllCustomers();
+        Assert.assertNotEquals(3, result.size());
+    }
+
+    @Test
+    public void testFindByEmail_ShouldReturn_WhenValidArgsPassed() {
         when(customerRepository.findCustomerByEmail(anyString()))
                 .thenReturn(customer);
 
@@ -70,8 +80,8 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void testFindByEmail_ShouldReturn_WhenInvalidArgsPassed() throws Exception {
-        Mockito.when(customerRepository.findCustomerByEmail("email"))
+    public void testFindByEmail_ShouldReturn_WhenInvalidArgsPassed() {
+        when(customerRepository.findCustomerByEmail("email"))
         .thenReturn(customer);
 
         Customer customerToFind = customerServiceImpl.findByEmail("aaa@aa.aa");
@@ -98,7 +108,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void testResetPassword() throws Exception {
+    public void testResetPassword() {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
 
@@ -106,26 +116,26 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void testChangePassword() throws Exception {
+    public void testChangePassword() {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
 
         customerServiceImpl.changePassword(new CustomerDto());
     }
 
     @Test
-    public void testListOfYears() throws Exception {
+    public void testListOfYears() {
         List<Integer> result = customerServiceImpl.listOfYears();
         Assert.assertEquals(Arrays.<Integer>asList(Integer.valueOf(0)), result);
     }
 
     @Test
-    public void testGetAllCustomerCars() throws Exception {
+    public void testGetAllCustomerCars() {
         List<CustomerCars> result = customerServiceImpl.getAllCustomerCars();
         Assert.assertEquals(Arrays.<CustomerCars>asList(new CustomerCars(customer, new Models(new Make("makeName"), "modelName"), Integer.valueOf(0), "licensePlate", "VINnumber")), result);
     }
 
     @Test
-    public void testGetCustomerCarById() throws Exception {
+    public void testGetCustomerCarById() {
         when(customerCarsRepository.findCustomerCarsByCustomerCarID(anyLong())).thenReturn(new CustomerCars(customer, new Models(new Make("makeName"), "modelName"), Integer.valueOf(0), "licensePlate", "VINnumber"));
 
         CustomerCars result = customerServiceImpl.getCustomerCarById(0L);
