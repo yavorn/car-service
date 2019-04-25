@@ -14,17 +14,19 @@ import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -37,13 +39,13 @@ public class CustomerServiceImpl implements CustomerService {
     private SimpleMailMessage emailTemplate;
 
     @Autowired
-    public CustomerServiceImpl (CustomerRepository customerRepository
-            , CustomerCarsRepository customerCarsRepository
-            , UserDetailsManager userDetailsManager
-            , PasswordEncoder passwordEncoder
-            , PassayService passwordService
-            , EmailService emailService
-            , SimpleMailMessage emailTemplate) {
+    public CustomerServiceImpl(CustomerRepository customerRepository,
+                               CustomerCarsRepository customerCarsRepository,
+                               UserDetailsManager userDetailsManager,
+                               PasswordEncoder passwordEncoder,
+                               PassayService passwordService,
+                               EmailService emailService,
+                               SimpleMailMessage emailTemplate) {
         this.customerRepository = customerRepository;
         this.customerCarsRepository = customerCarsRepository;
         this.userDetailsManager = userDetailsManager;
@@ -52,9 +54,15 @@ public class CustomerServiceImpl implements CustomerService {
         this.emailService = emailService;
         this.emailTemplate = emailTemplate;
     }
+
     @Override
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
+    }
+
+    @Override
+    public Customer findByEmail(String email) {
+        return customerRepository.findCustomerByEmail(email);
     }
 
     @Override
@@ -101,6 +109,33 @@ public class CustomerServiceImpl implements CustomerService {
             );
         }
     }
+
+    @Override
+    @Transactional
+    public void changePassword(CustomerDto customerDto) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        Customer customer = customerRepository.findCustomerByEmail(currentPrincipalName);
+
+        String newPassword = customerDto.getPasswordConfirmation();
+            try {
+                String newEncodedPassword = passwordEncoder.encode(newPassword);
+                customerRepository.updatePassword(newEncodedPassword, currentPrincipalName);
+                customerRepository.saveAndFlush(customer);
+            } catch (HibernateException he) {
+                throw new ResponseStatusException(
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Failed to access database."
+                );
+            } catch (DatabaseItemNotFoundException e) {
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        e.getMessage()
+                );
+            }
+        }
+
     private void createCustomerOrAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) throws UsernameExistsException {
         Customer existingCustomer = customerRepository.findCustomerByEmail(customerDto.getEmail());
 
@@ -117,7 +152,7 @@ public class CustomerServiceImpl implements CustomerService {
         newCustomer.setPhone(customerDto.getPhone());
         newCustomer.setName(customerDto.getName());
 
-        User newUser = new User(customerDto.getEmail(),passwordEncoded,authorities);
+        User newUser = new User(customerDto.getEmail(), passwordEncoded, authorities);
 
         try {
             userDetailsManager.createUser(newUser);
@@ -136,12 +171,13 @@ public class CustomerServiceImpl implements CustomerService {
             );
         }
     }
+
     @Override
     public List<Integer> listOfYears() {
         int startYear = 1960;
-        int endYear =  Calendar.getInstance().get(Calendar.YEAR);
+        int endYear = Calendar.getInstance().get(Calendar.YEAR);
         List<Integer> listYears = new ArrayList<>();
-        for (int i = endYear; i >= startYear ; i--) {
+        for (int i = endYear; i >= startYear; i--) {
             listYears.add(i);
         }
         return listYears;
@@ -161,21 +197,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerCars getCustomerCarById(Long id) {
-
-
+    public CustomerCars getCustomerCarById(long id) {
         try {
-            List<CustomerCars> existingCustomerCar = getAllCustomerCars()
-                    .stream()
-                    .filter(car -> car.getCustomerCarID().equals(id))
-                    .collect(Collectors.toList());
+            CustomerCars carToFind = customerCarsRepository.findCustomerCarsByCustomerCarID(id);
 
-            if (existingCustomerCar.size() == 0) {
+            if (carToFind == null) {
                 throw new DatabaseItemNotFoundException("Customer Car", id);
             }
-            return customerCarsRepository.findCustomerCarsByCustomerCarID(id);
+            return carToFind;
 
-        }  catch (HibernateException he) {
+        } catch (HibernateException he) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Failed to access database."
