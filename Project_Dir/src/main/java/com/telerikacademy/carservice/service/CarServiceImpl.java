@@ -41,7 +41,7 @@ public class CarServiceImpl implements CarService {
             if (existingMakes.size() != 0) {
                 throw new DatabaseItemAlreadyExists("Car Make");
             }
-             makeRepository.save(make);
+            makeRepository.save(make);
 
 
         } catch (HibernateException he) {
@@ -79,7 +79,7 @@ public class CarServiceImpl implements CarService {
             if (existingModels.size() != 0) {
                 throw new DatabaseItemAlreadyExists("Car Model");
             }
-           return   modelsRepository.save(model);
+            return modelsRepository.save(model);
 
         } catch (HibernateException he) {
             throw new ResponseStatusException(
@@ -105,58 +105,27 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Make getMakeById(Long id) {
-        try {
-            List<Make> existingMakes = getAllMakes()
-                    .stream()
-                    .filter(carMake -> carMake.getMakeID().equals(id))
-                    .collect(Collectors.toList());
 
-            if (existingMakes.size() == 0) {
+            Make make = makeRepository.findMakeByMakeID(id);
+            if (make == null) {
                 throw new DatabaseItemNotFoundException("Car Make", id);
             }
             return makeRepository.findMakeByMakeID(id);
 
-        }  catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
 
-        } catch (DatabaseItemNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
-        }
     }
 
     @Override
     public Models getModelById(Long id) {
 
-        try {
-            List<Models> existingModels = getAllModels()
-                    .stream()
-                    .filter(carModel -> carModel.getModelID().equals(id))
-                    .collect(Collectors.toList());
-
-            if (existingModels.size() == 0) {
-                throw new DatabaseItemNotFoundException("Car model", id);
-            }
-            return modelsRepository.findModelsByModelID(id);
-
-        }  catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-
-        } catch (DatabaseItemNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
+        Models model = modelsRepository.findModelsByModelID(id);
+        if (model == null) {
+            throw new DatabaseItemNotFoundException("Car model", id);
         }
+        return modelsRepository.findModelsByModelID(id);
+
     }
+
     @Override
     public List<Make> getAllMakes() {
 
@@ -173,7 +142,6 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<Models> getAllModels() {
-
 
 
         try {
@@ -217,14 +185,14 @@ public class CarServiceImpl implements CarService {
     public List<Models> findModelsByMakeID(Long id) {
 
         try {
-            List<Models> existingModels = getAllModels();
-
-            if (existingModels.size() == 0) {
-                throw new DatabaseItemNotFoundException("Car models from Make", id);
-            }
+//            List<Models> existingModels = getAllModels();
+//
+//            if (existingModels.size() == 0) {
+//                throw new DatabaseItemNotFoundException("Car models from Make", id);
+//            }
             return modelsRepository.findModelsByMake_MakeID(id);
 
-        }  catch (HibernateException he) {
+        } catch (HibernateException he) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Failed to access database."
