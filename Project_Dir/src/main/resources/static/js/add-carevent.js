@@ -2,8 +2,8 @@ $(document).ready(function () {
     $('#customers-dropdown').on('change', (function (){
         let userID = $('#customers-dropdown').val();
 
-        $('#test1').append(userID);
-        $('#test2').append(userID);
+        
+        $('#test2').text(userID);
     }))
 
 });
