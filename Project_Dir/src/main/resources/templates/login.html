@@ -4,16 +4,17 @@
 	<meta charset="UTF-8">
 	<title>Login</title>
 	<link rel="stylesheet" th:href="@{/css/main.css}">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 </head>
 <body id="login-body">
-<h1>Login Page</h1>
+<h1 id="h1-title">Welcome to Team 6 Car service</h1>
 <i th:if="${param.error}" class="error">Wrong username or password</i>
 <i th:if="${param.logout}">You have successfully logged out</i>
-<form th:action="@{/authenticateUser}" method="post">
-	<p>Username:
+<form id="login-form" th:action="@{/authenticateUser}" method="post">
+	<p class="login-form-input">Username:
 		<input type="text" id="username" name="username">
 	</p>
-	<p>Password:
+	<p class="login-form-input">Password:
 		<input type="password" id="password" name="password">
 	</p>
 	<input type="submit" value="Login">
