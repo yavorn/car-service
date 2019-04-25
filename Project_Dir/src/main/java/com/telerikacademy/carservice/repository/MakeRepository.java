@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MakeRepository extends JpaRepository<Make, Long> {
 
-    List<Make> findAllByMakeNameOrderByMakeNameAsc();
+    List<Make> findAllByOrderByMakeNameAsc();
     Make findMakeByMakeID(Long id);
     Make findMakeByMakeName(String name);
 

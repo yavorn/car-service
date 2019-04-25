@@ -68,7 +68,7 @@ public class CarModelServiceTests {
     @Test
     public void getAllMakes_shouldReturnTwoCarMakes_whenTwoCarMakesAreAvailable() {
         // Arrange
-        when(mockMakeRepository.findAllByMakeNameOrderByMakeNameAsc())
+        when(mockMakeRepository.findAllByOrderByMakeNameAsc())
                 .thenReturn(carMakes);
 
         // Act
@@ -78,7 +78,7 @@ public class CarModelServiceTests {
         Assert.assertEquals(2, result.size());
         Assert.assertEquals("Audi", result.get(0).getMakeName());
         Assert.assertEquals("Seat", result.get(1).getMakeName());
-        verify(mockMakeRepository, Mockito.times(1)).findAllByMakeNameOrderByMakeNameAsc();
+        verify(mockMakeRepository, Mockito.times(1)).findAllByOrderByMakeNameAsc();
     }
 
 
