@@ -5,6 +5,7 @@ import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerCars;
 import com.telerikacademy.carservice.models.CustomerDto;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,4 +27,8 @@ public interface CustomerService {
     List<CustomerCars> getAllCustomerCars();
 
     void changePassword(CustomerDto customerDto);
+
+    void disableCustomer(CustomerDto customerDto);
+
+    void enableCustomer(String email);
 }
