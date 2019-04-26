@@ -1,6 +1,8 @@
 package com.telerikacademy.carservice;
 
+import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
+import com.telerikacademy.carservice.exceptions.UserRightsNotDisabledException;
 import com.telerikacademy.carservice.exceptions.UsernameExistsException;
 import com.telerikacademy.carservice.models.*;
 import com.telerikacademy.carservice.repository.CustomerCarsRepository;
@@ -60,12 +62,14 @@ public class CustomerServiceImplTest {
         customer.setEmail("email");
         customer.setPhone("phone");
         customer.setName("name");
+        customer.setIsDeleted(0);
 
-        customerDto.setEmail("someEmail");
+        customerDto.setEmail("email");
         customerDto.setPassword("password");
         customerDto.setPasswordConfirmation("passwordConfirm");
         customerDto.setPhone("phone");
         customerDto.setName("name");
+        customerDto.setIsDeleted(0);
     }
 
     @Test
@@ -229,6 +233,53 @@ public class CustomerServiceImplTest {
     public void testGetCustomerCarById_ShouldThrow_WhenInvalidArgsPassed() {
         when(customerCarsRepository.findCustomerCarsByCustomerCarID(anyLong())).thenReturn(null);
         CustomerCars car = customerServiceImpl.getCustomerCarById(0L);
+    }
+
+    @Test
+    public void testDisableCustomer_ShouldReturn_WhenValidArgsPassed(){
+        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+        customerServiceImpl.disableCustomer(customerDto);
+
+        Assert.assertEquals(1, customer.getIsDeleted());
+    }
+
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void testDisableCustomer_ShouldThrow_WhenNullPassed(){
+        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
+        customerServiceImpl.disableCustomer(customerDto);
+
+        Assert.assertEquals(1, customer.getIsDeleted());
+    }
+
+    @Test(expected = DatabaseItemAlreadyDeletedException.class)
+    public void testDisableCustomer_ShouldThrow_WhenUserAlreadyDisabled(){
+        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+        customer.setIsDeleted(1);
+        customerServiceImpl.disableCustomer(customerDto);
+    }
+
+    @Test
+    public void testEnableCustomer_ShouldReturn_WhenValidArgsPassed() {
+        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+        customer.setIsDeleted(1);
+        customerServiceImpl.enableCustomer(customerDto);
+
+        Assert.assertEquals(0, customer.getIsDeleted());
+    }
+
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void testEnableCustomer_ShouldThrow_WhenNullPassed(){
+        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
+        customerServiceImpl.enableCustomer(customerDto);
+
+        Assert.assertEquals(1, customer.getIsDeleted());
+    }
+
+    @Test(expected = UserRightsNotDisabledException.class)
+    public void testEnableCustomer_ShouldThrow_WhenUserAlreadyDisabled(){
+        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+        customer.setIsDeleted(0);
+        customerServiceImpl.enableCustomer(customerDto);
     }
 }
 
