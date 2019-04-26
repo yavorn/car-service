@@ -30,5 +30,5 @@ public interface CustomerService {
 
     void disableCustomer(CustomerDto customerDto);
 
-    void enableCustomer(String email);
+    void enableCustomer(CustomerDto customerDto);
 }

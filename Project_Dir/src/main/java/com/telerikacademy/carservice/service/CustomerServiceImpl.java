@@ -1,6 +1,8 @@
 package com.telerikacademy.carservice.service;
 
+import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
+import com.telerikacademy.carservice.exceptions.UserRightsNotDisabledException;
 import com.telerikacademy.carservice.exceptions.UsernameExistsException;
 import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerCars;
@@ -168,6 +170,10 @@ public class CustomerServiceImpl implements CustomerService {
             throw new DatabaseItemNotFoundException(customerDto.getName());
         }
 
+        if (customerToDisable.getIsDeleted() == 1){
+            throw new DatabaseItemAlreadyDeletedException(customerToDisable.getEmail());
+        }
+
         try {
             customerRepository.disableUser(customerToDisable.getEmail());
             customerToDisable.setIsDeleted(1);
@@ -176,6 +182,11 @@ public class CustomerServiceImpl implements CustomerService {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Failed to access database."
+            );
+
+        } catch (DatabaseItemAlreadyDeletedException ex) {
+            throw new ResponseStatusException(
+              HttpStatus.BAD_REQUEST
             );
 
         } catch (DatabaseItemNotFoundException e) {
@@ -188,11 +199,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public void enableCustomer(String email) {
-        Customer customerToEnable = customerRepository.findCustomerByEmail(email);
+    public void enableCustomer(CustomerDto customerDto) {
+        Customer customerToEnable = customerRepository.findCustomerByEmail(customerDto.getEmail());
 
         if (customerToEnable == null) {
-            throw new DatabaseItemNotFoundException(email);
+            throw new DatabaseItemNotFoundException(customerDto.getEmail());
         }
 
         try {
@@ -204,6 +215,11 @@ public class CustomerServiceImpl implements CustomerService {
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Failed to access database."
             );
+
+        } catch (UserRightsNotDisabledException ex) {
+          throw new ResponseStatusException(
+                  HttpStatus.BAD_REQUEST
+          )  ;
 
         } catch (DatabaseItemNotFoundException e) {
             throw new ResponseStatusException(
