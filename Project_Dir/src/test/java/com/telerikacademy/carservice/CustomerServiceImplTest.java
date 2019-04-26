@@ -276,7 +276,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test(expected = UserRightsNotDisabledException.class)
-    public void testEnableCustomer_ShouldThrow_WhenUserAlreadyDisabled(){
+    public void testEnableCustomer_ShouldThrow_WhenUserAlreadyEnabled(){
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         customer.setIsDeleted(0);
         customerServiceImpl.enableCustomer(customerDto);
