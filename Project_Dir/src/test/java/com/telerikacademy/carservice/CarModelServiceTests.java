@@ -1,5 +1,6 @@
 package com.telerikacademy.carservice;
 
+import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyExists;
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import com.telerikacademy.carservice.models.Make;
 import com.telerikacademy.carservice.models.Models;
@@ -14,15 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Scanner;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -113,7 +110,7 @@ public class CarModelServiceTests {
     }
 
     @Test(expected = NullPointerException.class)
-    public void getAllModels_shouldThrowNullPointerException() {
+    public void getAllModels_shouldThrowNullPointerException() throws ResponseStatusException {
         // Arrange
         when(mockModelsRepository.findAll())
                 .thenReturn(null);
@@ -125,14 +122,9 @@ public class CarModelServiceTests {
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
-    public void getMakeById_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() {
-        //Arrange
-        Mockito.when(mockMakeRepository.findMakeByMakeID((long) 100000)).thenReturn(null);
+    public void getMakeById_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws ResponseStatusException {
         // Act
-        Make carMake = carService.getMakeById((long) 100000);
-        // Assert
-        assertEquals(null, carMake);
-        verify(mockMakeRepository, times(2)).findMakeByMakeID((long) 1);
+        Make carMake = carService.getMakeById((long)1);
     }
 
     @Test
@@ -165,15 +157,11 @@ public class CarModelServiceTests {
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
-    public void getModelById_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() {
-        Mockito.when(mockModelsRepository.findModelsByModelID((long) 100000)).thenReturn(null);
+    public void getModelById_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws ResponseStatusException {
 
         // Act
-        Models carModel = carService.getModelById((long) 100000);
+        Models carModel = carService.getModelById((long) 1);
 
-        // Assert
-        assertEquals(null, carModel);
-        verify(mockModelsRepository, times(2)).findModelsByModelID((long) 1);
     }
 
     @Test
@@ -190,8 +178,62 @@ public class CarModelServiceTests {
         assertEquals(2, result.size());
         assertEquals("A6", result.get(0).getModelName());
         assertEquals("RS6", result.get(1).getModelName());
-        verify(mockModelsRepository, times(1)).findModelsByMake_MakeID((long) 1);
+        verify(mockModelsRepository, times(2)).findModelsByMake_MakeID((long) 1);
     }
+
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void findModelsByMakeId_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws ResponseStatusException{
+
+        List<Models> result = carService.findModelsByMakeID((long) 1);
+
+    }
+
+
+
+
+
+    @Test
+    public void addMake_shouldInvokeSaveInMakeRepository_whenAddedSuccessfully() {
+
+        // Act
+        carService.addMake(carMakeAudi);
+
+        // Assert
+        verify(mockMakeRepository, times(1)).save(Mockito.any(Make.class));
+    }
+
+
+     @Test(expected = ResponseStatusException.class)
+    public void addMake_shouldThrowDatabaseItemAlreadyExistsException_whenCarMakeExists() throws ResponseStatusException  {
+        //Arrange
+        when(mockMakeRepository.findAllByOrderByMakeNameAsc())
+                .thenReturn(carMakes);
+
+        // Act
+         carService.addMake(carMakeAudi);
+    }
+
+    @Test
+    public void addModel_shouldInvokeSaveInModelsRepository_whenAddedSuccessfully() {
+
+        // Act
+        carService.addModel(carModelA6);
+
+        // Assert
+        verify(mockModelsRepository, times(1)).save(Mockito.any(Models.class));
+    }
+
+
+    @Test(expected = ResponseStatusException.class)
+    public void addModel_shouldThrowDatabaseItemAlreadyExistsException_whenCarModelExists() throws ResponseStatusException  {
+        //Arrange
+        when(mockModelsRepository.findAll())
+                .thenReturn(carModels);
+
+        // Act
+        carService.addModel(carModelA6);
+    }
+
 
 
 }
