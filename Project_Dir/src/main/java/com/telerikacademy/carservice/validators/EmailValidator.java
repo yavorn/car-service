@@ -1,4 +1,4 @@
-package com.telerikacademy.carservice.controllers.exception_handler;
+package com.telerikacademy.carservice.validators;
 
 import com.telerikacademy.carservice.exceptions.EmailNotSentException;
 import org.springframework.mail.SimpleMailMessage;
