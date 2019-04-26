@@ -71,8 +71,8 @@ public class CustomerServiceImplTest {
     @Test
     public void testGetAllCustomers_ShouldReturn_WhenValidArgsPassed() {
         when(customerRepository.findAll()).thenReturn(Arrays.<Customer>asList(
-                new Customer("email", "phone", "name"),
-                new Customer("email1", "phone", "name1")));
+                new Customer("email", "phone", "name", 0),
+                new Customer("email1", "phone", "name1", 0)));
 
         List<Customer> result = customerServiceImpl.getAllCustomers();
         Assert.assertEquals(2, result.size());
@@ -81,8 +81,8 @@ public class CustomerServiceImplTest {
     @Test
     public void testGetAllCustomers_ShouldReturn_WhenInvalidArgsPassed() {
         when(customerRepository.findAll()).thenReturn(Arrays.<Customer>asList(
-                new Customer("email", "phone", "name"),
-                new Customer("email1", "phone", "name1")));
+                new Customer("email", "phone", "name", 0),
+                new Customer("email1", "phone", "name1", 0)));
 
         List<Customer> result = customerServiceImpl.getAllCustomers();
         Assert.assertNotEquals(3, result.size());
@@ -120,7 +120,7 @@ public class CustomerServiceImplTest {
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
         when(passwordEncoder.encode("generateRandomPasswordResponse")).thenReturn("$2y$10$SWb8bU0QIEb067afKMIj6.nTSNXDUDTKLNye/jXi7WBBpXfv8Izg6");
         customerServiceImpl.addCustomer(customerDto, userAuthorities);
-        Customer testCustomer = new Customer(customerDto.getEmail(), customerDto.getPhone(), customerDto.getName());
+        Customer testCustomer = new Customer(customerDto.getEmail(), customerDto.getPhone(), customerDto.getName(), customerDto.getIsDeleted());
         List<Customer> result = new ArrayList<>();
         result.add(testCustomer);
 
@@ -133,7 +133,7 @@ public class CustomerServiceImplTest {
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
         when(passwordEncoder.encode("generateRandomPasswordResponse")).thenReturn("$2y$10$SWb8bU0QIEb067afKMIj6.nTSNXDUDTKLNye/jXi7WBBpXfv8Izg6");
         customerServiceImpl.addCustomer(customerDto, adminAuthorities);
-        Customer testAdmin = new Customer(customerDto.getEmail(), customerDto.getPhone(), customerDto.getName());
+        Customer testAdmin = new Customer(customerDto.getEmail(), customerDto.getPhone(), customerDto.getName(), customerDto.getIsDeleted());
         List<Customer> result = new ArrayList<>();
         result.add(testAdmin);
 
