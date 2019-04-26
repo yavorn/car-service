@@ -1,5 +1,6 @@
 package com.telerikacademy.carservice;
 
+import com.telerikacademy.carservice.exceptions.UsernameExistsException;
 import com.telerikacademy.carservice.models.*;
 import com.telerikacademy.carservice.repository.CustomerCarsRepository;
 import com.telerikacademy.carservice.repository.CustomerRepository;
@@ -15,9 +16,11 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,6 +44,10 @@ public class CustomerServiceImplTest {
     @InjectMocks
     CustomerServiceImpl customerServiceImpl;
     private Customer customer = new Customer();
+    private CustomerDto customerDto = new CustomerDto();
+    private List<GrantedAuthority> userAuthorities = AuthorityUtils.createAuthorityList("ROLE_USER");
+    private List<GrantedAuthority> adminAuthorities = AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
+
 
     @Before
     public void setUp() {
@@ -48,8 +55,15 @@ public class CustomerServiceImplTest {
         customer.setEmail("email");
         customer.setPhone("phone");
         customer.setName("name");
+
+        customerDto.setEmail("someEmail");
+        customerDto.setPassword("password");
+        customerDto.setPasswordConfirmation("passwordConfirm");
+        customerDto.setPhone("phone");
+        customerDto.setName("name");
     }
 
+//    OK
     @Test
     public void testGetAllCustomers_ShouldReturn_WhenValidArgsPassed() {
         when(customerRepository.findAll()).thenReturn(Arrays.<Customer>asList(
@@ -60,6 +74,7 @@ public class CustomerServiceImplTest {
         Assert.assertEquals(2, result.size());
     }
 
+//    OK
     @Test
     public void testGetAllCustomers_ShouldReturn_WhenInvalidArgsPassed() {
         when(customerRepository.findAll()).thenReturn(Arrays.<Customer>asList(
@@ -70,6 +85,7 @@ public class CustomerServiceImplTest {
         Assert.assertNotEquals(3, result.size());
     }
 
+//    OK
     @Test
     public void testFindByEmail_ShouldReturn_WhenValidArgsPassed() {
         when(customerRepository.findCustomerByEmail(anyString()))
@@ -79,6 +95,7 @@ public class CustomerServiceImplTest {
         Assert.assertEquals("email", result.getEmail());
     }
 
+//    OK
     @Test
     public void testFindByEmail_ShouldReturn_WhenInvalidArgsPassed() {
         when(customerRepository.findCustomerByEmail("email"))
@@ -90,23 +107,42 @@ public class CustomerServiceImplTest {
 
 
 
-    //todo finish tests
-    @Test
-    public void testAddCustomer() throws Exception {
+//    OK
+    @Test(expected = UsernameExistsException.class)
+    public void addCustomer_ShouldThrow_WhenUserExists() throws Exception {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
-
-        customerServiceImpl.addCustomer(new CustomerDto(), Arrays.<GrantedAuthority>asList(null));
+        when(passwordEncoder.encode("generateRandomPasswordResponse")).thenReturn("$2y$10$SWb8bU0QIEb067afKMIj6.nTSNXDUDTKLNye/jXi7WBBpXfv8Izg6");
+        customerServiceImpl.addCustomer(customerDto, userAuthorities);
     }
 
+//    OK
     @Test
-    public void testAddAdmin() throws Exception {
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+    public void testAddCustomer_ShouldReturn_WhenValidArgsPassed() throws Exception {
+        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
+        when(passwordEncoder.encode("generateRandomPasswordResponse")).thenReturn("$2y$10$SWb8bU0QIEb067afKMIj6.nTSNXDUDTKLNye/jXi7WBBpXfv8Izg6");
+        customerServiceImpl.addCustomer(customerDto, userAuthorities);
+        Customer testCustomer = new Customer(customerDto.getEmail(), customerDto.getPhone(), customerDto.getName());
+        List<Customer> result = new ArrayList<>();
+        result.add(testCustomer);
 
-        customerServiceImpl.addAdmin(new CustomerDto(), Arrays.<GrantedAuthority>asList(null));
+        Assert.assertEquals(1, result.size());
     }
+//OK
+    @Test
+    public void testAddAdmin_ShouldReturn_WhenValidArgsPassed() throws Exception {
+        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
+        when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
+        when(passwordEncoder.encode("generateRandomPasswordResponse")).thenReturn("$2y$10$SWb8bU0QIEb067afKMIj6.nTSNXDUDTKLNye/jXi7WBBpXfv8Izg6");
+        customerServiceImpl.addCustomer(customerDto, adminAuthorities);
+        Customer testAdmin = new Customer(customerDto.getEmail(), customerDto.getPhone(), customerDto.getName());
+        List<Customer> result = new ArrayList<>();
+        result.add(testAdmin);
 
+        Assert.assertEquals(1, result.size());
+    }
+//OK
     @Test
     public void testResetPassword() {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
@@ -115,8 +151,15 @@ public class CustomerServiceImplTest {
         customerServiceImpl.resetPassword("email");
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testChangePassword_ShouldReturn_WhenNullPassed() {
+        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+
+        customerServiceImpl.changePassword(new CustomerDto());
+    }
+
     @Test
-    public void testChangePassword() {
+    public void testChangePassword_ShouldReturn_WhenValidArgsPassed() {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
 
         customerServiceImpl.changePassword(new CustomerDto());
