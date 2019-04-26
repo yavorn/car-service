@@ -135,6 +135,108 @@ public class CustomerServiceImpl implements CustomerService {
             }
         }
 
+    @Override
+    public CustomerCars getCustomerCarById(long id) {
+        try {
+            CustomerCars carToFind = customerCarsRepository.findCustomerCarsByCustomerCarID(id);
+
+            if (carToFind == null) {
+                throw new DatabaseItemNotFoundException("Customer Car", id);
+            }
+            return carToFind;
+
+        } catch (HibernateException he) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Failed to access database."
+            );
+
+        } catch (DatabaseItemNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage()
+            );
+        }
+    }
+
+    @Override
+    @Transactional
+    public void disableCustomer(CustomerDto customerDto) {
+        Customer customerToDisable = customerRepository.findCustomerByEmail(customerDto.getEmail());
+
+        if (customerToDisable == null) {
+            throw new DatabaseItemNotFoundException(customerDto.getName());
+        }
+
+        try {
+            customerRepository.disableUser(customerToDisable.getEmail());
+            customerToDisable.setIsDeleted(1);
+            customerRepository.saveAndFlush(customerToDisable);
+        } catch (HibernateException he) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Failed to access database."
+            );
+
+        } catch (DatabaseItemNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage()
+            );
+        }
+    }
+
+    @Override
+    @Transactional
+    public void enableCustomer(String email) {
+        Customer customerToEnable = customerRepository.findCustomerByEmail(email);
+
+        if (customerToEnable == null) {
+            throw new DatabaseItemNotFoundException(email);
+        }
+
+        try {
+            customerRepository.enableUser(customerToEnable.getEmail());
+            customerToEnable.setIsDeleted(0);
+            customerRepository.saveAndFlush(customerToEnable);
+        } catch (HibernateException he) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Failed to access database."
+            );
+
+        } catch (DatabaseItemNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage()
+            );
+        }
+    }
+
+    @Override
+    public List<CustomerCars> getAllCustomerCars() {
+        try {
+            return customerCarsRepository.findAll();
+
+        } catch (HibernateException he) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Failed to access database."
+            );
+        }
+    }
+
+    @Override
+    public List<Integer> listOfYears() {
+        int startYear = 1960;
+        int endYear = Calendar.getInstance().get(Calendar.YEAR);
+        List<Integer> listYears = new ArrayList<>();
+        for (int i = endYear; i >= startYear; i--) {
+            listYears.add(i);
+        }
+        return listYears;
+    }
+
     private void createCustomerOrAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) throws UsernameExistsException {
         Customer existingCustomer = customerRepository.findCustomerByEmail(customerDto.getEmail());
 
@@ -169,53 +271,4 @@ public class CustomerServiceImpl implements CustomerService {
             );
         }
     }
-
-    @Override
-    public List<Integer> listOfYears() {
-        int startYear = 1960;
-        int endYear = Calendar.getInstance().get(Calendar.YEAR);
-        List<Integer> listYears = new ArrayList<>();
-        for (int i = endYear; i >= startYear; i--) {
-            listYears.add(i);
-        }
-        return listYears;
-    }
-
-    @Override
-    public List<CustomerCars> getAllCustomerCars() {
-        try {
-            return customerCarsRepository.findAll();
-
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-        }
-    }
-
-    @Override
-    public CustomerCars getCustomerCarById(long id) {
-        try {
-            CustomerCars carToFind = customerCarsRepository.findCustomerCarsByCustomerCarID(id);
-
-            if (carToFind == null) {
-                throw new DatabaseItemNotFoundException("Customer Car", id);
-            }
-            return carToFind;
-
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-
-        } catch (DatabaseItemNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
-        }
-    }
-
 }
