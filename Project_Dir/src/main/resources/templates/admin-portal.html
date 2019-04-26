@@ -13,7 +13,10 @@
 	<input type="submit" value="Add customer">
 </form>
 <form th:action="@{/customer}" th:method="get">
-	<input type="submit" value="Delete customer">
+	<input type="submit" value="Disable customer access">
+</form>
+<form th:action="@{/customer}" th:method="get">
+	<input type="submit" value="Enable customer access">
 </form>
 <form th:action="@{/admin}" th:method="get">
 	<input type="submit" value="Add admin">
