@@ -33,7 +33,7 @@ public class CarServiceImpl implements CarService {
 
 
         try {
-            List<Make> existingMakes = getAllMakes()
+            List<Make> existingMakes = makeRepository.findAllByOrderByMakeNameAsc()
                     .stream()
                     .filter(carMake -> carMake.getMakeName().equals(make.getMakeName()))
                     .collect(Collectors.toList());
@@ -184,25 +184,12 @@ public class CarServiceImpl implements CarService {
     @Override
     public List<Models> findModelsByMakeID(Long id) {
 
-        try {
-//            List<Models> existingModels = getAllModels();
-//
-//            if (existingModels.size() == 0) {
-//                throw new DatabaseItemNotFoundException("Car models from Make", id);
-//            }
-            return modelsRepository.findModelsByMake_MakeID(id);
+        List<Models> existingModels = modelsRepository.findModelsByMake_MakeID(id);
 
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-
-        } catch (DatabaseItemNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
+        if (existingModels.size() == 0) {
+            throw new DatabaseItemNotFoundException("Car models from Make", id);
         }
+        return modelsRepository.findModelsByMake_MakeID(id);
+
     }
 }
