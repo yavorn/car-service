@@ -24,13 +24,17 @@ public class Customer {
     @Size(min = 5, max = 25, message = "Name must be bewteen 5 and 25 characters.")
     private String name;
 
+    @Column(name = "is_deleted")
+    private int isDeleted;
+
     public Customer() {
     }
 
-    public Customer(String email, String phone, String name) {
+    public Customer(String email, String phone, String name, int isDeleted) {
         this.email = email;
         this.phone = phone;
         this.name = name;
+        this.isDeleted = isDeleted;
     }
 
     public Long getCustomerId() {
@@ -63,5 +67,13 @@ public class Customer {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(int isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }
