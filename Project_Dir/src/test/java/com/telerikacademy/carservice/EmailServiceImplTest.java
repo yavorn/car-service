@@ -53,4 +53,18 @@ public class EmailServiceImplTest {
 
         verify(emailSender, Mockito.times(1)).send(Mockito.any(SimpleMailMessage.class));
     }
+    @Test(expected = EmailNotSentException.class)
+    public void sendSimpleMessage_ShouldThrow_WhenInvalidArgsPassedInToField() {
+        emailService.sendSimpleMessage("", subject, text);
+    }
+
+    @Test(expected = EmailNotSentException.class)
+    public void sendSimpleMessage_ShouldThrow_WhenInvalidArgsPassedInTextField() {
+        emailService.sendSimpleMessage(to, "", text);
+    }
+
+    @Test(expected = EmailNotSentException.class)
+    public void sendSimpleMessage_ShouldThrow_WhenInvalidArgsPassedInSubjectField() {
+        emailService.sendSimpleMessage(to, subject, "");
+    }
 }
