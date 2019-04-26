@@ -19,6 +19,8 @@ import javax.validation.constraints.Size;
 
         private String phone;
 
+        private int isDeleted;
+
         public CustomerDto() {
         }
 
@@ -60,5 +62,13 @@ import javax.validation.constraints.Size;
 
         public void setPasswordConfirmation(String passwordConfirmation) {
             this.passwordConfirmation = passwordConfirmation;
+        }
+
+        public int getIsDeleted() {
+            return isDeleted;
+        }
+
+        public void setIsDeleted(int isDeleted) {
+            this.isDeleted = isDeleted;
         }
     }

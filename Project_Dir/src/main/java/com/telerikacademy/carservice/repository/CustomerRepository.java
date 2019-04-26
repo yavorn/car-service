@@ -19,4 +19,13 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Query(value = "update users set password = :password where username = :username", nativeQuery = true)
     void updatePassword(@Param(value = "password") String password, @Param(value = "username") String username);
 
+    @Transactional
+    @Modifying
+    @Query(value = "update users set enabled = '0' where username = :username", nativeQuery = true)
+    void disableUser(@Param(value = "username") String username);
+
+    @Transactional
+    @Modifying
+    @Query(value = "update users set enabled = '1' where username = :username", nativeQuery = true)
+    void enableUser(@Param(value = "username") String username);
 }
