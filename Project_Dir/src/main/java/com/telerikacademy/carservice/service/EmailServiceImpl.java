@@ -1,8 +1,8 @@
 package com.telerikacademy.carservice.service;
 
+import com.telerikacademy.carservice.controllers.exception_handler.EmailValidator;
 import com.telerikacademy.carservice.service.contracts.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -17,17 +17,15 @@ public class EmailServiceImpl implements EmailService {
     }
 
 
+    @Override
     public void sendSimpleMessage(String to, String subject, String text) {
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(to);
-            message.setSubject(subject);
-            message.setText(text);
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(text);
 
-            emailSender.send(message);
-        } catch (MailException exception) {
-            exception.getMessage();
-        }
+        EmailValidator.validateSimpleMessage(message);
+        emailSender.send(message);
     }
 
     @Override
@@ -37,20 +35,19 @@ public class EmailServiceImpl implements EmailService {
         message.setSubject(subject);
         message.setText(text);
 
-        try {
-            emailSender.send(message);
-        } catch (MailException ex) {
-            ex.getMessage();
-        }
+        EmailValidator.validateSimpleMessage(message);
+        emailSender.send(message);
     }
 
     @Override
     public void sendSimpleMessageUsingTemplateWhenCreatingCustomer(String to, SimpleMailMessage template, String... templateArgs) {
-            SimpleMailMessage message = new SimpleMailMessage();
-            String text = String.format(template.getText(), templateArgs);
+        SimpleMailMessage message = new SimpleMailMessage();
+        String text = String.format(template.getText(), templateArgs);
 
-            message.setTo(to);
-            message.setText(text);
-            emailSender.send(message);
+        message.setTo(to);
+        message.setText(text);
+
+        EmailValidator.validateSimpleMessage(message);
+        emailSender.send(message);
     }
 }
