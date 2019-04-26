@@ -1,6 +1,7 @@
-package com.telerikacademy.carservice.service;
+package com.telerikacademy.carservice;
 
 import com.telerikacademy.carservice.exceptions.EmailNotSentException;
+import com.telerikacademy.carservice.service.EmailServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -16,8 +17,8 @@ public class EmailServiceImplTest {
     @Mock
     JavaMailSender emailSender;
     @InjectMocks
-    EmailServiceImpl emailServiceImpl;
-    private String to = "some.email@abv.bg";
+    EmailServiceImpl emailService;
+    private String to = "some.email@test.moc";
     private String subject = "Mockito test email";
     private String text = "Mockito text for testing email service.";
     @Before
@@ -27,25 +28,29 @@ public class EmailServiceImplTest {
 
     @Test
     public void testSendSimpleMessage_Should_WhenValidArgsPassed() throws Exception {
-        emailServiceImpl.sendSimpleMessage(to, subject, text);
+        emailService.sendSimpleMessage(to, subject, text);
 
         verify(emailSender, Mockito.times(1)).send(Mockito.any(SimpleMailMessage.class));
     }
 
     @Test(expected = EmailNotSentException.class)
     public void testSendSimpleMessage_ShouldThrow_WhenInvalidArgsPassed() throws Exception {
-        emailServiceImpl.sendSimpleMessage("", subject, text);
+        emailService.sendSimpleMessage("", subject, text);
 
         verify(emailSender, Mockito.times(1)).send(Mockito.any(SimpleMailMessage.class));
     }
 
     @Test
-    public void testSendSimpleMessageForPasswordResetUsingTemplate() throws Exception {
-        emailServiceImpl.sendSimpleMessageForPasswordResetUsingTemplate("to", "subject", "text");
+    public void testSendSimpleMessageForPasswordReset_Should_WhenValidArgsPassed() throws Exception {
+        emailService.sendSimpleMessageForPasswordResetUsingTemplate(to, subject, text);
+
+        verify(emailSender, Mockito.times(1)).send(Mockito.any(SimpleMailMessage.class));
     }
 
-    @Test
-    public void testSendSimpleMessageUsingTemplateWhenCreatingCustomer() throws Exception {
-        emailServiceImpl.sendSimpleMessageUsingTemplateWhenCreatingCustomer("to", null, "templateArgs");
+    @Test(expected = EmailNotSentException.class)
+    public void testSendSimpleMessageForPasswordReset_ShouldThrow_WhenInvalidArgsPassed() throws Exception {
+        emailService.sendSimpleMessageForPasswordResetUsingTemplate("", subject, text);
+
+        verify(emailSender, Mockito.times(1)).send(Mockito.any(SimpleMailMessage.class));
     }
 }

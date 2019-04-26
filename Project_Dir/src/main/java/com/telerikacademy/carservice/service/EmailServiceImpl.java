@@ -1,6 +1,6 @@
 package com.telerikacademy.carservice.service;
 
-import com.telerikacademy.carservice.controllers.exception_handler.EmailValidator;
+import com.telerikacademy.carservice.validators.EmailValidator;
 import com.telerikacademy.carservice.service.contracts.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
