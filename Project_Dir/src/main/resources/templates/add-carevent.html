@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Car Event</title>
+</head>
+<body>
+
+
+<p>Choose a customer:</p>
+<div class="form-group blu-margin">
+    <select class="form-control" id="customers-dropdown">
+        <option>Select Customer</option>
+        <option th:each="customer : ${customers}"
+                th:value="${customer.getCustomerId()}"
+                th:text="${customer.getName()}">
+        </option>
+
+    </select>
+</div>
+
+
+
+<p id ="test2"></p>
+
+<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+<script th:src="@{/js/add-carevent.js}"></script>
+</body>
+</html>

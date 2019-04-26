@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @Controller
 public class PasswordController {
@@ -20,14 +21,24 @@ public class PasswordController {
     }
 
     @GetMapping("/password")
-    public String showResetPassword(Model model){
+    public String showChangeOrResetPassword(Model model){
         model.addAttribute("customerDto", new CustomerDto());
         return "password";
     }
-
+//todo: error handling
     @PostMapping("/password")
-    public String resetPassword(@ModelAttribute CustomerDto customerDto) throws DatabaseItemNotFoundException {
+    public String resetPassword(@ModelAttribute CustomerDto customerDto, Model model) throws DatabaseItemNotFoundException {
         customerService.resetPassword(customerDto.getEmail());
+        return "password-confirmation";
+    }
+
+    @PutMapping("/password")
+    public String changePassword(@ModelAttribute CustomerDto customerDto, Model model) throws DatabaseItemNotFoundException {
+        if (!customerDto.getPassword().equals(customerDto.getPasswordConfirmation())) {
+            model.addAttribute("error", "Passwords do not match!");
+            return "password";
+        }
+        customerService.changePassword(customerDto);
         return "password-confirmation";
     }
 }

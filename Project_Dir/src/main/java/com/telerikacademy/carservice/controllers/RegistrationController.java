@@ -10,9 +10,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,6 +36,18 @@ public class RegistrationController {
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
         customerService.addCustomer(customerDto, authorities);
         return "new-customer-confirmation";
+    }
+
+    @DeleteMapping("/customer")
+    public String disableCustomer(@ModelAttribute CustomerDto customerDto) {
+        customerService.disableCustomer(customerDto);
+        return "redirect:admin-portal";
+    }
+
+    @PutMapping("/customer")
+    public String enableCustomer(@ModelAttribute CustomerDto customerDto) {
+        customerService.enableCustomer(customerDto);
+        return "redirect:admin-portal";
     }
 
     @GetMapping("/admin")

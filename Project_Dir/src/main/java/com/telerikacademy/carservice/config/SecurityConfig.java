@@ -2,7 +2,6 @@ package com.telerikacademy.carservice.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
-import org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -23,6 +22,7 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource securityDataSource;
+    private final String[] ADMIN_RIGHTS = {"/admin-portal", "/customer", "/admin", "/cars/edit-make/*"};
 
     @Autowired
     public SecurityConfig(DataSource dataSource) {
@@ -48,8 +48,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                     .antMatchers("/password", "/password-confirmation").permitAll()
+                    .antMatchers("/test").permitAll()
                     .antMatchers("/").hasRole("USER")
-                    .antMatchers("/admin-portal", "/customer", "admin", "/cars/edit-make/*").hasRole("ADMIN")
+                    .antMatchers(ADMIN_RIGHTS).hasRole("ADMIN")
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()

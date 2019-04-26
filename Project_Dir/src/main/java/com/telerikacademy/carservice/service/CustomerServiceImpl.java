@@ -1,6 +1,8 @@
 package com.telerikacademy.carservice.service;
 
+import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
+import com.telerikacademy.carservice.exceptions.UserRightsNotDisabledException;
 import com.telerikacademy.carservice.exceptions.UsernameExistsException;
 import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerCars;
@@ -14,17 +16,19 @@ import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -37,13 +41,13 @@ public class CustomerServiceImpl implements CustomerService {
     private SimpleMailMessage emailTemplate;
 
     @Autowired
-    public CustomerServiceImpl (CustomerRepository customerRepository
-            , CustomerCarsRepository customerCarsRepository
-            , UserDetailsManager userDetailsManager
-            , PasswordEncoder passwordEncoder
-            , PassayService passwordService
-            , EmailService emailService
-            , SimpleMailMessage emailTemplate) {
+    public CustomerServiceImpl(CustomerRepository customerRepository,
+                               CustomerCarsRepository customerCarsRepository,
+                               UserDetailsManager userDetailsManager,
+                               PasswordEncoder passwordEncoder,
+                               PassayService passwordService,
+                               EmailService emailService,
+                               SimpleMailMessage emailTemplate) {
         this.customerRepository = customerRepository;
         this.customerCarsRepository = customerCarsRepository;
         this.userDetailsManager = userDetailsManager;
@@ -52,9 +56,15 @@ public class CustomerServiceImpl implements CustomerService {
         this.emailService = emailService;
         this.emailTemplate = emailTemplate;
     }
+
     @Override
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
+    }
+
+    @Override
+    public Customer findByEmail(String email) {
+        return customerRepository.findCustomerByEmail(email);
     }
 
     @Override
@@ -79,7 +89,6 @@ public class CustomerServiceImpl implements CustomerService {
         String passwordEncoded = passwordEncoder.encode(generatedNewPassword);
 
         try {
-            customer.setCustomerPassword(generatedNewPassword);
             customerRepository.updatePassword(passwordEncoded, customer.getEmail());
             customerRepository.saveAndFlush(customer);
             emailService.sendSimpleMessageForPasswordResetUsingTemplate(customer.getEmail(),
@@ -101,34 +110,49 @@ public class CustomerServiceImpl implements CustomerService {
             );
         }
     }
-    private void createCustomerOrAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) throws UsernameExistsException {
-        Customer existingCustomer = customerRepository.findCustomerByEmail(customerDto.getEmail());
 
-        if (existingCustomer != null) {
-            throw new UsernameExistsException(String.format("User with username %s already exists", customerDto.getEmail()));
+    @Override
+    @Transactional
+    public void changePassword(CustomerDto customerDto) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        Customer customer = customerRepository.findCustomerByEmail(currentPrincipalName);
+
+        String newPassword = customerDto.getPasswordConfirmation();
+            try {
+                String newEncodedPassword = passwordEncoder.encode(newPassword);
+                customerRepository.updatePassword(newEncodedPassword, currentPrincipalName);
+                customerRepository.saveAndFlush(customer);
+            } catch (HibernateException he) {
+                throw new ResponseStatusException(
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Failed to access database."
+                );
+            } catch (DatabaseItemNotFoundException e) {
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        e.getMessage()
+                );
+            }
         }
 
-        String password = passwordService.generateRandomPassword();
-        String passwordEncoded = passwordEncoder.encode(password);
-
-        Customer newCustomer = new Customer();
-        newCustomer.setEmail(customerDto.getEmail());
-        newCustomer.setCustomerPassword(password);
-        newCustomer.setPhone(customerDto.getPhone());
-        newCustomer.setName(customerDto.getName());
-
-        User newUser = new User(customerDto.getEmail(),passwordEncoded,authorities);
-
+    @Override
+    public CustomerCars getCustomerCarById(long id) {
         try {
-            userDetailsManager.createUser(newUser);
-            customerRepository.saveAndFlush(newCustomer);
-            emailService.sendSimpleMessageUsingTemplateWhenCreatingCustomer(newCustomer.getEmail(),
-                    emailTemplate, newCustomer.getName(), newCustomer.getEmail(), newCustomer.getCustomerPassword());
+            CustomerCars carToFind = customerCarsRepository.findCustomerCarsByCustomerCarID(id);
+
+            if (carToFind == null) {
+                throw new DatabaseItemNotFoundException("Customer Car", id);
+            }
+            return carToFind;
+
         } catch (HibernateException he) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Failed to access database."
             );
+
         } catch (DatabaseItemNotFoundException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
@@ -136,15 +160,77 @@ public class CustomerServiceImpl implements CustomerService {
             );
         }
     }
+
     @Override
-    public List<Integer> listOfYears() {
-        int startYear = 1960;
-        int endYear =  Calendar.getInstance().get(Calendar.YEAR);
-        List<Integer> listYears = new ArrayList<>();
-        for (int i = endYear; i >= startYear ; i--) {
-            listYears.add(i);
+    @Transactional
+    public void disableCustomer(CustomerDto customerDto) {
+        Customer customerToDisable = customerRepository.findCustomerByEmail(customerDto.getEmail());
+
+        if (customerToDisable == null) {
+            throw new DatabaseItemNotFoundException(customerDto.getName());
         }
-        return listYears;
+
+        if (customerToDisable.getIsDeleted() == 1){
+            throw new DatabaseItemAlreadyDeletedException(customerToDisable.getEmail());
+        }
+
+        try {
+            customerRepository.disableUser(customerToDisable.getEmail());
+            customerToDisable.setIsDeleted(1);
+            customerRepository.saveAndFlush(customerToDisable);
+        } catch (HibernateException he) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Failed to access database."
+            );
+
+        } catch (DatabaseItemAlreadyDeletedException ex) {
+            throw new ResponseStatusException(
+              HttpStatus.BAD_REQUEST
+            );
+
+        } catch (DatabaseItemNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage()
+            );
+        }
+    }
+
+    @Override
+    @Transactional
+    public void enableCustomer(CustomerDto customerDto) {
+        Customer customerToEnable = customerRepository.findCustomerByEmail(customerDto.getEmail());
+
+        if (customerToEnable == null) {
+            throw new DatabaseItemNotFoundException(customerDto.getEmail());
+        }
+
+        if (customerToEnable.getIsDeleted() == 0) {
+            throw new UserRightsNotDisabledException(customerDto.getEmail());
+        }
+
+        try {
+            customerRepository.enableUser(customerToEnable.getEmail());
+            customerToEnable.setIsDeleted(0);
+            customerRepository.saveAndFlush(customerToEnable);
+        } catch (HibernateException he) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Failed to access database."
+            );
+
+        } catch (UserRightsNotDisabledException ex) {
+          throw new ResponseStatusException(
+                  HttpStatus.BAD_REQUEST
+          )  ;
+
+        } catch (DatabaseItemNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage()
+            );
+        }
     }
 
     @Override
@@ -161,26 +247,43 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerCars getCustomerCarById(Long id) {
+    public List<Integer> listOfYears() {
+        int startYear = 1960;
+        int endYear = Calendar.getInstance().get(Calendar.YEAR);
+        List<Integer> listYears = new ArrayList<>();
+        for (int i = endYear; i >= startYear; i--) {
+            listYears.add(i);
+        }
+        return listYears;
+    }
 
+    private void createCustomerOrAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) throws UsernameExistsException {
+        Customer existingCustomer = customerRepository.findCustomerByEmail(customerDto.getEmail());
+
+        if (existingCustomer != null) {
+            throw new UsernameExistsException(String.format("User with username %s already exists", customerDto.getEmail()));
+        }
+
+        String password = passwordService.generateRandomPassword();
+        String passwordEncoded = passwordEncoder.encode(password);
+
+        Customer newCustomer = new Customer();
+        newCustomer.setEmail(customerDto.getEmail());
+        newCustomer.setPhone(customerDto.getPhone());
+        newCustomer.setName(customerDto.getName());
+
+        User newUser = new User(customerDto.getEmail(), passwordEncoded, authorities);
 
         try {
-            List<CustomerCars> existingCustomerCar = getAllCustomerCars()
-                    .stream()
-                    .filter(car -> car.getCustomerCarID().equals(id))
-                    .collect(Collectors.toList());
-
-            if (existingCustomerCar.size() == 0) {
-                throw new DatabaseItemNotFoundException("Customer Car", id);
-            }
-            return customerCarsRepository.findCustomerCarsByCustomerCarID(id);
-
-        }  catch (HibernateException he) {
+            userDetailsManager.createUser(newUser);
+            customerRepository.saveAndFlush(newCustomer);
+            emailService.sendSimpleMessageUsingTemplateWhenCreatingCustomer(newCustomer.getEmail(),
+                    emailTemplate, newCustomer.getName(), newCustomer.getEmail(), password);
+        } catch (HibernateException he) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Failed to access database."
             );
-
         } catch (DatabaseItemNotFoundException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
@@ -188,5 +291,4 @@ public class CustomerServiceImpl implements CustomerService {
             );
         }
     }
-
 }

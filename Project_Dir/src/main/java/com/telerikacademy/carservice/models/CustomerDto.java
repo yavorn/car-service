@@ -13,11 +13,13 @@ import javax.validation.constraints.Size;
 
         private String password;
 
-        private String confirmedPassword;
+        private String passwordConfirmation;
 
         private String name;
 
         private String phone;
+
+        private int isDeleted;
 
         public CustomerDto() {
         }
@@ -54,11 +56,19 @@ import javax.validation.constraints.Size;
             this.password = password;
         }
 
-        public String getConfirmedPassword() {
-            return confirmedPassword;
+        public String getPasswordConfirmation() {
+            return passwordConfirmation;
         }
 
-        public void setConfirmedPassword(String confirmedPassword) {
-            this.confirmedPassword = confirmedPassword;
+        public void setPasswordConfirmation(String passwordConfirmation) {
+            this.passwordConfirmation = passwordConfirmation;
+        }
+
+        public int getIsDeleted() {
+            return isDeleted;
+        }
+
+        public void setIsDeleted(int isDeleted) {
+            this.isDeleted = isDeleted;
         }
     }
