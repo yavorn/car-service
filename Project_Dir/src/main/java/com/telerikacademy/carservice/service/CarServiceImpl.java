@@ -140,6 +140,8 @@ public class CarServiceImpl implements CarService {
         }
     }
 
+
+
     @Override
     public List<Models> getAllModels() {
 
@@ -155,31 +157,55 @@ public class CarServiceImpl implements CarService {
         }
     }
 
-//    public void deleteMake(Long id) {
-//        Make make =  makeRepository.findMakeByMakeID(id);
-////        if (model == null) {
-////            throw new ModelNotFoundException(id);
-////        }
-//       makeRepository.deleteById(id);
-//    }
+    @Override
+    public void changeCarMakeStatusByID(Long id) {
+        Make make =  makeRepository.findMakeByMakeID(id);
+        if (make == null) {
+            throw new DatabaseItemNotFoundException("Car Make", id);
+        }
 
-//    @Override
-//    public void deleteAllModelsByMakeID(List<Models> modelsToDelete) {
-//
-//        for (Models model :  modelsToDelete ) {
-//
-//            modelsRepository.deleteById(model.getModelID());
-//        }
-//
-//    }
+        if (make.isMakeDeleted()) {
+            make.setMakeUndeleted();
+        }
+        else {
+            make.setMakeDeleted();
+        }
+        makeRepository.save(make);
 
-//    public void deleteModel(Long id) {
-//        Models model =  modelsRepository.findModelsByModelID(id);
-////        if (model == null) {
-////            throw new ModelNotFoundException(id);
-////        }
-//        modelsRepository.deleteById(id);
-//    }
+    }
+
+    @Override
+    public void changeCarModelStatusByID(Long id) {
+        Models model =  modelsRepository.findModelsByModelID(id);
+        if (model == null) {
+            throw new DatabaseItemNotFoundException("Car Model", id);
+        }
+        if (model.isModelDeleted()) {
+            model.setModelUndeleted();
+        }
+        else {
+            model.setModelDeleted();
+        }
+        modelsRepository.save(model);
+    }
+
+    @Override
+    public void changeStatusAllModelsByMakeID(List<Models> modelsToChangeStatus) {
+
+        for (Models model :  modelsToChangeStatus ) {
+
+            if (model.isModelDeleted()) {
+                model.setModelUndeleted();
+            }
+            else {
+                model.setModelDeleted();
+            }
+            modelsRepository.save(model);
+        }
+
+    }
+
+
 
     @Override
     public List<Models> findModelsByMakeID(Long id) {

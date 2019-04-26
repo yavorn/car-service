@@ -26,6 +26,9 @@ public class Models {
     @Size(min = 2, max = 30, message = "Incorrect size for model name.")
     private String modelName;
 
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "tinyint(4) default 0")
+    private boolean modelDeleted;
+
     public Models() {
     }
 
@@ -56,5 +59,16 @@ public class Models {
 
     public void setModelName(String modelName) {
         this.modelName = modelName;
+    }
+
+    public boolean isModelDeleted() {
+        return modelDeleted;
+    }
+
+    public void setModelDeleted() {
+        this.modelDeleted = true;
+    }
+    public void setModelUndeleted() {
+        this.modelDeleted = false;
     }
 }

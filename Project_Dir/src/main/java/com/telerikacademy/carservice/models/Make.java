@@ -22,6 +22,9 @@ public class Make {
     @Size(min = 1, max = 30, message = "Incorrect size for make name.")
     private String makeName;
 
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "tinyint(4) default 0")
+    private boolean makeDeleted;
+
 
     public Make() {
     }
@@ -44,5 +47,16 @@ public class Make {
 
     public void setMakeName(String makeName) {
         this.makeName = makeName;
+    }
+
+    public boolean isMakeDeleted() {
+        return makeDeleted;
+    }
+
+    public void setMakeDeleted() {
+        this.makeDeleted = true;
+    }
+    public void setMakeUndeleted() {
+        this.makeDeleted = false;
     }
 }
