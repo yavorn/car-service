@@ -206,6 +206,10 @@ public class CustomerServiceImpl implements CustomerService {
             throw new DatabaseItemNotFoundException(customerDto.getEmail());
         }
 
+        if (customerToEnable.getIsDeleted() == 0) {
+            throw new UserRightsNotDisabledException(customerDto.getEmail());
+        }
+
         try {
             customerRepository.enableUser(customerToEnable.getEmail());
             customerToEnable.setIsDeleted(0);
