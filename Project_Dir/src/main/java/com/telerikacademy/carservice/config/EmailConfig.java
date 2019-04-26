@@ -14,7 +14,7 @@ public class EmailConfig {
         message.setText(
                         "Dear %s,\n\n"+
                         "Thank you for choosing our services!\n" +
-                        "You can logon to our website with the following credentials:\n" +
+                        "You can login to our system with the following credentials:\n" +
                         "Username: %s\n" +
                         "Password: %s\n\n" +
                         "Best Regards,\n" +
