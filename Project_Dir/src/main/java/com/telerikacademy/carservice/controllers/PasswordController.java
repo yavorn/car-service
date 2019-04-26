@@ -25,9 +25,9 @@ public class PasswordController {
         model.addAttribute("customerDto", new CustomerDto());
         return "password";
     }
-
+//todo: error handling
     @PostMapping("/password")
-    public String resetPassword(@ModelAttribute CustomerDto customerDto) throws DatabaseItemNotFoundException {
+    public String resetPassword(@ModelAttribute CustomerDto customerDto, Model model) throws DatabaseItemNotFoundException {
         customerService.resetPassword(customerDto.getEmail());
         return "password-confirmation";
     }
