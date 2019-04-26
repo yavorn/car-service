@@ -7,7 +7,7 @@
 
 </head>
 <body>
-<h1>Register New Customer</h1>
+<h2>Register New Customer</h2>
 <form th:action="@{/customer}" th:object="${customer}" method="post">
 	<p>
 		Username: <label>
@@ -26,12 +26,22 @@
 	</p>
 	<input type="submit" value="Send">
 </form>
+<h2>Disable customer rights</h2>
 <form th:action="@{/customer}" th:object="${customer}" th:method="delete">
 	<p>
 		Username: <label>
 		<input type="text" th:field="*{email}">
 	</label>
-		<input type="submit" value="Delete">
+		<input type="submit" value="Disable customer">
+</form>
+<br>
+<h2>Enable customer rights</h2>
+<form th:action="@{/customer}" th:object="${customer}" th:method="put">
+	<p>
+		Username: <label>
+		<input type="text" th:field="*{email}">
+	</label>
+		<input type="submit" value="Enable customer">
 </form>
 </body>
 </html>
