@@ -9,18 +9,19 @@
 <body>
 <h1>Admin Portal</h1>
 <p>Hello to the admin portal!</p>
-<form th:action="@{/customer}" method="get">
+<form th:action="@{/customer}" th:method="get">
 	<input type="submit" value="Add customer">
-	<!--<a th:href="@{/register-customer}">Register New User</a>-->
 </form>
-<form th:action="@{/admin}" method="get">
+<form th:action="@{/customer}" th:method="get">
+	<input type="submit" value="Delete customer">
+</form>
+<form th:action="@{/admin}" th:method="get">
 	<input type="submit" value="Add admin">
-	<!--<a th:href="@{/register-admin}">Register New Admin</a>-->
 </form>
-<form th:action="@{/cars/add-make}" method="get">
+<form th:action="@{/cars/add-make}" th:method="get">
 	<input type="submit" value="Add new Make"/>
 </form>
-<form th:action="@{/cars/add-car}" method="get">
+<form th:action="@{/cars/add-car}" th:method="get">
 	<input type="submit" value="Add new Car Model"/>
 </form>
 <p>

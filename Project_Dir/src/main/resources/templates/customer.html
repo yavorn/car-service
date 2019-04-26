@@ -26,5 +26,12 @@
 	</p>
 	<input type="submit" value="Send">
 </form>
+<form th:action="@{/customer}" th:object="${customer}" th:method="delete">
+	<p>
+		Username: <label>
+		<input type="text" th:field="*{email}">
+	</label>
+		<input type="submit" value="Delete">
+</form>
 </body>
 </html>
