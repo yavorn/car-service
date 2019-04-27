@@ -9,7 +9,6 @@ import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -51,7 +50,6 @@ public class ProcedureServiceImpl implements ProcedureService {
                     e.getMessage()
             );
         }
-
     }
 
     public void addProcedure(Procedure procedure) {
@@ -71,7 +69,7 @@ public class ProcedureServiceImpl implements ProcedureService {
             Procedure procedureToDelete = procedureRepository.findProcedureByProcedureID(procedureID);
 
             if(procedureToDelete == null){
-                throw new DatabaseItemNotFoundException("Procedure", procedureID);
+                throw new DatabaseItemNotFoundException("Procedure %d is not found", procedureID);
             }
 
             if(procedureToDelete.isProcedureDeleted()){
