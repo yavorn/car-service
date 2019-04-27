@@ -30,6 +30,9 @@ public class ProcedureVisit {
     @JoinColumn(name = "procedure_id")
     private Procedure procedure;
 
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "tinyint(4) default 0")
+    private boolean procedureVisitDeleted;
+
     public Long getProcedureVisitID() {
         return procedureVisitID;
     }
@@ -52,5 +55,17 @@ public class ProcedureVisit {
 
     public void setProcedure(Procedure procedure) {
         this.procedure = procedure;
+    }
+
+    public boolean isProcedureVisitDeleted() {
+        return procedureVisitDeleted;
+    }
+
+    public void setProcedureVisitDeleted() {
+        this.procedureVisitDeleted = true;
+    }
+
+    public void setProcedureVisitNotDeleted() {
+        this.procedureVisitDeleted = false;
     }
 }

@@ -32,6 +32,10 @@ public class Procedure {
     @Column(name = "procedure_price")
     private double procedurePrice;
 
+
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "tinyint(4) default 0")
+    private boolean procedureDeleted;
+
     public Long getProcedureID() {
         return procedureID;
     }
@@ -54,5 +58,18 @@ public class Procedure {
 
     public void setProcedurePrice(double procedurePrice) {
         this.procedurePrice = procedurePrice;
+    }
+
+
+    public boolean isProcedureDeleted() {
+        return procedureDeleted;
+    }
+
+    public void setProcedureDeleted() {
+        this.procedureDeleted = true;
+    }
+
+    public void setProcedureNotDeleted() {
+        this.procedureDeleted = false;
     }
 }
