@@ -25,9 +25,9 @@ public class ProcedureController {
     }
 
     @PutMapping("/delete/{procedureID}")
-    public String deleteProcedureById(@PathVariable Long procedureID){
+    public void deleteProcedureById(@PathVariable Long procedureID){
         procedureService.deleteProcedure(procedureID);
-        return "list-procedures";
+        //return "list-procedures";
     }
 
     @GetMapping("/add-procedure")

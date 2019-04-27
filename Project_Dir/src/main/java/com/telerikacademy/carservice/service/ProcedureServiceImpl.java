@@ -1,5 +1,6 @@
 package com.telerikacademy.carservice.service;
 
+import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import com.telerikacademy.carservice.models.Procedure;
 import com.telerikacademy.carservice.repository.ProcedureRepository;
@@ -66,12 +67,22 @@ public class ProcedureServiceImpl implements ProcedureService {
         try {
             //procedureRepository.deleteById(procedureID);
             //Procedure procedureToDelete = procedureRepository.getOne(procedureID);
+
             Procedure procedureToDelete = procedureRepository.findProcedureByProcedureID(procedureID);
+
+            if(procedureToDelete == null){
+                throw new DatabaseItemNotFoundException("Procedure", procedureID);
+            }
+
+            if(procedureToDelete.isProcedureDeleted()){
+                throw new DatabaseItemAlreadyDeletedException("Procedure", procedureID);
+            }
+
             procedureToDelete.setProcedureDeleted();
             procedureRepository.save(procedureToDelete);
 
 
-        } catch (DatabaseItemNotFoundException e) {
+        } catch (DatabaseItemNotFoundException | DatabaseItemAlreadyDeletedException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
                     e.getMessage()

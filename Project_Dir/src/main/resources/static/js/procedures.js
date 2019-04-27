@@ -4,13 +4,14 @@ $(document).ready(function () {
 
 
     $('#delete-procedure-button').click(function(e) {
-        e.preventDefault();
+        //e.preventDefault();
         let id = $('#delete-procedure-button').val();
+
         $.ajax({
-            type: 'PUT',
             url: apiUrl + 'procedures/delete/' + id,
+            type: 'PUT',
             data: '_method=PUT',
-            dataType: 'json',
+
             success: function() {
                 alert('ok');
             },
