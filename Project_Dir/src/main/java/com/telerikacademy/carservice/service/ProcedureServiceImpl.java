@@ -64,7 +64,13 @@ public class ProcedureServiceImpl implements ProcedureService {
 
     public void deleteProcedure(Long procedureID) {
         try {
-            procedureRepository.deleteById(procedureID);
+            //procedureRepository.deleteById(procedureID);
+            //Procedure procedureToDelete = procedureRepository.getOne(procedureID);
+            Procedure procedureToDelete = procedureRepository.findProcedureByProcedureID(procedureID);
+            procedureToDelete.setProcedureDeleted();
+            procedureRepository.save(procedureToDelete);
+
+
         } catch (DatabaseItemNotFoundException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
