@@ -17,12 +17,16 @@ import java.util.List;
 @Service
 public class ProcedureServiceImpl implements ProcedureService {
 
-    @Autowired
     ProcedureRepository procedureRepository;
+
+    @Autowired
+    public ProcedureServiceImpl(ProcedureRepository procedureRepository) {
+        this.procedureRepository = procedureRepository;
+    }
 
     public List<Procedure> getAllProcedures() {
         try {
-            return procedureRepository.findAll();
+            return procedureRepository.findAllByProcedureDeletedIsFalse();
         } catch (HibernateException he) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
