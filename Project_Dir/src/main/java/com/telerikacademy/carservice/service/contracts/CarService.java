@@ -15,11 +15,12 @@ public interface CarService {
     Models getModelById(Long id);
     List<Models> getAllModels();
     List<Make> getAllMakes();
-    void changeCarMakeStatusByID(Long id);
-    void changeCarModelStatusByID(Long id);
-//    void deleteMake(Long id);
-    void changeStatusAllModelsByMakeID(List<Models> modelsToChangeStatus);
-//    void deleteModel(Long id);
+    void deleteCarMakeByID(Long id);
+    void undeleteCarMakeByID(Long id);
+    void deleteCarModelByID(Long id);
+    void undeleteCarModelByID(Long id);
+    void deleteAllModelsByMakeID(List<Models> modelsToDelete);
+    void undeleteAllModelsByMakeID(List<Models> modelsToUndelete);
     List<Models> findModelsByMakeID(Long id);
 
 

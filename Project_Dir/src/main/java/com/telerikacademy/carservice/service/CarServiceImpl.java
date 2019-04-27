@@ -158,7 +158,25 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void changeCarMakeStatusByID(Long id) {
+    public void deleteCarMakeByID(Long id) {
+        Make make =  makeRepository.findMakeByMakeID(id);
+        if (make == null) {
+            throw new DatabaseItemNotFoundException("Car Make", id);
+        }
+
+        if (!make.isMakeDeleted()) {
+            make.setMakeDeleted();
+        }
+        else {
+            throw new DatabaseItemNotFoundException("Car Make already Deleted", id);
+
+        }
+        makeRepository.save(make);
+
+    }
+
+    @Override
+    public void undeleteCarMakeByID(Long id) {
         Make make =  makeRepository.findMakeByMakeID(id);
         if (make == null) {
             throw new DatabaseItemNotFoundException("Car Make", id);
@@ -168,14 +186,29 @@ public class CarServiceImpl implements CarService {
             make.setMakeUndeleted();
         }
         else {
-            make.setMakeDeleted();
+            throw new DatabaseItemNotFoundException("Car Make is Not Deleted", id);
         }
         makeRepository.save(make);
 
     }
+    @Override
+    public void deleteCarModelByID(Long id) {
+        Models model =  modelsRepository.findModelsByModelID(id);
+        if (model == null) {
+            throw new DatabaseItemNotFoundException("Car Model", id);
+        }
+        if (!model.isModelDeleted()) {
+            model.setModelDeleted();
+        }
+        else {
+            throw new DatabaseItemNotFoundException("Car Model already Deleted", id);
+
+        }
+        modelsRepository.save(model);
+    }
 
     @Override
-    public void changeCarModelStatusByID(Long id) {
+    public void undeleteCarModelByID(Long id) {
         Models model =  modelsRepository.findModelsByModelID(id);
         if (model == null) {
             throw new DatabaseItemNotFoundException("Car Model", id);
@@ -184,27 +217,43 @@ public class CarServiceImpl implements CarService {
             model.setModelUndeleted();
         }
         else {
-            model.setModelDeleted();
+            throw new DatabaseItemNotFoundException("Car Model is Not Deleted", id);
+
         }
         modelsRepository.save(model);
     }
 
     @Override
-    public void changeStatusAllModelsByMakeID(List<Models> modelsToChangeStatus) {
+    public void deleteAllModelsByMakeID(List<Models> modelsToDelete) {
 
-        for (Models model :  modelsToChangeStatus ) {
+        for (Models model :  modelsToDelete ) {
 
-            if (model.isModelDeleted()) {
-                model.setModelUndeleted();
+            if (!model.isModelDeleted()) {
+                model.setModelDeleted();
             }
             else {
-                model.setModelDeleted();
+               continue;
             }
             modelsRepository.save(model);
         }
 
     }
 
+    @Override
+    public void undeleteAllModelsByMakeID(List<Models> modelsToUndelete) {
+
+        for (Models model :  modelsToUndelete ) {
+
+            if (model.isModelDeleted()) {
+                model.setModelUndeleted();
+            }
+            else {
+                continue;
+            }
+            modelsRepository.save(model);
+        }
+
+    }
 
 
     @Override

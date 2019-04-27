@@ -115,17 +115,33 @@ public class CarController {
 
     }
 
-    @GetMapping("/make_changeStatus/{id}")
-    public String changeMakeStatusByID (@PathVariable Long id) {
-        carService.changeStatusAllModelsByMakeID(carService.findModelsByMakeID(id));
-        carService.changeCarMakeStatusByID(id);
+    @GetMapping("/delete_make/{id}")
+    public String deleteMakeByID (@PathVariable Long id) {
+        carService.deleteAllModelsByMakeID(carService.findModelsByMakeID(id));
+        carService.deleteCarMakeByID(id);
         return "redirect:/cars";
     }
 
+    @GetMapping("/undelete_make/{id}")
+    public String undeleteMakeByID (@PathVariable Long id) {
+        carService.undeleteCarMakeByID(id);
+        return "redirect:/cars";
+    }
 
-    @GetMapping("/model_changeStatus/{id}")
-    public String changeModelStatusByID (@PathVariable Long id) {
-        carService.changeCarModelStatusByID(id);
+    @GetMapping("/delete_model/{id}")
+    public String deleteModelByID (@PathVariable Long id) {
+        carService.deleteCarModelByID(id);
+        return "redirect:/cars";
+    }
+    @GetMapping("/undelete_model/{id}")
+    public String undeleteModelByID (@PathVariable Long id) {
+        carService.undeleteCarModelByID(id);
+        return "redirect:/cars";
+    }
+
+    @GetMapping("/undelete_modelsByMakeId/{id}")
+    public String undeleteModelsByMakeID (@PathVariable Long id) {
+        carService.undeleteAllModelsByMakeID(carService.findModelsByMakeID(id));
         return "redirect:/cars";
     }
 
