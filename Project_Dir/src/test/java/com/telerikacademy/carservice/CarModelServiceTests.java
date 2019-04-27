@@ -69,7 +69,7 @@ public class CarModelServiceTests {
     @Test
     public void getAllMakes_shouldReturnTwoCarMakes_whenTwoCarMakesAreAvailable() {
         // Arrange
-        when(mockMakeRepository.findAllByOrderByMakeNameAsc())
+        when(mockMakeRepository.getAllByMakeDeletedFalseOrderByMakeNameAsc())
                 .thenReturn(carMakes);
         // Act
         List<Make> result = carService.getAllMakes();
@@ -77,26 +77,26 @@ public class CarModelServiceTests {
         assertEquals(2, result.size());
         assertEquals("Audi", result.get(0).getMakeName());
         assertEquals("Seat", result.get(1).getMakeName());
-        verify(mockMakeRepository, times(1)).findAllByOrderByMakeNameAsc();
+        verify(mockMakeRepository, times(1)).getAllByMakeDeletedFalseOrderByMakeNameAsc();
     }
 
     @Test(expected = NullPointerException.class)
     public void getAllMakes_shouldThrowNullPointerException() {
         // Arrange
-        when(mockMakeRepository.findAllByOrderByMakeNameAsc())
+        when(mockMakeRepository.getAllByMakeDeletedFalseOrderByMakeNameAsc())
                 .thenReturn(null);
         // Act
         List<Make> result = carService.getAllMakes();
-//        // Assert
+        // Assert
         assertEquals(0, result.size());
-        verify(mockMakeRepository, times(1)).findAllByOrderByMakeNameAsc();
+        verify(mockMakeRepository, times(1)).getAllByMakeDeletedFalseOrderByMakeNameAsc();
     }
 
 
     @Test
     public void getAllModels_shouldReturnTwoCarModels_whenTwoCarModelsAreAvailable() {
         // Arrange
-        when(mockModelsRepository.findAll())
+        when(mockModelsRepository.getAllByModelDeletedFalse())
                 .thenReturn(carModels);
 
         // Act
@@ -106,19 +106,19 @@ public class CarModelServiceTests {
         assertEquals(2, result.size());
         assertEquals("A6", result.get(0).getModelName());
         assertEquals("RS6", result.get(1).getModelName());
-        verify(mockModelsRepository, times(1)).findAll();
+        verify(mockModelsRepository, times(1)).getAllByModelDeletedFalse();
     }
 
     @Test(expected = NullPointerException.class)
     public void getAllModels_shouldThrowNullPointerException() throws ResponseStatusException {
         // Arrange
-        when(mockModelsRepository.findAll())
+        when(mockModelsRepository.getAllByModelDeletedFalse())
                 .thenReturn(null);
         // Act
         List<Models> result = carService.getAllModels();
         // Assert
         assertEquals(0, result.size());
-        verify(mockModelsRepository, times(1)).findAll();
+        verify(mockModelsRepository, times(1)).getAllByModelDeletedFalse();
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
@@ -227,7 +227,7 @@ public class CarModelServiceTests {
     @Test(expected = ResponseStatusException.class)
     public void addModel_shouldThrowDatabaseItemAlreadyExistsException_whenCarModelExists() throws ResponseStatusException  {
         //Arrange
-        when(mockModelsRepository.findAll())
+        when(mockModelsRepository.getAllByModelDeletedFalse())
                 .thenReturn(carModels);
 
         // Act
