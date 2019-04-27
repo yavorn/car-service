@@ -71,9 +71,10 @@
                                     <td th:text="${model.getProcedureID()}"> </td>
                                     <td th:text="${model.getProcedureName()}"> </td>
                                     <td th:text="${model.getProcedurePrice()}"> </td>
-                                    <td><a th:value="${model.getProcedureID()}" class="btn btn-danger pull-right" title="Delete" id="delete-procedure-button">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a></td>
+                                    <td><button th:value="${model.getProcedureID()}" class="btn btn-danger pull-right"  title="Delete" id="delete-procedure-button">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </button ></td>
+
                                 </tr>
                                 </tbody>
                             </table>
