@@ -38,4 +38,7 @@ dependencies {
     
     //Bootstrap
     compile group: 'org.webjars', name: 'bootstrap', version: '4.3.1'
+
+    //Spring Boot Dev Tools (Auto Reload Static Resources)
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
 }
