@@ -97,7 +97,8 @@ public class ProcedureServiceImplTest {
     //TO DO
     @Test(expected = DatabaseItemAlreadyExists.class)
     public void addProcedure_shouldReturn_WhenDuplicateNamePassed() {
-        procedureServiceImpl.addProcedure(testProcedure);
+        when(mockProcedureRepository.findProcedureByProcedureName(testProcedure.getProcedureName()))
+                .thenReturn(testProcedure);
         procedureServiceImpl.addProcedure(testProcedure);
     }
 

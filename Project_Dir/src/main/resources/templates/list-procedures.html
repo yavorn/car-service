@@ -63,6 +63,7 @@
                                     <th>#</th>
                                     <th>Procedure</th>
                                     <th>Price</th>
+                                    <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
                                 </thead>
@@ -71,8 +72,13 @@
                                     <td th:text="${model.getProcedureID()}"> </td>
                                     <td th:text="${model.getProcedureName()}"> </td>
                                     <td th:text="${model.getProcedurePrice()}"> </td>
-                                    <td><form th:action="@{'/procedures/' +  ${model.getProcedureID()}}" th:object="${procedures}" th:method="delete">
-                                        <button type="submit" class="btn btn-danger pull-right" title="Delete" id="delete-procedure-button">
+                                    <td><form>
+                                        <button type="submit" class="btn btn-outline-secondary" title="Edit" id="edite-procedure-button">
+                                            <i class="far fa-edit"></i> Edit</button >
+                                    </form></td>
+
+                                    <td><form th:action="@{'/procedures/' + ${model.getProcedureID()}}" th:object="${procedures}" th:method="delete">
+                                        <button type="submit" class="btn btn-danger" title="Delete" id="delete-procedure-button">
                                         <i class="fas fa-trash-alt"></i> Delete</button >
                                     </form></td>
                                 </tr>
