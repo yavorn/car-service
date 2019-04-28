@@ -30,9 +30,9 @@ public class ProcedureController {
         return "redirect:/procedures";
     }
 
-    @PutMapping()
-    public String editProcedure(@Valid @ModelAttribute Procedure procedure ) {
-        procedureService.addProcedure(procedure);
+    @PutMapping("/{procedureID}")
+    public String editProcedure(@Valid @ModelAttribute Procedure procedure, @PathVariable Long procedureID) {
+        procedureService.editProcedure(procedure, procedureID);
         return "redirect:/procedures";
     }
 
