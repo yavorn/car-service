@@ -47,8 +47,8 @@ public class CustomerController {
     @GetMapping("/car/{id}")
     public String customerCarByID(Model model, @PathVariable Long id){
 
-        CustomerCars customerCarr = customerService.getCustomerCarById(id);
-        model.addAttribute("customerCar", customerCarr);
+        CustomerCars customerCar = customerService.getCustomerCarById(id);
+        model.addAttribute("customerCar", customerCar);
         model.addAttribute("listCustomerCarEvents", carEventService.getCarEventByCustomerCarID(id));
         model.addAttribute("listProcedureVisit", procedureVisitService.getAllProcedureVisitsByCarEventCustomerCarID(id));
 
