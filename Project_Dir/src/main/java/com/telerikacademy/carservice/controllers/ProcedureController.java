@@ -24,10 +24,16 @@ public class ProcedureController {
         return "list-procedures";
     }
 
-    @PutMapping("/delete/{procedureID}")
-    public void deleteProcedureById(@PathVariable Long procedureID){
+    @DeleteMapping("/{procedureID}")
+    public String deleteProcedureById(@PathVariable Long procedureID){
         procedureService.deleteProcedure(procedureID);
-        //return "list-procedures";
+        return "redirect:/procedures";
+    }
+
+    @PutMapping()
+    public String editProcedure(@Valid @ModelAttribute Procedure procedure ) {
+        procedureService.addProcedure(procedure);
+        return "redirect:/procedures";
     }
 
     @GetMapping("/add-procedure")

@@ -9,6 +9,8 @@ public interface ProcedureRepository extends JpaRepository<Procedure, Long> {
 
     Procedure findProcedureByProcedureID(Long id);
 
+    Procedure findProcedureByProcedureName(String name);
+
     List<Procedure> findAllByProcedureDeletedIsFalse();
 
 
