@@ -1,5 +1,6 @@
 package com.telerikacademy.carservice.service;
 
+import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
 import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyExists;
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import com.telerikacademy.carservice.models.Make;
@@ -19,6 +20,11 @@ import java.util.stream.Collectors;
 @Service
 public class CarServiceImpl implements CarService {
 
+    private static final String MAKE_EXIST_EXCEPTION_MSG = "Car Make with name %s already exist!";
+    private static final String MODEL_EXIST_EXCEPTION_MSG = "Car Model with name %s already exist!";
+    private static final String MODEL_DELETED_EXCEPTION_MSG = "Car Model with name %s already deleted!";
+
+
     private ModelsRepository modelsRepository;
     private MakeRepository makeRepository;
 
@@ -31,30 +37,16 @@ public class CarServiceImpl implements CarService {
     @Override
     public void addMake(Make make) {
 
+        Make existingMake = makeRepository.findMakeByMakeName(make.getMakeName());
 
-        try {
-            List<Make> existingMakes = makeRepository.findAllByOrderByMakeNameAsc()
-                    .stream()
-                    .filter(carMake -> carMake.getMakeName().equals(make.getMakeName()))
-                    .collect(Collectors.toList());
-
-            if (existingMakes.size() != 0) {
-                throw new DatabaseItemAlreadyExists("Car Make");
-            }
-            makeRepository.save(make);
-
-
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-        } catch (DatabaseItemAlreadyExists e) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    e.getMessage()
-            );
+        if (existingMake != null && existingMake.isMakeDeleted()) {
+            throw new DatabaseItemAlreadyDeletedException(String.format(MODEL_DELETED_EXCEPTION_MSG, make.getMakeName()));
         }
+        else if(existingMake != null && !existingMake.isMakeDeleted()){
+            throw new DatabaseItemAlreadyExists(String.format(MODEL_EXIST_EXCEPTION_MSG, make.getMakeName()));
+        }
+        makeRepository.save(make);
+
     }
 
     @Override
@@ -70,28 +62,16 @@ public class CarServiceImpl implements CarService {
     @Override
     public Models addModel(Models model) {
 
-        try {
-            List<Models> existingModels = getAllModels()
-                    .stream()
-                    .filter(carModel -> carModel.getModelName().equals(model.getModelName()))
-                    .collect(Collectors.toList());
+        Models existingModel = modelsRepository.findModelsByModelName(model.getModelName());
 
-            if (existingModels.size() != 0) {
-                throw new DatabaseItemAlreadyExists("Car Model");
-            }
-            return modelsRepository.save(model);
-
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-        } catch (DatabaseItemAlreadyExists e) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    e.getMessage()
-            );
+        if (existingModel != null && existingModel.isModelDeleted()) {
+            throw new DatabaseItemAlreadyDeletedException(String.format(MODEL_DELETED_EXCEPTION_MSG, model.getModelName()));
         }
+        else if(existingModel != null && !existingModel.isModelDeleted()){
+            throw new DatabaseItemAlreadyExists(String.format(MODEL_EXIST_EXCEPTION_MSG, model.getModelName()));
+        }
+        return modelsRepository.save(model);
+      
     }
 
     @Override
