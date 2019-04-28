@@ -20,9 +20,16 @@ import java.util.stream.Collectors;
 @Service
 public class CarServiceImpl implements CarService {
 
-    private static final String MAKE_EXIST_EXCEPTION_MSG = "Car Make with name %s already exist!";
-    private static final String MODEL_EXIST_EXCEPTION_MSG = "Car Model with name %s already exist!";
-    private static final String MODEL_DELETED_EXCEPTION_MSG = "Car Model with name %s already deleted!";
+    private static final String MAKE_EXIST_EXCEPTION_MSG = "Car Make with name/ID: %s already exist!";
+    private static final String MAKE_DELETED_EXCEPTION_MSG = "Car Make with name/ID: %s already deleted!";
+    private static final String MAKE_NOT_DELETED_EXCEPTION_MSG = "Car Make with name/ID: %s is not deleted!";
+    private static final String MODEL_EXIST_EXCEPTION_MSG = "Car Model with name/ID: %s already exist!";
+    private static final String MODEL_DELETED_EXCEPTION_MSG = "Car Model with name/ID: %s already deleted!";
+    private static final String MODEL_NOT_DELETED_EXCEPTION_MSG = "Car Model with name/ID: %s is not deleted!";
+    private static final String MAKE_NOT_FOUND_BY_ID_EXCEPTION_MSG = "Car Make with name/ID: %s not found!";
+    private static final String MODEL_NOT_FOUND_BY_ID_EXCEPTION_MSG = "Car Model with name/ID: %s not found!";
+    private static final String MODEL_NOT_FOUND_BY_MAKE_ID_EXCEPTION_MSG = "Car Model by Make name/ID: %s not found!";
+
 
 
     private ModelsRepository modelsRepository;
@@ -40,10 +47,10 @@ public class CarServiceImpl implements CarService {
         Make existingMake = makeRepository.findMakeByMakeName(make.getMakeName());
 
         if (existingMake != null && existingMake.isMakeDeleted()) {
-            throw new DatabaseItemAlreadyDeletedException(String.format(MODEL_DELETED_EXCEPTION_MSG, make.getMakeName()));
+            throw new DatabaseItemAlreadyDeletedException(String.format(MAKE_DELETED_EXCEPTION_MSG, make.getMakeName()));
         }
         else if(existingMake != null && !existingMake.isMakeDeleted()){
-            throw new DatabaseItemAlreadyExists(String.format(MODEL_EXIST_EXCEPTION_MSG, make.getMakeName()));
+            throw new DatabaseItemAlreadyExists(String.format(MAKE_EXIST_EXCEPTION_MSG, make.getMakeName()));
         }
         makeRepository.save(make);
 
@@ -71,7 +78,7 @@ public class CarServiceImpl implements CarService {
             throw new DatabaseItemAlreadyExists(String.format(MODEL_EXIST_EXCEPTION_MSG, model.getModelName()));
         }
         return modelsRepository.save(model);
-      
+
     }
 
     @Override
@@ -88,7 +95,7 @@ public class CarServiceImpl implements CarService {
 
             Make make = makeRepository.findMakeByMakeID(id);
             if (make == null) {
-                throw new DatabaseItemNotFoundException("Car Make", id);
+                throw new DatabaseItemNotFoundException(String.format(MAKE_NOT_FOUND_BY_ID_EXCEPTION_MSG, id));
             }
             return makeRepository.findMakeByMakeID(id);
 
@@ -100,7 +107,7 @@ public class CarServiceImpl implements CarService {
 
         Models model = modelsRepository.findModelsByModelID(id);
         if (model == null) {
-            throw new DatabaseItemNotFoundException("Car model", id);
+            throw new DatabaseItemNotFoundException(String.format(MODEL_NOT_FOUND_BY_ID_EXCEPTION_MSG, id));
         }
         return modelsRepository.findModelsByModelID(id);
 
@@ -141,15 +148,14 @@ public class CarServiceImpl implements CarService {
     public void deleteCarMakeByID(Long id) {
         Make make =  makeRepository.findMakeByMakeID(id);
         if (make == null) {
-            throw new DatabaseItemNotFoundException("Car Make", id);
+            throw new DatabaseItemNotFoundException(String.format(MAKE_NOT_FOUND_BY_ID_EXCEPTION_MSG, id.toString()));
         }
 
         if (!make.isMakeDeleted()) {
             make.setMakeDeleted();
         }
         else {
-            throw new DatabaseItemNotFoundException("Car Make already Deleted", id);
-
+            throw new DatabaseItemAlreadyDeletedException(String.format(MAKE_DELETED_EXCEPTION_MSG, id.toString()));
         }
         makeRepository.save(make);
 
@@ -159,14 +165,14 @@ public class CarServiceImpl implements CarService {
     public void undeleteCarMakeByID(Long id) {
         Make make =  makeRepository.findMakeByMakeID(id);
         if (make == null) {
-            throw new DatabaseItemNotFoundException("Car Make", id);
+            throw new DatabaseItemNotFoundException(String.format(MAKE_NOT_FOUND_BY_ID_EXCEPTION_MSG, id.toString()));
         }
 
         if (make.isMakeDeleted()) {
             make.setMakeUndeleted();
         }
         else {
-            throw new DatabaseItemNotFoundException("Car Make is Not Deleted", id);
+            throw new DatabaseItemAlreadyDeletedException(String.format(MAKE_NOT_DELETED_EXCEPTION_MSG, id.toString()));
         }
         makeRepository.save(make);
 
@@ -175,14 +181,13 @@ public class CarServiceImpl implements CarService {
     public void deleteCarModelByID(Long id) {
         Models model =  modelsRepository.findModelsByModelID(id);
         if (model == null) {
-            throw new DatabaseItemNotFoundException("Car Model", id);
+            throw new DatabaseItemNotFoundException(String.format(MODEL_NOT_FOUND_BY_ID_EXCEPTION_MSG, id.toString()));
         }
         if (!model.isModelDeleted()) {
             model.setModelDeleted();
         }
         else {
-            throw new DatabaseItemNotFoundException("Car Model already Deleted", id);
-
+            throw new DatabaseItemAlreadyDeletedException(String.format(MODEL_DELETED_EXCEPTION_MSG, id.toString()));
         }
         modelsRepository.save(model);
     }
@@ -191,14 +196,13 @@ public class CarServiceImpl implements CarService {
     public void undeleteCarModelByID(Long id) {
         Models model =  modelsRepository.findModelsByModelID(id);
         if (model == null) {
-            throw new DatabaseItemNotFoundException("Car Model", id);
+            throw new DatabaseItemNotFoundException(String.format(MODEL_NOT_FOUND_BY_ID_EXCEPTION_MSG, id.toString()));
         }
         if (model.isModelDeleted()) {
             model.setModelUndeleted();
         }
         else {
-            throw new DatabaseItemNotFoundException("Car Model is Not Deleted", id);
-
+            throw new DatabaseItemAlreadyDeletedException(String.format(MODEL_NOT_DELETED_EXCEPTION_MSG, id.toString()));
         }
         modelsRepository.save(model);
     }
@@ -242,7 +246,7 @@ public class CarServiceImpl implements CarService {
         List<Models> existingModels = modelsRepository.findModelsByMake_MakeID(id);
 
         if (existingModels.size() == 0) {
-            throw new DatabaseItemNotFoundException("Car models from Make", id);
+            throw new DatabaseItemNotFoundException(String.format(MODEL_NOT_FOUND_BY_MAKE_ID_EXCEPTION_MSG, id.toString()));
         }
         return modelsRepository.findModelsByMake_MakeID(id);
 
