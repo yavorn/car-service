@@ -130,7 +130,7 @@ public class CarServiceImpl implements CarService {
     public List<Make> getAllMakes() {
 
         try {
-            return makeRepository.findAllByOrderByMakeNameAsc();
+            return makeRepository.getAllByMakeDeletedFalseOrderByMakeNameAsc();
 
         } catch (HibernateException he) {
             throw new ResponseStatusException(
@@ -147,7 +147,7 @@ public class CarServiceImpl implements CarService {
 
 
         try {
-            return modelsRepository.findAll();
+            return modelsRepository.getAllByModelDeletedFalse();
 
         } catch (HibernateException he) {
             throw new ResponseStatusException(
@@ -267,4 +267,6 @@ public class CarServiceImpl implements CarService {
         return modelsRepository.findModelsByMake_MakeID(id);
 
     }
+
+
 }
