@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" th:fragment="navbar" xmlns:th="http://www.thymeleaf.org">
+    <a class="navbar-brand" th:href="@{/}">Car Service</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/customer' ? 'active':''}">
+                <a class="nav-link" th:href="@{/customer}">Customers</a>
+            </li>
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/cars' ? 'active':''}">
+                <a class="nav-link" th:href="@{/cars}">Cars</a>
+            </li>
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/procedures' ? 'active':''}">
+                <a class="nav-link" th:href="@{/procedures}">Procedures</a>
+            </li>
+        </ul>
+
+        <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#"><span class="fas fa-user"></span> Sign Up</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><span class="fas fa-sign-in-alt"></span> Login</a>
+            </li>
+        </ul>
+
+    </div>
+</nav>

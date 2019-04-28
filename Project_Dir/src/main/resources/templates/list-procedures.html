@@ -14,35 +14,7 @@
 
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="#">Car Service</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#">Customers</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Cars</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Procedures</a>
-            </li>
-        </ul>
-
-        <ul class="nav navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#"><span class="fas fa-user"></span> Sign Up</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#"><span class="fas fa-sign-in-alt"></span> Login</a>
-            </li>
-        </ul>
-
-    </div>
-</nav>
+<footer th:replace="fragments/navbar :: navbar"></footer>
 
 <br>
 <br>
@@ -95,19 +67,9 @@
 </div>
 
 
+<footer th:replace="fragments/footer :: footer"></footer>
 
 
-
-<footer>
-    <div class="container">
-        <p>
-            All rights reserved. &copy; 2019 Team 6
-            <span style="display: inline-block;">
-
-                </span>
-        </p>
-    </div>
-</footer>
 
 <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
