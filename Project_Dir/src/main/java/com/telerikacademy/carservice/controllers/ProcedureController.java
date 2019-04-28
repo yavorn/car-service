@@ -24,7 +24,7 @@ public class ProcedureController {
         return "list-procedures";
     }
 
-    @PutMapping("/delete/{procedureID}")
+    @DeleteMapping("/{procedureID}")
     public String deleteProcedureById(@PathVariable Long procedureID){
         procedureService.deleteProcedure(procedureID);
         return "redirect:/procedures";

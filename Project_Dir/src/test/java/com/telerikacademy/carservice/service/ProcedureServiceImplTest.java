@@ -1,8 +1,7 @@
-package com.telerikacademy.carservice;
+package com.telerikacademy.carservice.service;
 
 import com.telerikacademy.carservice.models.Procedure;
 import com.telerikacademy.carservice.repository.ProcedureRepository;
-import com.telerikacademy.carservice.service.ProcedureServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,36 +16,26 @@ import static org.mockito.Mockito.*;
 
 public class ProcedureServiceImplTest {
     @Mock
-    ProcedureRepository mockProcedureRepository;
+    ProcedureRepository procedureRepository;
     @InjectMocks
     ProcedureServiceImpl procedureServiceImpl;
-    private Procedure testProcedure = new Procedure();
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        testProcedure.setProcedureName("procedureName");
-        testProcedure.setProcedurePrice(0);
     }
 
     @Test
-    public void getAllProcedures_shouldReturn_WhenValidArgsPassed() throws Exception {
-        when(mockProcedureRepository.findAllByProcedureDeletedIsFalse()).thenReturn(Arrays.<Procedure>asList(testProcedure));
+    public void testGetAllProcedures() throws Exception {
+        when(procedureRepository.findAllByProcedureDeletedIsFalse()).thenReturn(Arrays.<Procedure>asList(new Procedure("procedureName", 0d)));
 
         List<Procedure> result = procedureServiceImpl.getAllProcedures();
-        Assert.assertEquals(1, result.size());
-    }
-
-    @Test
-    public void getAllProcedures_shouldReturn_WhenInvalidArgsPassed() throws Exception{
-        when(mockProcedureRepository.findAllByProcedureDeletedIsFalse()).thenReturn(null);
-        List<Procedure> result = procedureServiceImpl.getAllProcedures();
-        Assert.assertNull(result.get(0));
+        Assert.assertEquals(Arrays.<Procedure>asList(new Procedure("procedureName", 0d)), result);
     }
 
     @Test
     public void testGetProcedureByID() throws Exception {
-        when(mockProcedureRepository.findProcedureByProcedureID(anyLong())).thenReturn(new Procedure("procedureName", 0d));
+        when(procedureRepository.findProcedureByProcedureID(anyLong())).thenReturn(new Procedure("procedureName", 0d));
 
         Procedure result = procedureServiceImpl.getProcedureByID(Long.valueOf(1));
         Assert.assertEquals(new Procedure("procedureName", 0d), result);
@@ -59,8 +48,15 @@ public class ProcedureServiceImplTest {
 
     @Test
     public void testDeleteProcedure() throws Exception {
-        when(mockProcedureRepository.findProcedureByProcedureID(anyLong())).thenReturn(new Procedure("procedureName", 0d));
+        when(procedureRepository.findProcedureByProcedureID(anyLong())).thenReturn(new Procedure("procedureName", 0d));
 
         procedureServiceImpl.deleteProcedure(Long.valueOf(1));
     }
+
+    @Test
+    public void testEditProcedure() throws Exception {
+        procedureServiceImpl.editProcedure(new Procedure("procedureName", 0d));
+    }
 }
+
+//Generated with love by TestMe :) Please report issues and submit feature requests at: http://weirddev.com/forum#!/testme

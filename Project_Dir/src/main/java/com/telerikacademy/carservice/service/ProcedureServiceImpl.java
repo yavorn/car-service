@@ -88,5 +88,13 @@ public class ProcedureServiceImpl implements ProcedureService {
         }
     }
 
+    public void editProcedure(Procedure procedure) {
+        try {
+            procedureRepository.save(procedure);
+        } catch (DataIntegrityViolationException e){
+            e.printStackTrace();
+        }
+    }
+
 
 }
