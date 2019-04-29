@@ -62,7 +62,7 @@ public class ProcedureServiceImpl implements ProcedureService {
 
     public void addProcedure(Procedure procedure) {
         try {
-            if (procedureRepository.findProcedureByProcedureName(procedure.getProcedureName()) == procedure){
+            if (procedureRepository.findProcedureByProcedureName(procedure.getProcedureName()) == procedure) {
                 throw new DatabaseItemAlreadyExists("Procedure");
             }
             procedureRepository.save(procedure);
@@ -88,7 +88,6 @@ public class ProcedureServiceImpl implements ProcedureService {
             procedureToDelete.setProcedureDeleted();
             procedureRepository.save(procedureToDelete);
 
-
         } catch (DatabaseItemNotFoundException | DatabaseItemAlreadyDeletedException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
@@ -97,8 +96,13 @@ public class ProcedureServiceImpl implements ProcedureService {
         }
     }
 
-    public void editProcedure(Procedure procedure, Long id) {
-        Procedure procedureToUpdate = procedureRepository.findProcedureByProcedureID(id);
+    public void editProcedure(Procedure procedure, Long procedureID) {
+        Procedure procedureToUpdate = procedureRepository.findProcedureByProcedureID(procedureID);
+
+        if (procedureToUpdate == null) {
+            throw new DatabaseItemNotFoundException("Procedure %d is not found", procedureID);
+        }
+
         procedureToUpdate.setProcedureName(procedure.getProcedureName());
         procedureToUpdate.setProcedurePrice(procedure.getProcedurePrice());
 

@@ -20,30 +20,12 @@ public class ProcedureController {
 
     @GetMapping
     public String listProcedures(Model model){
+        model.addAttribute("procedure", new Procedure());
         model.addAttribute("procedures", procedureService.getAllProcedures());
         return "list-procedures";
     }
 
-    @DeleteMapping("/{procedureID}")
-    public String deleteProcedureById(@PathVariable Long procedureID){
-        procedureService.deleteProcedure(procedureID);
-        return "redirect:/procedures";
-    }
-
-    @PutMapping()
-    public String editProcedure(@Valid @ModelAttribute Procedure procedure ) {
-        procedureService.addProcedure(procedure);
-        return "redirect:/procedures";
-    }
-
-    @GetMapping("/add-procedure")
-    public String addProcedureForm(Model model) {
-
-        model.addAttribute("procedure", new Procedure());
-        return "add-procedure";
-    }
-
-    @PostMapping("/add-procedure")
+    @PostMapping
     public String addProcedure(@Valid @ModelAttribute Procedure procedure , BindingResult bindingErrors) {
 
         if(bindingErrors.hasErrors()) {
@@ -52,5 +34,31 @@ public class ProcedureController {
         procedureService.addProcedure(procedure);
         return "redirect:/procedures";
     }
+
+    @GetMapping("/{procedureID}")
+    @ResponseBody
+    public Procedure getProcedureById(@PathVariable Long procedureID){
+        return procedureService.getProcedureByID(procedureID);
+    }
+
+    @DeleteMapping("/{procedureID}")
+    @ResponseBody
+    public String deleteProcedureById(@PathVariable Long procedureID){
+        procedureService.deleteProcedure(procedureID);
+        return "redirect:/procedures";
+    }
+
+    @PutMapping("/{procedureID}")
+    public String editProcedureById(@Valid @ModelAttribute Procedure procedure, @PathVariable Long procedureID) {
+        procedureService.editProcedure(procedure, procedureID);
+        return "redirect:/procedures";
+    }
+
+    @GetMapping("/add-procedure")
+    public String addProcedureForm(Model model) {
+        return "add-procedure";
+    }
+
+
 
 }

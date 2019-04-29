@@ -13,4 +13,6 @@ public interface ProcedureService {
 
     void deleteProcedure(Long procedureID);
 
+    void editProcedure(Procedure procedure, Long id);
+
 }

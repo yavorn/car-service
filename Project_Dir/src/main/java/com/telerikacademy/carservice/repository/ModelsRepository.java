@@ -14,5 +14,6 @@ public interface ModelsRepository extends JpaRepository<Models, Long> {
 
     List<Models> findModelsByMake_MakeID(Long id);
     List<Models> getAllByModelDeletedFalse();
+    Models findModelsByModelName(String name);
 
 }

@@ -1,59 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-
     <title>Procedures</title>
-
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{https://use.fontawesome.com/releases/v5.5.0/css/all.css}"/>
+    <div th:replace="fragments/components :: head"></div>
 
 </head>
 
 <body>
+<br><br><br>
 
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="#">Car Service</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#">Customers</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Cars</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Procedures</a>
-            </li>
-        </ul>
-
-        <ul class="nav navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#"><span class="fas fa-user"></span> Sign Up</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#"><span class="fas fa-sign-in-alt"></span> Login</a>
-            </li>
-        </ul>
-
-    </div>
-</nav>
-
-<br>
-<br>
-<br>
+<footer th:replace="fragments/components :: navbar"></footer>
 
 <div class="container body-content">
     <div class="page-header">
         <label class="heading"><h1>Procedures Table</h1></label>
         <div class="form-group">
             <fieldset>
-                <form action="" class="form-group" method="post">
                     <div class="table-responsive">
                         <div class="table-responsive">
 
@@ -63,7 +25,9 @@
                                     <th>#</th>
                                     <th>Procedure</th>
                                     <th>Price</th>
+                                    <th>Edit</th>
                                     <th>Delete</th>
+                                    <th>Delete AJAX</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -71,41 +35,43 @@
                                     <td th:text="${model.getProcedureID()}"> </td>
                                     <td th:text="${model.getProcedureName()}"> </td>
                                     <td th:text="${model.getProcedurePrice()}"> </td>
-                                    <td><button th:value="${model.getProcedureID()}" class="btn btn-danger pull-right"  title="Delete" id="delete-procedure-button" onclick="deleteProcedure()">
-                                        <i class="fas fa-trash-alt"></i> Delete
-                                    </button ></td>
+                                    <td><form>
+                                        <button type="submit" class="btn btn-outline-secondary" title="Edit" id="edite-procedure-button">
+                                            <i class="far fa-edit"></i> Edit</button >
+                                    </form></td>
+
+                                    <td><form th:action="@{'/procedures/' + ${model.getProcedureID()}}" th:object="${procedures}" th:method="delete">
+                                        <button type="submit" class="btn btn-danger" title="Delete" id="delete-procedure-button">
+                                        <i class="fas fa-trash-alt"></i> Delete</button >
+                                    </form></td>
+
+                                    <td><button th:value="${model.getProcedureID()}" class="btn btn-danger" title="Delete" id="delete-procedure-button2" onclick="deleteProcedure()">Delete</button></td>
 
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </form>            <!--END OF FORM ^^-->
-                <a th:href="@{procedures/add-procedure}" th:text="#{label.addProcedure}" class="btn btn-success">Add Procedure</a>
+
+                <button th:text="#{label.addProcedure}" class="btn btn-success" id="add-procedure-button">Add Procedures</button>
             </fieldset>
         </div>
-        <hr />
+        <hr/>
     </div>
 </div>
 
+<!--<div th:replace="fragments/procedures :: addProcedure"></div>-->
+<div th:replace="fragments/components :: infoModal"></div>
+<div th:replace="fragments/components :: confirmationModal"></div>
 
 
 
+<br><br>
+<footer th:replace="fragments/components :: footer"></footer>
 
-<footer>
-    <div class="container">
-        <p>
-            All rights reserved. &copy; 2019 Team 6
-            <span style="display: inline-block;">
 
-                </span>
-        </p>
-    </div>
-</footer>
 
-<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
-<script th:src="@{https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js}"></script>
+<div th:replace="fragments/components :: js"></div>
 <script th:src="@{/js/procedures.js}"></script>
 
 

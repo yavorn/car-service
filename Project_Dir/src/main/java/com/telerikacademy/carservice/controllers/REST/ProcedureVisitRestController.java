@@ -1,4 +1,4 @@
-package com.telerikacademy.carservice.controllers;
+package com.telerikacademy.carservice.controllers.REST;
 
 import com.telerikacademy.carservice.models.ProcedureVisit;
 import com.telerikacademy.carservice.service.contracts.ProcedureVisitService;
