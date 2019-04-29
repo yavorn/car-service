@@ -1,32 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-
     <title>Procedures</title>
-
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{https://use.fontawesome.com/releases/v5.5.0/css/all.css}"/>
+    <div th:replace="fragments/components :: head"></div>
 
 </head>
 
 <body>
+<br><br><br>
 
-<footer th:replace="fragments/navbar :: navbar"></footer>
-
-<br>
-<br>
-<br>
-
+<footer th:replace="fragments/components :: navbar"></footer>
 
 <div class="container body-content">
     <div class="page-header">
         <label class="heading"><h1>Procedures Table</h1></label>
         <div class="form-group">
             <fieldset>
-                <form action="" class="form-group" method="post">
                     <div class="table-responsive">
                         <div class="table-responsive">
 
@@ -38,6 +27,7 @@
                                     <th>Price</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
+                                    <th>Delete AJAX</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -54,27 +44,34 @@
                                         <button type="submit" class="btn btn-danger" title="Delete" id="delete-procedure-button">
                                         <i class="fas fa-trash-alt"></i> Delete</button >
                                     </form></td>
+
+                                    <td><button th:value="${model.getProcedureID()}" class="btn btn-danger" title="Delete" id="delete-procedure-button2" onclick="deleteProcedure()">Delete</button></td>
+
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </form>            <!--END OF FORM ^^-->
-                <a th:href="@{procedures/add-procedure}" th:text="#{label.addProcedure}" class="btn btn-success">Add Procedure</a>
+
+                <button th:text="#{label.addProcedure}" class="btn btn-success" id="add-procedure-button">Add Procedures</button>
             </fieldset>
         </div>
-        <hr />
+        <hr/>
     </div>
 </div>
 
+<!--<div th:replace="fragments/procedures :: addProcedure"></div>-->
+<div th:replace="fragments/components :: infoModal"></div>
+<div th:replace="fragments/components :: confirmationModal"></div>
 
-<footer th:replace="fragments/footer :: footer"></footer>
+
+
+<br><br>
+<footer th:replace="fragments/components :: footer"></footer>
 
 
 
-<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
-<script th:src="@{https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js}"></script>
+<div th:replace="fragments/components :: js"></div>
 <script th:src="@{/js/procedures.js}"></script>
 
 
