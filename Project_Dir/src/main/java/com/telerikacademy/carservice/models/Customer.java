@@ -3,6 +3,7 @@ package com.telerikacademy.carservice.models;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Entity
 @Table(name = "customer")
@@ -26,6 +27,9 @@ public class Customer {
 
     @Column(name = "is_deleted")
     private int isDeleted;
+
+    @OneToMany(mappedBy = "customer_cars")
+    private Set<Long> customerCars;
 
     public Customer() {
     }
@@ -75,5 +79,13 @@ public class Customer {
 
     public void setIsDeleted(int isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public Set<Long> getCustomerCars() {
+        return customerCars;
+    }
+
+    public void setCustomerCars(Set<Long> customerCars) {
+        this.customerCars = customerCars;
     }
 }
