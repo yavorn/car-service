@@ -1,8 +1,6 @@
 package com.telerikacademy.carservice;
 
-import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
-import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyExists;
-import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
+import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyExistsException;
 import com.telerikacademy.carservice.models.Procedure;
 import com.telerikacademy.carservice.repository.ProcedureRepository;
 import com.telerikacademy.carservice.service.ProcedureServiceImpl;
@@ -95,7 +93,7 @@ public class ProcedureServiceImplTest {
     }
 
     //TO DO
-    @Test(expected = DatabaseItemAlreadyExists.class)
+    @Test(expected = DatabaseItemAlreadyExistsException.class)
     public void addProcedure_shouldReturn_WhenDuplicateNamePassed() {
         when(mockProcedureRepository.findProcedureByProcedureName(testProcedure.getProcedureName()))
                 .thenReturn(testProcedure);

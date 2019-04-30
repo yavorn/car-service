@@ -1,13 +1,12 @@
 package com.telerikacademy.carservice;
 
-import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyExists;
+import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyExistsException;
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import com.telerikacademy.carservice.models.Make;
 import com.telerikacademy.carservice.models.Models;
 import com.telerikacademy.carservice.repository.MakeRepository;
 import com.telerikacademy.carservice.repository.ModelsRepository;
 import com.telerikacademy.carservice.service.CarServiceImpl;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -203,8 +202,8 @@ public class CarModelServiceTest {
     }
 
 
-     @Test(expected = DatabaseItemAlreadyExists.class)
-    public void addMake_shouldThrowDatabaseItemAlreadyExistsException_whenCarMakeExists() throws DatabaseItemAlreadyExists  {
+     @Test(expected = DatabaseItemAlreadyExistsException.class)
+    public void addMake_shouldThrowDatabaseItemAlreadyExistsException_whenCarMakeExists() throws DatabaseItemAlreadyExistsException {
         //Arrange
         when(mockMakeRepository.findMakeByMakeName(carMakeAudi.getMakeName()))
                 .thenReturn(carMakeAudi);
@@ -224,8 +223,8 @@ public class CarModelServiceTest {
     }
 
 
-    @Test(expected = DatabaseItemAlreadyExists.class)
-    public void addModel_shouldThrowDatabaseItemAlreadyExistsException_whenCarModelExists() throws DatabaseItemAlreadyExists  {
+    @Test(expected = DatabaseItemAlreadyExistsException.class)
+    public void addModel_shouldThrowDatabaseItemAlreadyExistsException_whenCarModelExists() throws DatabaseItemAlreadyExistsException {
         //Arrange
         when(mockModelsRepository.findModelsByModelName(carModelA6.getModelName()))
                 .thenReturn(carModelA6);
