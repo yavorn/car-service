@@ -5,8 +5,8 @@ public class DatabaseItemNotFoundException extends RuntimeException {
         super(String.format("%s with ID - %d not found.",item, id));
     }
 
-    public DatabaseItemNotFoundException(String username) {
-        super(String.format("Customer with username %s not found.", username));
+    public DatabaseItemNotFoundException(String message) {
+        super(message);
 
     }
 }

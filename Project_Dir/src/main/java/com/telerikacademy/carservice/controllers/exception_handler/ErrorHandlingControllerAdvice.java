@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -20,13 +21,14 @@ public class ErrorHandlingControllerAdvice {
     @ExceptionHandler(DatabaseItemNotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    ErrorHandler onDatabaseItemNotFoundException(DatabaseItemNotFoundException e) {
+    public ModelAndView onDatabaseItemNotFoundException(DatabaseItemNotFoundException e) {
         ErrorHandler error = new ErrorHandler();
-
         error.setStatus(HttpStatus.BAD_REQUEST.value());
         error.setMessage(e.getMessage());
-
-        return error;
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("error", error.toString());
+        mav.setViewName("error");
+        return mav;
     }
 
     @ExceptionHandler(Exception.class)

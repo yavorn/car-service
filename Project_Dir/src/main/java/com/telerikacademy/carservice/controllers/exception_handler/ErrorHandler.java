@@ -30,7 +30,7 @@ public class ErrorHandler {
 
     @Override
     public String toString() {
-        return String.format("Status: %d" + System.lineSeparator()+
-                "Error Message: %s", this.getStatus(), this.getMessage() );
+        return String.format("Status: %d" + System.lineSeparator() +
+                "Error Message: %s", this.getStatus(), this.getMessage());
     }
 }
