@@ -7,6 +7,11 @@ $(document).ready(function () {
 
 let apiUrl = 'http://localhost:8080/';
 
+function addProcedure(){
+
+    $('#add-procedure-modal').modal();
+}
+
 function deleteProcedure() {
     let btnTarget = event.target;
     let id = $(btnTarget).val();

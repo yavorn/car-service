@@ -13,7 +13,7 @@
 
 
 <!-- Navbar Fragment -->
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" th:fragment="navbar">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" th:fragment="navbar" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <a class="navbar-brand" th:href="@{/}">Car Service</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -33,11 +33,17 @@
         </ul>
 
         <ul class="nav navbar-nav ml-auto">
+
             <li class="nav-item">
-                <a class="nav-link" href="#"><span class="fas fa-user"></span> Sign Up</a>
+                <a class="nav-link" href="#"><span class="fas fa-user"></span> <span sec:authentication="name"/></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#"><span class="fas fa-sign-in-alt"></span> Login</a>
+                <form th:action="@{/logout}" method="post">
+                <a class="nav-link" href="#"><span class="fas fa-sign-in-alt"></span>
+                    <input type="submit" style="border: none; background: none; padding: 0; color: lightgray" value="Logout">
+                </a>
+
+                </form>
             </li>
         </ul>
 
