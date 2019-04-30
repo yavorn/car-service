@@ -19,7 +19,7 @@ public class Make {
     private Long makeID;
 
     @Column(name = "make_name")
-    @Size(min = 1, max = 30, message = "Incorrect size for make name.")
+    @Size(min = 2, max = 30, message = "Incorrect size for make name.")
     private String makeName;
 
     @Column(name = "is_deleted", nullable = false, columnDefinition = "tinyint(4) default 0")

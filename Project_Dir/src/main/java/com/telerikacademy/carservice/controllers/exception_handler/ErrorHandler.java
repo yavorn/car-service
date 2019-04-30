@@ -28,5 +28,9 @@ public class ErrorHandler {
         this.message = message;
     }
 
-
+    @Override
+    public String toString() {
+        return String.format("Status: %d" + System.lineSeparator()+
+                "Error Message: %s", this.getStatus(), this.getMessage() );
+    }
 }
