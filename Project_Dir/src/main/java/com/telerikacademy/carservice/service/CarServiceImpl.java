@@ -1,7 +1,7 @@
 package com.telerikacademy.carservice.service;
 
 import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
-import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyExists;
+import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyExistsException;
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import com.telerikacademy.carservice.models.Make;
 import com.telerikacademy.carservice.models.Models;
@@ -49,7 +49,7 @@ public class CarServiceImpl implements CarService {
             throw new DatabaseItemAlreadyDeletedException(String.format(MAKE_DELETED_EXCEPTION_MSG, make.getMakeName()));
         }
         else if(existingMake != null && !existingMake.isMakeDeleted()){
-            throw new DatabaseItemAlreadyExists(String.format(MAKE_EXIST_EXCEPTION_MSG, make.getMakeName()));
+            throw new DatabaseItemAlreadyExistsException(String.format(MAKE_EXIST_EXCEPTION_MSG, make.getMakeName()));
         }
         makeRepository.save(make);
 
@@ -78,7 +78,7 @@ public class CarServiceImpl implements CarService {
             throw new DatabaseItemAlreadyDeletedException(String.format(MODEL_DELETED_EXCEPTION_MSG, model.getModelName()));
         }
         else if(existingModel != null && !existingModel.isModelDeleted()){
-            throw new DatabaseItemAlreadyExists(String.format(MODEL_EXIST_EXCEPTION_MSG, model.getModelName()));
+            throw new DatabaseItemAlreadyExistsException(String.format(MODEL_EXIST_EXCEPTION_MSG, model.getModelName()));
         }
         return modelsRepository.save(model);
 
@@ -256,8 +256,5 @@ public class CarServiceImpl implements CarService {
             throw new DatabaseItemNotFoundException(String.format(MODEL_NOT_FOUND_BY_MAKE_ID_EXCEPTION_MSG, id.toString()));
         }
         return modelsRepository.findModelsByMake_MakeID(id);
-
     }
-
-
 }
