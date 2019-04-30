@@ -67,7 +67,10 @@ public class ProcedureServiceImpl implements ProcedureService {
             }
             procedureRepository.save(procedure);
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseItemAlreadyExists("Procedure");
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Procedure parameters are wrong or not complete."
+            );
         }
     }
 

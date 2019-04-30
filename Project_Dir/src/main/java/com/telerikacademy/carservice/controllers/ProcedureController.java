@@ -2,6 +2,7 @@ package com.telerikacademy.carservice.controllers;
 
 import com.telerikacademy.carservice.models.Procedure;
 import com.telerikacademy.carservice.service.contracts.ProcedureService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,7 @@ import javax.validation.Valid;
 public class ProcedureController {
     private ProcedureService procedureService;
 
+    @Autowired
     public ProcedureController(ProcedureService procedureService) {
         this.procedureService = procedureService;
     }
@@ -29,7 +31,7 @@ public class ProcedureController {
     public String addProcedure(@Valid @ModelAttribute Procedure procedure , BindingResult bindingErrors) {
 
         if(bindingErrors.hasErrors()) {
-            return "add-procedure";
+            return "list-procedures";
         }
         procedureService.addProcedure(procedure);
         return "redirect:/procedures";
@@ -53,12 +55,6 @@ public class ProcedureController {
         procedureService.editProcedure(procedure, procedureID);
         return "redirect:/procedures";
     }
-
-    @GetMapping("/add-procedure")
-    public String addProcedureForm(Model model) {
-        return "add-procedure";
-    }
-
 
 
 }
