@@ -32,22 +32,22 @@ public class CustomerCars  {
 
     @Column(name= "VIN")
     @Size(min = 16, max = 18, message = "Incorrect size for VIN Number.")
-    private String VINnumber;
+    private String vinNumber;
 
     public CustomerCars() {
     }
 
 
-    public CustomerCars(Customer customerID
-            , Models modelID
-            , Integer yearOfProduction
-            , String licensePlate
-            , String VINnumber) {
-        setCustomerID(customerID);
-        setModelID(modelID);
-        setYearOfProduction(yearOfProduction);
-        setLicensePlate(licensePlate);
-        setVINnumber(VINnumber);
+    public CustomerCars(Customer customerID,
+                        Models modelID,
+                        Integer yearOfProduction,
+                        String licensePlate,
+                        String vinNumber) {
+        this.customerID = customerID;
+        this.modelID = modelID;
+        this.yearOfProduction = yearOfProduction;
+        this.licensePlate = licensePlate;
+        this.vinNumber = vinNumber;
     }
 
     public Long getCustomerCarID() {
@@ -74,8 +74,6 @@ public class CustomerCars  {
         this.modelID = modelID;
     }
 
-
-
     public Integer getYearOfProduction() {
         return yearOfProduction;
     }
@@ -92,11 +90,11 @@ public class CustomerCars  {
         this.licensePlate = licensePlate;
     }
 
-    public String getVINnumber() {
-        return VINnumber;
+    public String getVinNumber() {
+        return vinNumber;
     }
 
-    public void setVINnumber(String VINnumber) {
-        this.VINnumber = VINnumber;
+    public void setVinNumber(String vinNumber) {
+        this.vinNumber = vinNumber;
     }
 }
