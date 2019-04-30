@@ -53,14 +53,15 @@
                         </div>
                     </div>
 
-                <button th:text="#{label.addProcedure}" class="btn btn-success" id="add-procedure-button">Add Procedures</button>
+                <button th:text="#{label.addProcedure}" class="btn btn-success" id="add-procedure-button" onclick="addProcedure()">Add Procedures</button>
             </fieldset>
         </div>
         <hr/>
     </div>
 </div>
 
-<!--<div th:replace="fragments/procedures :: addProcedure"></div>-->
+
+<div th:replace="fragments/procedures :: addProcedureModal"></div>
 <div th:replace="fragments/components :: infoModal"></div>
 <div th:replace="fragments/components :: confirmationModal"></div>
 
