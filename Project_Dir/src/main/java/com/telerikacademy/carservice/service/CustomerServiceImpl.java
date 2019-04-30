@@ -1,9 +1,6 @@
 package com.telerikacademy.carservice.service;
 
-import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
-import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
-import com.telerikacademy.carservice.exceptions.UserRightsNotDisabledException;
-import com.telerikacademy.carservice.exceptions.UsernameExistsException;
+import com.telerikacademy.carservice.exceptions.*;
 import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerCars;
 import com.telerikacademy.carservice.models.CustomerDto;
@@ -120,22 +117,22 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerRepository.findCustomerByEmail(currentPrincipalName);
 
         String newPassword = customerDto.getPasswordConfirmation();
-            try {
-                String newEncodedPassword = passwordEncoder.encode(newPassword);
-                customerRepository.updatePassword(newEncodedPassword, currentPrincipalName);
-                customerRepository.saveAndFlush(customer);
-            } catch (HibernateException he) {
-                throw new ResponseStatusException(
-                        HttpStatus.INTERNAL_SERVER_ERROR,
-                        "Failed to access database."
-                );
-            } catch (DatabaseItemNotFoundException e) {
-                throw new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        e.getMessage()
-                );
-            }
+        try {
+            String newEncodedPassword = passwordEncoder.encode(newPassword);
+            customerRepository.updatePassword(newEncodedPassword, currentPrincipalName);
+            customerRepository.saveAndFlush(customer);
+        } catch (HibernateException he) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Failed to access database."
+            );
+        } catch (DatabaseItemNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage()
+            );
         }
+    }
 
     @Override
     public CustomerCars getCustomerCarById(long id) {
@@ -143,7 +140,7 @@ public class CustomerServiceImpl implements CustomerService {
             CustomerCars carToFind = customerCarsRepository.findCustomerCarsByCustomerCarID(id);
 
             if (carToFind == null) {
-                throw new DatabaseItemNotFoundException("Customer Car", id);
+                throw new DatabaseItemNotFoundException(String.format("Car with id %d not found", id));
             }
             return carToFind;
 
@@ -152,78 +149,6 @@ public class CustomerServiceImpl implements CustomerService {
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Failed to access database."
             );
-
-        } catch (DatabaseItemNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
-        }
-    }
-
-    @Override
-    @Transactional
-    public void disableCustomer(CustomerDto customerDto) {
-        Customer customerToDisable = customerRepository.findCustomerByEmail(customerDto.getEmail());
-
-        if (customerToDisable == null) {
-            throw new DatabaseItemNotFoundException(customerDto.getName());
-        }
-
-        if (customerToDisable.getIsDeleted() == 1){
-            throw new DatabaseItemAlreadyDeletedException(customerToDisable.getEmail());
-        }
-
-        try {
-            customerRepository.disableUser(customerToDisable.getEmail());
-            customerToDisable.setIsDeleted(1);
-            customerRepository.saveAndFlush(customerToDisable);
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-
-        } catch (DatabaseItemAlreadyDeletedException ex) {
-            throw new ResponseStatusException(
-              HttpStatus.BAD_REQUEST
-            );
-
-        } catch (DatabaseItemNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
-        }
-    }
-
-    @Override
-    @Transactional
-    public void enableCustomer(CustomerDto customerDto) {
-        Customer customerToEnable = customerRepository.findCustomerByEmail(customerDto.getEmail());
-
-        if (customerToEnable == null) {
-            throw new DatabaseItemNotFoundException(customerDto.getEmail());
-        }
-
-        if (customerToEnable.getIsDeleted() == 0) {
-            throw new UserRightsNotDisabledException(customerDto.getEmail());
-        }
-
-        try {
-            customerRepository.enableUser(customerToEnable.getEmail());
-            customerToEnable.setIsDeleted(0);
-            customerRepository.saveAndFlush(customerToEnable);
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-
-        } catch (UserRightsNotDisabledException ex) {
-          throw new ResponseStatusException(
-                  HttpStatus.BAD_REQUEST
-          )  ;
 
         } catch (DatabaseItemNotFoundException e) {
             throw new ResponseStatusException(
@@ -246,49 +171,183 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    @Override
-    public List<Integer> listOfYears() {
-        int startYear = 1960;
-        int endYear = Calendar.getInstance().get(Calendar.YEAR);
-        List<Integer> listYears = new ArrayList<>();
-        for (int i = endYear; i >= startYear; i--) {
-            listYears.add(i);
-        }
-        return listYears;
-    }
-
-    private void createCustomerOrAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) throws UsernameExistsException {
-        Customer existingCustomer = customerRepository.findCustomerByEmail(customerDto.getEmail());
-
-        if (existingCustomer != null) {
-            throw new UsernameExistsException(String.format("User with username %s already exists", customerDto.getEmail()));
-        }
-
-        String password = passwordService.generateRandomPassword();
-        String passwordEncoded = passwordEncoder.encode(password);
-
-        Customer newCustomer = new Customer();
-        newCustomer.setEmail(customerDto.getEmail());
-        newCustomer.setPhone(customerDto.getPhone());
-        newCustomer.setName(customerDto.getName());
-
-        User newUser = new User(customerDto.getEmail(), passwordEncoded, authorities);
-
+    public void addCarToCustomerList(CustomerDto customerDto, Long carToAddId) {
         try {
-            userDetailsManager.createUser(newUser);
-            customerRepository.saveAndFlush(newCustomer);
-            emailService.sendSimpleMessageUsingTemplateWhenCreatingCustomer(newCustomer.getEmail(),
-                    emailTemplate, newCustomer.getName(), newCustomer.getEmail(), password);
+            Customer customer = customerRepository.findCustomerByEmail(customerDto.getEmail());
+
+            if (customer == null) {
+                throw new DatabaseItemNotFoundException(String.format("Customer with username %s dose not exist", customerDto.getEmail()));
+            }
+
+            if (customer.getCustomerCars().contains(carToAddId)) {
+                throw new DatabaseItemAlreadyExistsException(String.format("Customer %s already has car with id %d linked to them."
+                        , customer.getEmail(), carToAddId));
+            }
+
+            customer.getCustomerCars().add(carToAddId);
+
+        } catch (DatabaseItemNotFoundException ex) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND
+            );
+        } catch (DatabaseItemAlreadyExistsException ex) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST
+            );
         } catch (HibernateException he) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Failed to access database."
             );
-        } catch (DatabaseItemNotFoundException e) {
+        }
+    }
+
+    public void removeCarFromCustomerList(CustomerDto customerDto, Long carToRemoveId) {
+        try {
+            Customer customer = customerRepository.findCustomerByEmail(customerDto.getEmail());
+
+            if (customer == null) {
+                throw new DatabaseItemNotFoundException(
+                        String.format("Customer with username %s dose not exist",
+                                customerDto.getEmail()));
+            }
+
+            if (!customer.getCustomerCars().contains(carToRemoveId)) {
+                throw new DatabaseItemNotFoundException(
+                        String.format("Customer %s does not have car with id %d linked to them.",
+                        customer.getEmail(), carToRemoveId));
+            }
+
+            customer.getCustomerCars().remove(carToRemoveId);
+
+        } catch (DatabaseItemNotFoundException ex) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
+                    HttpStatus.NOT_FOUND
+            );
+        } catch (HibernateException he) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Failed to access database."
             );
         }
     }
-}
+
+        @Override
+        @Transactional
+        public void enableCustomer (CustomerDto customerDto){
+            Customer customerToEnable = customerRepository.findCustomerByEmail(customerDto.getEmail());
+
+            if (customerToEnable == null) {
+                throw new DatabaseItemNotFoundException(customerDto.getEmail());
+            }
+
+            if (customerToEnable.getIsDeleted() == 0) {
+                throw new UserRightsNotDisabledException(customerDto.getEmail());
+            }
+
+            try {
+                customerRepository.enableUser(customerToEnable.getEmail());
+                customerToEnable.setIsDeleted(0);
+                customerRepository.saveAndFlush(customerToEnable);
+            } catch (HibernateException he) {
+                throw new ResponseStatusException(
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Failed to access database."
+                );
+
+            } catch (UserRightsNotDisabledException ex) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST
+                );
+
+            } catch (DatabaseItemNotFoundException e) {
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        e.getMessage()
+                );
+            }
+        }
+
+        @Override
+        @Transactional
+        public void disableCustomer (CustomerDto customerDto){
+            Customer customerToDisable = customerRepository.findCustomerByEmail(customerDto.getEmail());
+
+            if (customerToDisable == null) {
+                throw new DatabaseItemNotFoundException(customerDto.getName());
+            }
+
+            if (customerToDisable.getIsDeleted() == 1) {
+                throw new DatabaseItemAlreadyDeletedException(customerToDisable.getEmail());
+            }
+
+            try {
+                customerRepository.disableUser(customerToDisable.getEmail());
+                customerToDisable.setIsDeleted(1);
+                customerRepository.saveAndFlush(customerToDisable);
+            } catch (HibernateException he) {
+                throw new ResponseStatusException(
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Failed to access database."
+                );
+
+            } catch (DatabaseItemAlreadyDeletedException ex) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST
+                );
+
+            } catch (DatabaseItemNotFoundException e) {
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        e.getMessage()
+                );
+            }
+        }
+
+        @Override
+        public List<Integer>listOfYears () {
+            int startYear = 1960;
+            int endYear = Calendar.getInstance().get(Calendar.YEAR);
+            List<Integer> listYears = new ArrayList<>();
+            for (int i = endYear; i >= startYear; i--) {
+                listYears.add(i);
+            }
+            return listYears;
+        }
+
+        private void createCustomerOrAdmin (CustomerDto customerDto, List < GrantedAuthority > authorities) throws
+        UsernameExistsException {
+            Customer existingCustomer = customerRepository.findCustomerByEmail(customerDto.getEmail());
+
+            if (existingCustomer != null) {
+                throw new UsernameExistsException(String.format("User with username %s already exists", customerDto.getEmail()));
+            }
+
+            String password = passwordService.generateRandomPassword();
+            String passwordEncoded = passwordEncoder.encode(password);
+
+            Customer newCustomer = new Customer();
+            newCustomer.setEmail(customerDto.getEmail());
+            newCustomer.setPhone(customerDto.getPhone());
+            newCustomer.setName(customerDto.getName());
+
+            User newUser = new User(customerDto.getEmail(), passwordEncoded, authorities);
+
+            try {
+                userDetailsManager.createUser(newUser);
+                customerRepository.saveAndFlush(newCustomer);
+                emailService.sendSimpleMessageUsingTemplateWhenCreatingCustomer(newCustomer.getEmail(),
+                        emailTemplate, newCustomer.getName(), newCustomer.getEmail(), password);
+            } catch (HibernateException he) {
+                throw new ResponseStatusException(
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Failed to access database."
+                );
+            } catch (DatabaseItemNotFoundException e) {
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        e.getMessage()
+                );
+            }
+        }
+    }
