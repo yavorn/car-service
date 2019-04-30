@@ -25,7 +25,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CarModelServiceTests {
+public class CarModelServiceTest {
 
 
     @Mock
@@ -203,11 +203,11 @@ public class CarModelServiceTests {
     }
 
 
-     @Test(expected = ResponseStatusException.class)
-    public void addMake_shouldThrowDatabaseItemAlreadyExistsException_whenCarMakeExists() throws ResponseStatusException  {
+     @Test(expected = DatabaseItemAlreadyExists.class)
+    public void addMake_shouldThrowDatabaseItemAlreadyExistsException_whenCarMakeExists() throws DatabaseItemAlreadyExists  {
         //Arrange
-        when(mockMakeRepository.findAllByOrderByMakeNameAsc())
-                .thenReturn(carMakes);
+        when(mockMakeRepository.findMakeByMakeName(carMakeAudi.getMakeName()))
+                .thenReturn(carMakeAudi);
 
         // Act
          carService.addMake(carMakeAudi);
@@ -224,16 +224,58 @@ public class CarModelServiceTests {
     }
 
 
-    @Test(expected = ResponseStatusException.class)
-    public void addModel_shouldThrowDatabaseItemAlreadyExistsException_whenCarModelExists() throws ResponseStatusException  {
+    @Test(expected = DatabaseItemAlreadyExists.class)
+    public void addModel_shouldThrowDatabaseItemAlreadyExistsException_whenCarModelExists() throws DatabaseItemAlreadyExists  {
         //Arrange
-        when(mockModelsRepository.getAllByModelDeletedFalse())
-                .thenReturn(carModels);
+        when(mockModelsRepository.findModelsByModelName(carModelA6.getModelName()))
+                .thenReturn(carModelA6);
 
         // Act
         carService.addModel(carModelA6);
     }
 
+    @Test
+    public void editMake_shouldInvokeSaveInMakeRepository_whenEditSuccessfully() {
+
+        when(mockMakeRepository.findMakeByMakeID((long)1))
+                .thenReturn(carMakeAudi);
+        // Act
+        carService.editMake((long)1, carMakeAudi);
+
+        // Assert
+        verify(mockMakeRepository, times(1)).save(Mockito.any(Make.class));
+    }
 
 
+    @Test(expected = NullPointerException.class)
+    public void editMake_shouldDatabaseItemNotFoundException_whenCarMakeDoNotExists() throws NullPointerException {
+
+        when(mockMakeRepository.findMakeByMakeID((long)1))
+                .thenReturn(null);
+        // Act
+        carService.editMake((long)1, carMakeAudi);
+
+
+    }
+    @Test
+    public void editModel_shouldInvokeSaveInModelRepository_whenEditSuccessfully() {
+
+        when(mockModelsRepository.findModelsByModelID((long)1))
+                .thenReturn(carModelA6);
+        // Act
+        carService.editModel((long)1, carModelA6);
+
+        // Assert
+        verify(mockModelsRepository, times(1)).save(Mockito.any(Models.class));
+    }
+    @Test(expected = NullPointerException.class)
+    public void editModel_shouldDatabaseItemNotFoundException_whenCarModelDoNotExists() throws NullPointerException {
+
+        when(mockModelsRepository.findModelsByModelID((long)1))
+                .thenReturn(null);
+        // Act
+        carService.editModel((long)1, carModelA6);
+
+
+    }
 }
