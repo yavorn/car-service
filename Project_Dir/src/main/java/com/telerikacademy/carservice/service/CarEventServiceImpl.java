@@ -44,7 +44,7 @@ public class CarEventServiceImpl implements CarEventService {
                     .collect(Collectors.toList());
 
             if (existingCarEvents.size() == 0) {
-                throw new DatabaseItemNotFoundException("Car Event", id);
+                throw new DatabaseItemNotFoundException(String.format("Car event with id %d not found.", id));
             }
             return carEventRepository.findAllByCustomerCar_CustomerCarID(id);
 

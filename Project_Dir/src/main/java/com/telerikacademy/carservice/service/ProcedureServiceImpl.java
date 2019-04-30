@@ -1,7 +1,7 @@
 package com.telerikacademy.carservice.service;
 
 import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
-import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyExists;
+import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyExistsException;
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import com.telerikacademy.carservice.models.Procedure;
 import com.telerikacademy.carservice.repository.ProcedureRepository;
@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class ProcedureServiceImpl implements ProcedureService {
 
-    ProcedureRepository procedureRepository;
+    private ProcedureRepository procedureRepository;
 
     @Autowired
     public ProcedureServiceImpl(ProcedureRepository procedureRepository) {
@@ -42,7 +42,7 @@ public class ProcedureServiceImpl implements ProcedureService {
             Procedure procedureToFind = procedureRepository.findProcedureByProcedureID(procedureID);
 
             if (procedureToFind == null) {
-                throw new DatabaseItemNotFoundException("Procedure %d is not found", procedureID);
+                throw new DatabaseItemNotFoundException(String.format("Procedure with id %d not found.", procedureID));
             }
 
             return procedureToFind;
@@ -63,7 +63,7 @@ public class ProcedureServiceImpl implements ProcedureService {
     public void addProcedure(Procedure procedure) {
         try {
             if (procedureRepository.findProcedureByProcedureName(procedure.getProcedureName()) == procedure) {
-                throw new DatabaseItemAlreadyExists("Procedure");
+                throw new DatabaseItemAlreadyExistsException("Procedure");
             }
             procedureRepository.save(procedure);
         } catch (DataIntegrityViolationException e) {
@@ -81,7 +81,7 @@ public class ProcedureServiceImpl implements ProcedureService {
             Procedure procedureToDelete = procedureRepository.findProcedureByProcedureID(procedureID);
 
             if (procedureToDelete == null) {
-                throw new DatabaseItemNotFoundException("Procedure %d is not found", procedureID);
+                throw new DatabaseItemNotFoundException(String.format("Procedure with id %d not found.", procedureID));
             }
 
             if (procedureToDelete.isProcedureDeleted()) {
@@ -103,7 +103,7 @@ public class ProcedureServiceImpl implements ProcedureService {
         Procedure procedureToUpdate = procedureRepository.findProcedureByProcedureID(procedureID);
 
         if (procedureToUpdate == null) {
-            throw new DatabaseItemNotFoundException("Procedure %d is not found", procedureID);
+            throw new DatabaseItemNotFoundException(String.format("Procedure with id %d not found.", procedureID));
         }
 
         procedureToUpdate.setProcedureName(procedure.getProcedureName());

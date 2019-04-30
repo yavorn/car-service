@@ -40,7 +40,7 @@ public class ProcedureVisitServiceImpl implements ProcedureVisitService {
                     .collect(Collectors.toList());
 
             if (existingProcedureVisit.size() == 0) {
-                throw new DatabaseItemNotFoundException("Procedure visit", id);
+                throw new DatabaseItemNotFoundException(String.format("Procedure visit with id %d not found.", id));
             }
             return procedureVisitRepository.findAllByCarEvent_CustomerCar_CustomerCarID(id);
 
