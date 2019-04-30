@@ -195,10 +195,6 @@ public class CarModelServiceTest {
 
     }
 
-
-
-
-
     @Test
     public void addMake_shouldInvokeSaveInMakeRepository_whenAddedSuccessfully() {
 
@@ -254,8 +250,8 @@ public class CarModelServiceTest {
     }
 
 
-    @Test(expected = NullPointerException.class)
-    public void editMake_shouldDatabaseItemNotFoundException_whenCarMakeDoNotExists() throws NullPointerException {
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void editMake_shouldDatabaseItemNotFoundException_whenCarMakeDoNotExists() throws DatabaseItemNotFoundException {
 
         when(mockMakeRepository.findMakeByMakeID((long)1))
                 .thenReturn(null);
@@ -275,8 +271,8 @@ public class CarModelServiceTest {
         // Assert
         verify(mockModelsRepository, times(1)).save(Mockito.any(Models.class));
     }
-    @Test(expected = NullPointerException.class)
-    public void editModel_shouldDatabaseItemNotFoundException_whenCarModelDoNotExists() throws NullPointerException {
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void editModel_shouldDatabaseItemNotFoundException_whenCarModelDoNotExists() throws DatabaseItemNotFoundException {
 
         when(mockModelsRepository.findModelsByModelID((long)1))
                 .thenReturn(null);
@@ -378,6 +374,28 @@ public class CarModelServiceTest {
         carService.undeleteCarMakeByID((long)3);
 
 
+    }
+
+    @Test
+    public void deleteAllModelsByMakeID_shouldInvokeSaveInModelRepository_whenDeleteSuccessfully() {
+
+        // Act
+        carService.deleteAllModelsByMakeID(carModels);
+
+        // Assert
+        verify(mockModelsRepository, times(2)).save(Mockito.any(Models.class));
+    }
+
+    @Test
+    public void undeleteAllModelsByMakeID_shouldInvokeSaveInModelRepository_whenUndeleteSuccessfully() {
+
+        List<Models> carModel = new ArrayList<>();
+        carModel.add(carModelAstra);
+        // Act
+        carService.undeleteAllModelsByMakeID(carModel);
+
+        // Assert
+        verify(mockModelsRepository, times(1)).save(Mockito.any(Models.class));
     }
 
 }
