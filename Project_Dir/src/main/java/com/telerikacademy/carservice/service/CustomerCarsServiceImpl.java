@@ -25,6 +25,6 @@ public class CustomerCarsServiceImpl implements CustomerCarsService {
 
     @Override
     public List<CustomerCars> getAllCustomerCarsByCustomerId(Long id) {
-        return customerCarsRepository.findCustomerCarsByCustomerID(id);
+        return customerCarsRepository.findCustomerCarsByCustomer_CustomerId(id);
     }
 }
