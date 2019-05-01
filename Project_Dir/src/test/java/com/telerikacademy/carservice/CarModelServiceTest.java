@@ -38,9 +38,11 @@ public class CarModelServiceTest {
 
     private Make carMakeAudi = new Make("Audi");
     private Make carMakeSeat = new Make("Seat");
+    private Make carMakeOpel = new Make("Opel");
     private Models carModelA6 = new Models(carMakeAudi, "A6");
     private Models carModelRS6 = new Models(carMakeAudi, "RS6");
     private Models carModelLeon = new Models(carMakeSeat, "Leon");
+    private Models carModelAstra = new Models(carMakeOpel, "Astra");
 
     private List<Make> carMakes = new ArrayList<>();
     private List<Models> carModels = new ArrayList<>();
@@ -51,9 +53,14 @@ public class CarModelServiceTest {
 
         carMakeAudi.setMakeID((long) 1);
         carMakeSeat.setMakeID((long) 2);
+        carMakeOpel.setMakeID((long) 3);
+        carMakeOpel.setMakeDeleted();
         carModelA6.setModelID((long) 1);
         carModelRS6.setModelID((long) 2);
         carModelLeon.setModelID((long) 3);
+        carModelAstra.setModelID((long) 4);
+        carModelAstra.setModelDeleted();
+
 
         carMakes.add(carMakeAudi);
         carMakes.add(carMakeSeat);
@@ -121,7 +128,7 @@ public class CarModelServiceTest {
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
-    public void getMakeById_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws ResponseStatusException {
+    public void getMakeById_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws DatabaseItemNotFoundException {
         // Act
         Make carMake = carService.getMakeById((long)1);
     }
@@ -156,7 +163,7 @@ public class CarModelServiceTest {
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
-    public void getModelById_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws ResponseStatusException {
+    public void getModelById_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws DatabaseItemNotFoundException {
 
         // Act
         Models carModel = carService.getModelById((long) 1);
@@ -181,15 +188,11 @@ public class CarModelServiceTest {
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
-    public void findModelsByMakeId_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws ResponseStatusException{
+    public void findModelsByMakeId_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws DatabaseItemNotFoundException{
 
         List<Models> result = carService.findModelsByMakeID((long) 1);
 
     }
-
-
-
-
 
     @Test
     public void addMake_shouldInvokeSaveInMakeRepository_whenAddedSuccessfully() {
@@ -246,8 +249,8 @@ public class CarModelServiceTest {
     }
 
 
-    @Test(expected = NullPointerException.class)
-    public void editMake_shouldDatabaseItemNotFoundException_whenCarMakeDoNotExists() throws NullPointerException {
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void editMake_shouldDatabaseItemNotFoundException_whenCarMakeDoNotExists() throws DatabaseItemNotFoundException {
 
         when(mockMakeRepository.findMakeByMakeID((long)1))
                 .thenReturn(null);
@@ -267,14 +270,131 @@ public class CarModelServiceTest {
         // Assert
         verify(mockModelsRepository, times(1)).save(Mockito.any(Models.class));
     }
-    @Test(expected = NullPointerException.class)
-    public void editModel_shouldDatabaseItemNotFoundException_whenCarModelDoNotExists() throws NullPointerException {
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void editModel_shouldDatabaseItemNotFoundException_whenCarModelDoNotExists() throws DatabaseItemNotFoundException {
 
         when(mockModelsRepository.findModelsByModelID((long)1))
                 .thenReturn(null);
         // Act
         carService.editModel((long)1, carModelA6);
+    }
+
+    @Test
+    public void deleteCarMakeByID_shouldInvokeSaveInMakeRepository_whenDeleteSuccessfully() {
+
+        when(mockMakeRepository.findMakeByMakeID((long)1))
+                .thenReturn(carMakeAudi);
+        // Act
+        carService.deleteCarMakeByID((long)1);
+
+        // Assert
+        verify(mockMakeRepository, times(1)).save(Mockito.any(Make.class));
+    }
+
+
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void deleteCarMakeByID_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws DatabaseItemNotFoundException {
+
+        when(mockMakeRepository.findMakeByMakeID((long)1))
+                .thenReturn(null);
+        // Act
+        carService.deleteCarMakeByID((long)1);
 
 
     }
+
+    @Test
+    public void deleteCarModelByID_shouldInvokeSaveInModelRepository_whenDeleteSuccessfully() {
+
+        when(mockModelsRepository.findModelsByModelID((long)1))
+                .thenReturn(carModelA6);
+        // Act
+        carService.deleteCarModelByID((long)1);
+
+        // Assert
+        verify(mockModelsRepository, times(1)).save(Mockito.any(Models.class));
+    }
+
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void deleteCarModelByID_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws DatabaseItemNotFoundException {
+
+        when(mockModelsRepository.findModelsByModelID((long)1))
+                .thenReturn(null);
+        // Act
+        carService.deleteCarModelByID((long)1);
+
+
+    }
+
+
+    @Test
+    public void undeleteCarMakeByID_shouldInvokeSaveInMakeRepository_whenUndeleteSuccessfully() {
+
+        when(mockMakeRepository.findMakeByMakeID((long)3))
+                .thenReturn(carMakeOpel);
+        // Act
+        carService.undeleteCarMakeByID((long)3);
+
+        // Assert
+        verify(mockMakeRepository, times(1)).save(Mockito.any(Make.class));
+    }
+
+
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void undeleteCarMakeByID_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws DatabaseItemNotFoundException {
+
+        when(mockMakeRepository.findMakeByMakeID((long)3))
+                .thenReturn(null);
+        // Act
+        carService.undeleteCarMakeByID((long)3);
+
+
+    }
+
+    @Test
+    public void undeleteCarModelByID_shouldInvokeSaveInModelRepository_whenUndeleteSuccessfully() {
+
+        when(mockModelsRepository.findModelsByModelID((long)4))
+                .thenReturn(carModelAstra);
+        // Act
+        carService.undeleteCarModelByID((long)4);
+
+        // Assert
+        verify(mockModelsRepository, times(1)).save(Mockito.any(Models.class));
+    }
+
+
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void undeleteCarModelByID_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws DatabaseItemNotFoundException {
+
+        when(mockMakeRepository.findMakeByMakeID((long)3))
+                .thenReturn(null);
+        // Act
+        carService.undeleteCarMakeByID((long)3);
+
+
+    }
+
+    @Test
+    public void deleteAllModelsByMakeID_shouldInvokeSaveInModelRepository_whenDeleteSuccessfully() {
+
+        // Act
+        carService.deleteAllModelsByMakeID(carModels);
+
+        // Assert
+        verify(mockModelsRepository, times(2)).save(Mockito.any(Models.class));
+    }
+
+    @Test
+    public void undeleteAllModelsByMakeID_shouldInvokeSaveInModelRepository_whenUndeleteSuccessfully() {
+
+        List<Models> carModel = new ArrayList<>();
+        carModel.add(carModelAstra);
+        // Act
+        carService.undeleteAllModelsByMakeID(carModel);
+
+        // Assert
+        verify(mockModelsRepository, times(1)).save(Mockito.any(Models.class));
+    }
+
 }

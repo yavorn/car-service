@@ -61,7 +61,7 @@ public class CarServiceImpl implements CarService {
         Make makeToUpdate = makeRepository.findMakeByMakeID(id);
 
         if(makeToUpdate == null){
-            throw new DatabaseItemNotFoundException(String.format(MAKE_NOT_FOUND_EXCEPTION_MSG, makeToUpdate.getMakeName()));
+            throw new DatabaseItemNotFoundException(String.format(MAKE_NOT_FOUND_EXCEPTION_MSG, newMake.getMakeName()));
         }
         makeToUpdate.setMakeName(newMake.getMakeName());
 
@@ -89,7 +89,7 @@ public class CarServiceImpl implements CarService {
         Models modelToUpdate = modelsRepository.findModelsByModelID(id);
 
         if(modelToUpdate == null){
-            throw new DatabaseItemNotFoundException(String.format(MODEL_NOT_FOUND_EXCEPTION_MSG, modelToUpdate.getModelName()));
+            throw new DatabaseItemNotFoundException(String.format(MODEL_NOT_FOUND_EXCEPTION_MSG, newModel.getModelName()));
         }
         modelToUpdate.setModelName(newModel.getModelName());
         modelToUpdate.setMake(newModel.getMake());
