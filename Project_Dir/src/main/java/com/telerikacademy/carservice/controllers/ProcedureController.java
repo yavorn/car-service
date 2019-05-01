@@ -22,16 +22,16 @@ public class ProcedureController {
 
     @GetMapping
     public String listProcedures(Model model){
-        model.addAttribute("procedure", new Procedure());
-        model.addAttribute("procedures", procedureService.getAllProcedures());
-        return "list-procedures";
+        model.addAttribute("newProcedure", new Procedure());
+        model.addAttribute("allProcedures", procedureService.getAllProcedures());
+        return "procedures";
     }
 
     @PostMapping
     public String addProcedure(@Valid @ModelAttribute Procedure procedure , BindingResult bindingErrors) {
 
         if(bindingErrors.hasErrors()) {
-            return "list-procedures";
+            return "procedures";
         }
         procedureService.addProcedure(procedure);
         return "redirect:/procedures";

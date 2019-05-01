@@ -12,14 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Scanner;
 
 @Controller
-@RequestMapping("/customer")
+@RequestMapping("/customers")
 public class CustomerController {
 
 
@@ -29,23 +24,29 @@ public class CustomerController {
 
 
     public CustomerController(CustomerService customerService
-                            ,CarEventService carEventService
-                            ,ProcedureVisitService procedureVisitService) {
+            , CarEventService carEventService
+            , ProcedureVisitService procedureVisitService) {
         this.customerService = customerService;
         this.carEventService = carEventService;
         this.procedureVisitService = procedureVisitService;
     }
 
+    @GetMapping
+    public String listAllCustomersAndTheirCars(Model model) {
+        model.addAttribute("allCustomers", customerService.getAllCustomers());
+        return "customers";
+    }
+
 
     @GetMapping("/car")
-    public String listCustomersCars(Model model){
+    public String listCustomersCars(Model model) {
         model.addAttribute("customersCars", customerService.getAllCustomerCars());
         return "list-customers-cars";
     }
 
 
     @GetMapping("/car/{id}")
-    public String customerCarByID(Model model, @PathVariable Long id){
+    public String customerCarByID(Model model, @PathVariable Long id) {
 
         CustomerCars customerCar = customerService.getCustomerCarById(id);
         model.addAttribute("customerCar", customerCar);
