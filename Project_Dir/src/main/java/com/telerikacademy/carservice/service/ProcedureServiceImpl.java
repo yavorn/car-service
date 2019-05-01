@@ -85,7 +85,7 @@ public class ProcedureServiceImpl implements ProcedureService {
             }
 
             if (procedureToDelete.isProcedureDeleted()) {
-                throw new DatabaseItemAlreadyDeletedException("Procedure", procedureID);
+                throw new DatabaseItemAlreadyDeletedException(String.format("Procedure with id %d is already deleted", procedureID));
             }
 
             procedureToDelete.setProcedureDeleted();
