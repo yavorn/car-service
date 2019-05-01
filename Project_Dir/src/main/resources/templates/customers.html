@@ -30,12 +30,14 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="model : ${allCustomers}">
+                            <tr th:each="customer : ${allCustomers}">
                                 <td></td>
-                                <td th:text="${model.getName()}"> </td>
-                                <td th:text="${model.getEmail()}"> </td>
-                                <td th:text="${model.getPhone()}"> </td>
+                                <td th:text="${customer.getName()}"> </td>
+                                <td th:text="${customer.getEmail()}"> </td>
+                                <td th:text="${customer.getPhone()}"> </td>
                                 <td><span sec:authentication="principal.authorities"/></td>
+                                <!--<td th:each="customerCar : ${allCustomersCars}" th:if="${customer.getCustomerId() == customerCar.getCustomer()}"-->
+                                    <!--th:text="${customerCar.getLicensePlate()}"></td>-->
 
                             </tr>
                             </tbody>
