@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
-
+<!-- Add Procedure Modal -->
 <div id="add-procedure-modal" class="modal fade" th:fragment="addProcedureModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -11,7 +11,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="add-procedure-form" th:action="@{/procedures}" th:object="${procedure}" method="post">
+                <form id="add-procedure-form" th:action="@{/procedures}" th:object="${newProcedure}" method="post">
 
                     <div class="form-group">
                         <label class="control-label">Procedure Name</label>

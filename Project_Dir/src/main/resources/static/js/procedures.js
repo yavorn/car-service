@@ -1,13 +1,10 @@
 'use strict';
-$(document).ready(function () {
-
-    $('#procedures-table').DataTable();
-
-});
-
 let apiUrl = 'http://localhost:8080/';
 
-function addProcedure(){
+//Initilize Procedure table
+$('#procedures-table').DataTable();
+
+function addProcedure() {
 
     $('#add-procedure-modal').modal();
 }
@@ -22,14 +19,14 @@ function deleteProcedure() {
             type: 'DELETE',
             data: '_method=DELETE',
 
-            success: function(data) {
+            success: function (data) {
                 $('#info-modal').modal();
                 document.getElementById('info-modal-text').innerHTML = "Procedure with name " + name + " was deleted!";
                 console.log('Procedure deleted successfully!');
                 console.log(JSON.stringify(data));
                 location.reload();
             },
-            error: function(error) {
+            error: function (error) {
                 console.log('Error when deleting procedure!');
                 console.log(JSON.stringify(error));
             }

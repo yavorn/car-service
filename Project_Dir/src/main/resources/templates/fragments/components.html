@@ -21,8 +21,8 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
 
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/customer' ? 'active':''}">
-                <a class="nav-link" th:href="@{/customer}">Customers</a>
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/customers' ? 'active':''}">
+                <a class="nav-link" th:href="@{/customers}">Customers</a>
             </li>
             <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/cars' ? 'active':''}">
                 <a class="nav-link" th:href="@{/cars}">Cars</a>
