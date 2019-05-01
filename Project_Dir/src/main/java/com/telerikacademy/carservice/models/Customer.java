@@ -8,6 +8,7 @@ import java.util.Set;
 @Entity
 @Table(name = "customer")
 public class Customer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customerId")
@@ -22,14 +23,11 @@ public class Customer {
     private String phone;
 
     @Column(name = "name")
-    @Size(min = 5, max = 25, message = "Name must be bewteen 5 and 25 characters.")
+    @Size(min = 5, max = 25, message = "Name must be between 5 and 25 characters.")
     private String name;
 
     @Column(name = "is_deleted")
     private int isDeleted;
-
-    @OneToMany(mappedBy = "customer_cars")
-    private Set<Long> customerCars;
 
     public Customer() {
     }
@@ -79,13 +77,5 @@ public class Customer {
 
     public void setIsDeleted(int isDeleted) {
         this.isDeleted = isDeleted;
-    }
-
-    public Set<Long> getCustomerCars() {
-        return customerCars;
-    }
-
-    public void setCustomerCars(Set<Long> customerCars) {
-        this.customerCars = customerCars;
     }
 }
