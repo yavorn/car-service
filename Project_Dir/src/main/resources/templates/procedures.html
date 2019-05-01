@@ -31,7 +31,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="model : ${procedures}">
+                                <tr th:each="model : ${allProcedures}">
                                     <td th:text="${model.getProcedureID()}"> </td>
                                     <td th:text="${model.getProcedureName()}"> </td>
                                     <td th:text="${model.getProcedurePrice()}"> </td>
@@ -40,7 +40,7 @@
                                             <i class="far fa-edit"></i> Edit</button >
                                     </form></td>
 
-                                    <td><form th:action="@{'/procedures/' + ${model.getProcedureID()}}" th:object="${procedures}" th:method="delete">
+                                    <td><form th:action="@{'/procedures/' + ${model.getProcedureID()}}" th:object="${allProcedures}" th:method="delete">
                                         <button type="submit" class="btn btn-danger" title="Delete" id="delete-procedure-button">
                                         <i class="fas fa-trash-alt"></i> Delete</button >
                                     </form></td>
