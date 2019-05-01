@@ -23,10 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -189,7 +186,7 @@ public class CustomerServiceImplTest {
 
     @Test
     public void getAllCustomerCars_ShouldReturn_WhenValidArgsPassed() {
-        when(customerServiceImpl.getAllCustomerCars()).thenReturn(Arrays.<CustomerCars>asList(new CustomerCars(customer,
+        when(customerCarsRepository.findAll()).thenReturn(Arrays.<CustomerCars>asList(new CustomerCars(customer,
                 new Models(new Make("makeName"), "modelName"),
                 Integer.valueOf(0), "licensePlate", "VINnumber")));
 
@@ -198,7 +195,7 @@ public class CustomerServiceImplTest {
         assertEquals(1, result.size());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = DatabaseItemNotFoundException.class)
     public void getAllCustomerCars_ShouldThrow_WhenInvalidArgsPassed() {
         when(customerServiceImpl.getAllCustomerCars()).thenReturn(null);
 
