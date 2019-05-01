@@ -9,5 +9,5 @@ public interface CustomerCarsRepository extends JpaRepository<CustomerCars, Long
 
     CustomerCars findCustomerCarsByCustomerCarID(Long id);
 
-    List<CustomerCars> findCustomerCarsByCustomerID(Long id);
+    List<CustomerCars> findCustomerCarsByCustomer_CustomerId(long id);
 }
