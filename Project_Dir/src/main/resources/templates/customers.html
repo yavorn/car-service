@@ -25,13 +25,13 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                <th>Role</th>
+                                <th>Roles</th>
 
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="model : ${allCustomers}">
-                                <td th:text="${model.getCustomerId()}"> </td>
+                                <td></td>
                                 <td th:text="${model.getName()}"> </td>
                                 <td th:text="${model.getEmail()}"> </td>
                                 <td th:text="${model.getPhone()}"> </td>
