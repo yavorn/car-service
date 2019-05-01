@@ -15,13 +15,11 @@ public class CustomerCars  {
 
     @OneToOne
     @JoinColumn(name = "customer_id")
-    private Customer customerID;
+    private Customer customer;
 
     @OneToOne
     @JoinColumn(name = "model_id")
-    private Models modelID;
-
-
+    private Models model;
 
     @Column(name= "year")
     private Integer yearOfProduction;
@@ -35,16 +33,17 @@ public class CustomerCars  {
     private String vinNumber;
 
     public CustomerCars() {
+
     }
 
 
-    public CustomerCars(Customer customerID,
-                        Models modelID,
+    public CustomerCars(Customer customer,
+                        Models model,
                         Integer yearOfProduction,
                         String licensePlate,
                         String vinNumber) {
-        this.customerID = customerID;
-        this.modelID = modelID;
+        this.customer = customer;
+        this.model = model;
         this.yearOfProduction = yearOfProduction;
         this.licensePlate = licensePlate;
         this.vinNumber = vinNumber;
@@ -58,20 +57,20 @@ public class CustomerCars  {
         this.customerCarID = customerCarID;
     }
 
-    public Customer getCustomerID() {
-        return customerID;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerID(Customer customerID) {
-        this.customerID = customerID;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public Models getModelID() {
-        return modelID;
+    public Models getModel() {
+        return model;
     }
 
-    public void setModelID(Models modelID) {
-        this.modelID = modelID;
+    public void setModel(Models model) {
+        this.model = model;
     }
 
     public Integer getYearOfProduction() {

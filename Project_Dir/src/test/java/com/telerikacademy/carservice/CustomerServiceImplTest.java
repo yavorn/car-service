@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,12 +23,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class CustomerServiceImplTest {
@@ -54,11 +53,9 @@ public class CustomerServiceImplTest {
     private List<GrantedAuthority> userAuthorities = AuthorityUtils.createAuthorityList("ROLE_USER");
     private List<GrantedAuthority> adminAuthorities = AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
 
-
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        customer.setCustomerId(1L);
         customer.setEmail("email");
         customer.setPhone("phone");
         customer.setName("name");
@@ -73,17 +70,17 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void testGetAllCustomers_ShouldReturn_WhenValidArgsPassed() {
+    public void getAllCustomers_ShouldReturn_WhenValidArgsPassed() {
         when(customerRepository.findAll()).thenReturn(Arrays.<Customer>asList(
                 new Customer("email", "phone", "name", 0),
                 new Customer("email1", "phone", "name1", 0)));
 
         List<Customer> result = customerServiceImpl.getAllCustomers();
-        Assert.assertEquals(2, result.size());
+        assertEquals(2, result.size());
     }
 
     @Test
-    public void testGetAllCustomers_ShouldReturn_WhenInvalidArgsPassed() {
+    public void getAllCustomers_ShouldReturn_WhenInvalidArgsPassed() {
         when(customerRepository.findAll()).thenReturn(Arrays.<Customer>asList(
                 new Customer("email", "phone", "name", 0),
                 new Customer("email1", "phone", "name1", 0)));
@@ -93,16 +90,16 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void testFindByEmail_ShouldReturn_WhenValidArgsPassed() {
+    public void findByEmail_ShouldReturn_WhenValidArgsPassed() {
         when(customerRepository.findCustomerByEmail(anyString()))
                 .thenReturn(customer);
 
         Customer result = customerServiceImpl.findByEmail("email");
-        Assert.assertEquals("email", result.getEmail());
+        assertEquals("email", result.getEmail());
     }
 
     @Test
-    public void testFindByEmail_ShouldReturn_WhenInvalidArgsPassed() {
+    public void findByEmail_ShouldReturn_WhenInvalidArgsPassed() {
         when(customerRepository.findCustomerByEmail("email"))
                 .thenReturn(customer);
 
@@ -111,7 +108,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test(expected = UsernameExistsException.class)
-    public void addCustomer_ShouldThrow_WhenUserExists() throws Exception {
+    public void customer_ShouldThrow_WhenUserExists() throws Exception {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
         when(passwordEncoder.encode("generateRandomPasswordResponse")).thenReturn("$2y$10$SWb8bU0QIEb067afKMIj6.nTSNXDUDTKLNye/jXi7WBBpXfv8Izg6");
@@ -119,7 +116,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void testAddCustomer_ShouldReturn_WhenValidArgsPassed() throws Exception {
+    public void addCustomer_ShouldReturn_WhenValidArgsPassed() throws Exception {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
         when(passwordEncoder.encode("generateRandomPasswordResponse")).thenReturn("$2y$10$SWb8bU0QIEb067afKMIj6.nTSNXDUDTKLNye/jXi7WBBpXfv8Izg6");
@@ -128,11 +125,11 @@ public class CustomerServiceImplTest {
         List<Customer> result = new ArrayList<>();
         result.add(testCustomer);
 
-        Assert.assertEquals(1, result.size());
+        assertEquals(1, result.size());
     }
 
     @Test
-    public void testAddAdmin_ShouldReturn_WhenValidArgsPassed() throws Exception {
+    public void addAdmin_ShouldReturn_WhenValidArgsPassed() throws Exception {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
         when(passwordEncoder.encode("generateRandomPasswordResponse")).thenReturn("$2y$10$SWb8bU0QIEb067afKMIj6.nTSNXDUDTKLNye/jXi7WBBpXfv8Izg6");
@@ -141,7 +138,7 @@ public class CustomerServiceImplTest {
         List<Customer> result = new ArrayList<>();
         result.add(testAdmin);
 
-        Assert.assertEquals(1, result.size());
+        assertEquals(1, result.size());
     }
 
     @Test(expected = UsernameExistsException.class)
@@ -153,7 +150,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void testResetPassword_ShouldReturn_WhenValidArgsPassed() {
+    public void resetPassword_ShouldReturn_WhenValidArgsPassed() {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
 
@@ -161,7 +158,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
-    public void testResetPassword_ShouldThrow_WhenInvalidArgsPassed() {
+    public void resetPassword_ShouldThrow_WhenInvalidArgsPassed() {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
 
@@ -169,7 +166,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void testChangePassword_ShouldThrow_WhenNullPassed() {
+    public void changePassword_ShouldThrow_WhenNullPassed() {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         customerServiceImpl.changePassword(new CustomerDto());
     }
@@ -184,7 +181,7 @@ public class CustomerServiceImplTest {
 //    }
 
     @Test
-    public void testListOfYears_ShouldReturn_WhenValidArgsPassed() {
+    public void listOfYears_ShouldReturn_WhenValidArgsPassed() {
         int startYear = 1960;
         int endYear = Calendar.getInstance().get(Calendar.YEAR);
         List<Integer> listYears = new ArrayList<>();
@@ -196,90 +193,114 @@ public class CustomerServiceImplTest {
 
         List<Integer> result = customerServiceImpl.listOfYears();
 
-        Assert.assertEquals(sizeToCheck, result.size());
+        assertEquals(sizeToCheck, result.size());
     }
 
     @Test
-    public void testGetAllCustomerCars_ShouldReturn_WhenValidArgsPassed() {
+    public void getAllCustomerCars_ShouldReturn_WhenValidArgsPassed() {
         when(customerServiceImpl.getAllCustomerCars()).thenReturn(Arrays.<CustomerCars>asList(new CustomerCars(customer,
                 new Models(new Make("makeName"), "modelName"),
                 Integer.valueOf(0), "licensePlate", "VINnumber")));
 
         List<CustomerCars> result = customerServiceImpl.getAllCustomerCars();
 
-        Assert.assertEquals(1, result.size());
+        assertEquals(1, result.size());
     }
 
     @Test(expected = NullPointerException.class)
-    public void testGetAllCustomerCars_ShouldThrow_WhenInvalidArgsPassed() {
+    public void getAllCustomerCars_ShouldThrow_WhenInvalidArgsPassed() {
         when(customerServiceImpl.getAllCustomerCars()).thenReturn(null);
 
         List<CustomerCars> result = customerServiceImpl.getAllCustomerCars();
 
-        Assert.assertEquals(1, result.size());
+        assertEquals(1, result.size());
     }
 
     @Test
-    public void testGetCustomerCarById_ShouldReturn_WhenValidArgsPassed() {
+    public void getCustomerCarById_ShouldReturn_WhenValidArgsPassed() {
         when(customerCarsRepository.findCustomerCarsByCustomerCarID(anyLong())).thenReturn(new CustomerCars(customer, new Models(new Make("makeName"), "modelName"), Integer.valueOf(0), "licensePlate", "VINnumber"));
 
         CustomerCars car = customerServiceImpl.getCustomerCarById(0L);
         List<CustomerCars> result = new ArrayList<>();
         result.add(car);
-        Assert.assertEquals(1, result.size());
+        assertEquals(1, result.size());
     }
 
     @Test(expected = ResponseStatusException.class)
-    public void testGetCustomerCarById_ShouldThrow_WhenInvalidArgsPassed() {
+    public void getCustomerCarById_ShouldThrow_WhenInvalidArgsPassed() {
         when(customerCarsRepository.findCustomerCarsByCustomerCarID(anyLong())).thenReturn(null);
         CustomerCars car = customerServiceImpl.getCustomerCarById(0L);
     }
 
     @Test
-    public void testDisableCustomer_ShouldReturn_WhenValidArgsPassed(){
+    public void disableCustomer_ShouldReturn_WhenValidArgsPassed(){
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         customerServiceImpl.disableCustomer(customerDto);
 
-        Assert.assertEquals(1, customer.getIsDeleted());
+        assertEquals(1, customer.getIsDeleted());
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
-    public void testDisableCustomer_ShouldThrow_WhenNullPassed(){
+    public void disableCustomer_ShouldThrow_WhenNullPassed(){
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
         customerServiceImpl.disableCustomer(customerDto);
 
-        Assert.assertEquals(1, customer.getIsDeleted());
+        assertEquals(1, customer.getIsDeleted());
     }
 
     @Test(expected = DatabaseItemAlreadyDeletedException.class)
-    public void testDisableCustomer_ShouldThrow_WhenUserAlreadyDisabled(){
+    public void disableCustomer_ShouldThrow_WhenUserAlreadyDisabled(){
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         customer.setIsDeleted(1);
         customerServiceImpl.disableCustomer(customerDto);
     }
 
     @Test
-    public void testEnableCustomer_ShouldReturn_WhenValidArgsPassed() {
+    public void enableCustomer_ShouldReturn_WhenValidArgsPassed() {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         customer.setIsDeleted(1);
         customerServiceImpl.enableCustomer(customerDto);
 
-        Assert.assertEquals(0, customer.getIsDeleted());
+        assertEquals(0, customer.getIsDeleted());
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
-    public void testEnableCustomer_ShouldThrow_WhenNullPassed(){
+    public void enableCustomer_ShouldThrow_WhenNullPassed(){
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
         customerServiceImpl.enableCustomer(customerDto);
 
-        Assert.assertEquals(1, customer.getIsDeleted());
+        assertEquals(1, customer.getIsDeleted());
     }
 
     @Test(expected = UserRightsNotDisabledException.class)
-    public void testEnableCustomer_ShouldThrow_WhenUserAlreadyEnabled(){
+    public void enableCustomer_ShouldThrow_WhenUserAlreadyEnabled(){
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         customer.setIsDeleted(0);
         customerServiceImpl.enableCustomer(customerDto);
     }
-}
 
+    @Test(expected = ResponseStatusException.class)
+    public void addCarToCustomerList_ShouldThrow_WhenNullPassed() {
+        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
+        CustomerCars car = new CustomerCars();
+
+        customerServiceImpl.addCarToCustomerList(new CustomerDto(), car.getCustomerCarID());
+    }
+
+    @Test
+    public void addCarToCustomerList_ShouldReturn_WhenValidArgsPassed() {
+        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+        CustomerCars car = new CustomerCars(customer, new Models(new Make("make"), "model"), 2018, "planeNo", "vinNo");
+        car.setCustomerCarID(1L);
+        customerServiceImpl.addCarToCustomerList(customerDto, car.getCustomerCarID());
+
+        assertEquals(1, customer.getCustomerCars().size());
+    }
+
+    @Test
+    public void testRemoveCarFromCustomerList() {
+        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+
+        customerServiceImpl.removeCarFromCustomerList(new CustomerDto(), Long.valueOf(1));
+    }
+}
