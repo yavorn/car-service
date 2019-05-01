@@ -1,7 +1,7 @@
 package com.telerikacademy.carservice.controllers.exception_handler;
 
 import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
-import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyExists;
+import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyExistsException;
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -9,12 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Scanner;
 @ControllerAdvice
 public class ErrorHandlingControllerAdvice {
 
@@ -51,10 +45,10 @@ public class ErrorHandlingControllerAdvice {
         return getModelAndView(error);
     }
 
-    @ExceptionHandler(DatabaseItemAlreadyExists.class)
+    @ExceptionHandler(DatabaseItemAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
-    ModelAndView onDatabaseItemAlreadyExists(DatabaseItemAlreadyExists e) {
+    ModelAndView onDatabaseItemAlreadyExists(DatabaseItemAlreadyExistsException e) {
         ErrorHandler error = new ErrorHandler();
         error.setStatus(HttpStatus.CONFLICT.value());
         error.setMessage(e.getMessage());
