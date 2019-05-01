@@ -24,10 +24,6 @@ public interface CustomerService {
 
     CustomerCars getCustomerCarById(long id);
 
-    public void addCarToCustomerList(CustomerDto customerDto, Long carToAddId);
-
-    public void removeCarFromCustomerList(CustomerDto customerDto, Long carToRemoveId);
-
     List<CustomerCars> getAllCustomerCars();
 
     void changePassword(CustomerDto customerDto);

@@ -171,67 +171,6 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    public void addCarToCustomerList(CustomerDto customerDto, Long carToAddId) {
-        try {
-            Customer customer = customerRepository.findCustomerByEmail(customerDto.getEmail());
-
-            if (customer == null) {
-                throw new DatabaseItemNotFoundException(String.format("Customer with username %s dose not exist", customerDto.getEmail()));
-            }
-
-            if (customer.getCustomerCars().contains(carToAddId)) {
-                throw new DatabaseItemAlreadyExistsException(String.format("Customer %s already has car with id %d linked to them."
-                        , customer.getEmail(), carToAddId));
-            }
-
-            customer.getCustomerCars().add(carToAddId);
-
-        } catch (DatabaseItemNotFoundException ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND
-            );
-        } catch (DatabaseItemAlreadyExistsException ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST
-            );
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-        }
-    }
-
-    public void removeCarFromCustomerList(CustomerDto customerDto, Long carToRemoveId) {
-        try {
-            Customer customer = customerRepository.findCustomerByEmail(customerDto.getEmail());
-
-            if (customer == null) {
-                throw new DatabaseItemNotFoundException(
-                        String.format("Customer with username %s dose not exist",
-                                customerDto.getEmail()));
-            }
-
-            if (!customer.getCustomerCars().contains(carToRemoveId)) {
-                throw new DatabaseItemNotFoundException(
-                        String.format("Customer %s does not have car with id %d linked to them.",
-                        customer.getEmail(), carToRemoveId));
-            }
-
-            customer.getCustomerCars().remove(carToRemoveId);
-
-        } catch (DatabaseItemNotFoundException ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND
-            );
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-        }
-    }
-
         @Override
         @Transactional
         public void enableCustomer (CustomerDto customerDto){
@@ -315,8 +254,7 @@ public class CustomerServiceImpl implements CustomerService {
             return listYears;
         }
 
-        private void createCustomerOrAdmin (CustomerDto customerDto, List < GrantedAuthority > authorities) throws
-        UsernameExistsException {
+        private void createCustomerOrAdmin (CustomerDto customerDto, List < GrantedAuthority > authorities) throws UsernameExistsException {
             Customer existingCustomer = customerRepository.findCustomerByEmail(customerDto.getEmail());
 
             if (existingCustomer != null) {
