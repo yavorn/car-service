@@ -171,15 +171,6 @@ public class CustomerServiceImplTest {
         customerServiceImpl.changePassword(new CustomerDto());
     }
 
-//    TODO: finish test
-//    @Test
-//    public void testChangePassword_ShouldReturn_WhenValidArgsPassed() {
-//        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
-//        when(passwordEncoder.encode("passwordConfirm"))
-//                .thenReturn("$2y$10$ejMX5LHwxCBLilp9udPX5uwIF1oSZs9Nr60p2GejfmHFMsBm1hM.e");
-//
-//    }
-
     @Test
     public void listOfYears_ShouldReturn_WhenValidArgsPassed() {
         int startYear = 1960;
