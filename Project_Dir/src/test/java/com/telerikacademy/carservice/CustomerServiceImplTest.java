@@ -195,7 +195,7 @@ public class CustomerServiceImplTest {
         assertEquals(1, result.size());
     }
 
-    @Test(expected = DatabaseItemNotFoundException.class)
+    @Test(expected = ResponseStatusException.class)
     public void getAllCustomerCars_ShouldThrow_WhenInvalidArgsPassed() {
         when(customerServiceImpl.getAllCustomerCars()).thenReturn(null);
 
