@@ -278,29 +278,4 @@ public class CustomerServiceImplTest {
         customer.setIsDeleted(0);
         customerServiceImpl.enableCustomer(customerDto);
     }
-
-    @Test(expected = ResponseStatusException.class)
-    public void addCarToCustomerList_ShouldThrow_WhenNullPassed() {
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
-        CustomerCars car = new CustomerCars();
-
-        customerServiceImpl.addCarToCustomerList(new CustomerDto(), car.getCustomerCarID());
-    }
-
-    @Test
-    public void addCarToCustomerList_ShouldReturn_WhenValidArgsPassed() {
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
-        CustomerCars car = new CustomerCars(customer, new Models(new Make("make"), "model"), 2018, "planeNo", "vinNo");
-        car.setCustomerCarID(1L);
-        customerServiceImpl.addCarToCustomerList(customerDto, car.getCustomerCarID());
-
-        assertEquals(1, customer.getCustomerCars().size());
-    }
-
-    @Test
-    public void testRemoveCarFromCustomerList() {
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
-
-        customerServiceImpl.removeCarFromCustomerList(new CustomerDto(), Long.valueOf(1));
-    }
 }
