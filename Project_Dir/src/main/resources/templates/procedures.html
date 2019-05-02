@@ -7,7 +7,7 @@
 </head>
 
 <body>
-<br><br><br>
+
 
 <div th:replace="fragments/components :: navbar"></div>
 
@@ -57,6 +57,13 @@
                 <button th:text="#{label.addProcedure}" class="btn btn-success" id="add-procedure-button"
                         onclick="addProcedure()">Add Procedures
                 </button>
+
+                <form>
+                    Test duplicates: <input type="text" name="firstname" id="test-true">
+
+                    <input type="submit" value="Submit" id="test-button">
+                </form>
+
             </fieldset>
         </div>
         <hr/>
@@ -64,12 +71,14 @@
 </div>
 
 
+
+
 <div th:replace="fragments/procedures :: addProcedureModal"></div>
 <div th:replace="fragments/components :: infoModal"></div>
 <div th:replace="fragments/components :: confirmationModal"></div>
 
 
-<br><br>
+
 <footer th:replace="fragments/components :: footer"></footer>
 
 

@@ -2,26 +2,41 @@
 let apiUrl = 'http://localhost:8080/';
 
 //Initialize Procedure table
-$('#procedures-table').DataTable();
+$('#procedures-table').DataTable({
+    "columnDefs": [
+        {"orderable": false, "targets": [2, 3]}
+    ]
+});
 
 
+$('#test-button').on('click', function (e) {
+    e.preventDefault();
 
+    let test = $('#test-true').val();
+
+    if (checkIfProcedureExists(test).valueOf()){
+        alert ('duplicate')
+    } else {
+        alert('not duplicate')
+    }
+
+});
 
 
 function addProcedure() {
     $('#add-procedure-modal').modal();
 
-    $('#add-procedure-form').on("submit", function (e){
+    $('#add-procedure-form').on('submit', function (e) {
         e.preventDefault();
 
         let procedureName = $('#procedure-name-input').val();
         let procedurePrice = $('#procedure-price-input').val();
 
-        if(checkIfProcedureExists(procedureName)){
-           console.log ("Duplicate");
-        } else {
-            console.log("NOT duplicated!");
+        if (checkIfProcedureExists(procedureName) === 'true') {
+            console.log("Duplicate");
         }
+        console.log("NOT duplicated!");
+
 
         let payload = {
             'procedureName': procedureName,
@@ -84,7 +99,7 @@ function deleteProcedure() {
 }
 
 function checkIfProcedureExists(procedureName) {
-    let result ='';
+    let result = true;
     $.ajax({
         url: apiUrl + 'procedures/check/' + procedureName,
         type: 'GET',
@@ -92,19 +107,14 @@ function checkIfProcedureExists(procedureName) {
 
         success: function (data) {
             console.log('OK');
-            console.log(JSON.stringify(data));
             console.log(data);
-            result = data;
+            result = JSON.parse(data);
         },
         error: function (error) {
             console.log('Error with checking if procedure exists!');
             console.log(JSON.stringify(error));
         }
     });
-   if (JSON.stringify(result) === 'true') {
-       return true;
-   }
-    if (JSON.stringify(result) === 'false') {
-        return false;
-    }
+
+    return result;
 }

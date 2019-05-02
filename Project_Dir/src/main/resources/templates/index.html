@@ -3,25 +3,44 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-	<meta charset="UTF-8">
-	<title>Home Page</title>
-	<link rel="stylesheet" th:href="@{/css/main.css}">
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <div th:replace="fragments/components :: head"></div>
 </head>
-<body>
-<h1>Home Page</h1>
-<p>Welcome to the home page!!!</p>
-<p>
-	User: <span sec:authentication="name"/><br/>
-	Role(s): <span sec:authentication="principal.authorities"/>
-</p>
-<p sec:authorize="hasRole('ROLE_ADMIN')">
-	<a th:href="@{/admin-portal}">Admin Portal</a>
-</p>
-<p>
-	<a th:href="@{/password}">Change password</a>
-</p>
-<form th:action="@{/logout}" method="post">
-	<input type="submit" value="Logout">
-</form>
+<body id="index">
+<div th:replace="fragments/components :: navbar"></div>
+
+<div class="jumbotron" id="index-jumbotron">
+    <h1 class="display-4">Welcome back, <span sec:authentication="name"/>!</h1>
+    <p class="lead">This is the admin panel for your auto maintenance and repair shop!</p>
+    <hr class="my-4">
+
+    <p class="lead">
+        <a class="btn btn-primary btn-lg" th:href="@{/admin-portal}" role="button">Admin Portal</a>
+        <a class="btn btn-warning btn-lg" th:href="@{/password}" role="button">Change Password</a>
+    </p>
+</div>
+
+
+<!--<p>-->
+    <!--User: <span sec:authentication="name"/><br/>-->
+    <!--Role(s): <span sec:authentication="principal.authorities"/>-->
+<!--</p>-->
+<!--<p sec:authorize="hasRole('ROLE_ADMIN')">-->
+    <!--<a th:href="@{/admin-portal}">Admin Portal</a>-->
+<!--</p>-->
+<!--<p>-->
+    <!--<a th:href="@{/password}">Change password</a>-->
+<!--</p>-->
+<!--<form th:action="@{/logout}" method="post">-->
+    <!--<input type="submit" value="Logout">-->
+<!--</form>-->
+
+
+<footer th:replace="fragments/components :: footer"></footer>
+
+
+<div th:replace="fragments/components :: js"></div>
+
 </body>
 </html>
