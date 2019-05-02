@@ -22,56 +22,56 @@ $('#test-button').on('click', function (e) {
 
 });
 
-
 function addProcedure() {
     $('#add-procedure-modal').modal();
-
-    $('#add-procedure-form').on('submit', function (e) {
-        e.preventDefault();
-
-        let procedureName = $('#procedure-name-input').val();
-        let procedurePrice = $('#procedure-price-input').val();
-
-        if (checkIfProcedureExists(procedureName) === 'true') {
-            console.log("Duplicate");
-        }
-        console.log("NOT duplicated!");
-
-
-        let payload = {
-            'procedureName': procedureName,
-            'procedurePrice': procedurePrice
-        };
-
-        $.ajax({
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            url: apiUrl + 'procedures',
-            type: 'POST',
-            dataType: "json",
-            data: JSON.stringify(payload),
-
-            success: function (data) {
-                $('#info-modal').modal();
-                document.getElementById('info-modal-text').innerHTML = "Procedure with name " + name + " was created!";
-                console.log('Procedure created successfully!');
-                console.log(JSON.stringify(payload));
-                $('#add-procedure-modal').modal('hide');
-                location.reload();
-            },
-            error: function (error) {
-                console.log('Error function triggered when creating procedure!');
-                console.log(JSON.stringify(payload));
-                $('#add-procedure-modal').modal('hide');
-                location.reload();
-            }
-        });
-
-    })
-
 }
+// function addProcedure() {
+//     $('#add-procedure-modal').modal();
+//
+//     $('#add-procedure-form').on('submit', function (e) {
+//         e.preventDefault();
+//
+//         let procedureName = $('#procedure-name-input').val();
+//         let procedurePrice = $('#procedure-price-input').val();
+//
+//         if (checkIfProcedureExists(procedureName) === 'true') {
+//             console.log("Duplicate");
+//         }
+//         console.log("NOT duplicated!");
+//
+//
+//         let payload = {
+//             'procedureName': procedureName,
+//             'procedurePrice': procedurePrice
+//         };
+//
+//         $.ajax({
+//             headers: {
+//                 'Accept': 'application/json',
+//                 'Content-Type': 'application/json'
+//             },
+//             url: apiUrl + 'procedures',
+//             type: 'POST',
+//             dataType: "json",
+//             data: JSON.stringify(payload),
+//
+//             success: function (data) {
+//                 $('#info-modal').modal();
+//                 document.getElementById('info-modal-text').innerHTML = "Procedure with name " + name + " was created!";
+//                 console.log('Procedure created successfully!');
+//                 console.log(JSON.stringify(payload));
+//                 $('#add-procedure-modal').modal('hide');
+//                 location.reload();
+//             },
+//             error: function (error) {
+//                 console.log('Error function triggered when creating procedure!');
+//                 console.log(JSON.stringify(payload));
+//                 $('#add-procedure-modal').modal('hide');
+//                 location.reload();
+//             }
+//         });
+//     })
+// }
 
 function deleteProcedure() {
     let btnTarget = event.target;
