@@ -2,6 +2,7 @@ package com.telerikacademy.carservice.controllers;
 
 import com.telerikacademy.carservice.models.CarEvent;
 import com.telerikacademy.carservice.models.Customer;
+import com.telerikacademy.carservice.models.Models;
 import com.telerikacademy.carservice.repository.CarEventRepository;
 import com.telerikacademy.carservice.service.contracts.CarEventService;
 import com.telerikacademy.carservice.service.contracts.CustomerCarsService;
@@ -33,22 +34,22 @@ public class CarEventController {
         this.procedureService = procedureService;
     }
 
-    @GetMapping
-    public String showCarEventPage(Model model) {
 
-        model.addAttribute("customers", customerService.getAllCustomers());
 
+    @GetMapping("/add-carevent")
+    public String addCarEventForm(Model model) {
+
+        model.addAttribute("carEvent", new CarEvent());
+        model.addAttribute("allCustomerCars",customerCarsService.getAllCustomerCars());
         return "add-carevent";
     }
-
-
-    @PostMapping("/add-carevent/")
+    @PostMapping("/add-carevent")
     public String addCarEvent(@Valid @ModelAttribute CarEvent carEvent, BindingResult bindingErrors) {
         if(bindingErrors.hasErrors()) {
             return "add-carevent";
         }
         carEventService.addCarEvent(carEvent);
-        return "redirect:/carevents";
+        return "redirect:/cars";
     }
 
 }

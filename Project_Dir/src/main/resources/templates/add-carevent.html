@@ -6,24 +6,49 @@
 </head>
 <body>
 
+<p>
+<h2>Add New Car Event</h2>
+</p>
 
-<p>Choose a customer:</p>
-<div class="form-group blu-margin">
-    <select class="form-control" id="customers-dropdown">
-        <option>Select Customer</option>
-        <option th:each="customer : ${customers}"
-                th:value="${customer.getCustomerId()}"
-                th:text="${customer.getName()}">
-        </option>
+<form action="#" th:action="@{/carevents/add-carevent}" th:object="${carEvent}" method="post">
 
-    </select>
-</div>
+<table>
+
+    <tr>
+        <td><label th:text="#{label.customerName}">Country</label></td>
+        <td>
+            <div class="form-group">
+                <select th:field="*{customerCar}" class="form-control" id="country">
+                    <option >--- Select ---</option>
+                    <option th:each="car : ${allCustomerCars}"
+                            th:value="${car.getCustomerCarID()}"
+                            th:text="${car.getCustomer().getName() + ' - '+ car.getModel().getMake().getMakeName() + ' ' + car.getModel().getModelName() + ' - '+ car.getLicensePlate()}">Wireframe
+                    </option>
+                </select>
+            </div>
+        </td>
+
+    </tr>
+
+    <!--<tr>-->
+        <!--<td>Certificate</td>-->
+        <!--<td>-->
+            <!--<th:block th:each="car : ${allCustomerCars}">-->
+                <!--<input type="checkbox" name="cers" th:value="${car.getCustomerCarID()}"/>-->
+                <!--<label th:text="${car.getCustomer().getName() + ' - '+ car.getModel().getMake().getMakeName() + ' ' + car.getModel().getModelName() + ' - '+ car.getLicensePlate()}"></label>-->
+            <!--</th:block>-->
+        <!--</td>-->
+    <!--</tr>-->
 
 
+    <tr>
+        <td><input type="submit" value="Save"/></td>
+    </tr>
+</table>
 
-<p id ="test2"></p>
 
-<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
-<script th:src="@{/js/add-carevent.js}"></script>
+</form>
+
+
 </body>
 </html>
