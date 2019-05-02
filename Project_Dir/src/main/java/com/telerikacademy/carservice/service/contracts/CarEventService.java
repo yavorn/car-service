@@ -18,5 +18,6 @@ public interface CarEventService {
     void addCarEvent(CarEvent CarEvent);
 
     void deleteCarEvent(Long CarEventID);
-    
+
+    void editCarEvent(CarEvent carEvent, Long carEventID);
 }
