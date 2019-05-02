@@ -31,6 +31,7 @@ public class ProcedureVisit {
     private Procedure procedure;
 
 
+    private boolean isPdfGenerated;
 
     public Long getProcedureVisitID() {
         return procedureVisitID;
@@ -53,4 +54,23 @@ public class ProcedureVisit {
     }
 
 
+    public boolean isProcedureVisitDeleted() {
+        return procedureVisitDeleted;
+    }
+
+    public void setProcedureVisitDeleted() {
+        this.procedureVisitDeleted = true;
+    }
+
+    public void setProcedureVisitNotDeleted() {
+        this.procedureVisitDeleted = false;
+    }
+
+    public boolean isPdfGenerated() {
+        return isPdfGenerated;
+    }
+
+    public void setPdfGenerated(boolean pdfGenerated) {
+        isPdfGenerated = pdfGenerated;
+    }
 }

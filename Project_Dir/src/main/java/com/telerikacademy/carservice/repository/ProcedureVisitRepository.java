@@ -9,5 +9,5 @@ import java.util.List;
 public interface ProcedureVisitRepository extends JpaRepository<ProcedureVisit, Long> {
     List<ProcedureVisit> findAllByCarEvent_CustomerCar_CustomerCarID(Long id);
 
-
+    ProcedureVisit findProcedureVisitByCarEvent_CarEventID(long id);
 }

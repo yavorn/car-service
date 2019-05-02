@@ -111,5 +111,19 @@ public class CarEventServiceImpl implements CarEventService {
         carEventRepository.deleteById(carEventID);
     }
 
+    @Override
+    public void editCarEvent(CarEvent carEvent, Long carEventID) {
+        CarEvent eventToChange = carEventRepository.findCarEventByCarEventID(carEventID);
 
+        if (eventToChange == null) {
+            throw new DatabaseItemNotFoundException(String.format("Car event with id %d not found.", carEventID));
+        }
+
+        eventToChange.setCustomerCar(carEvent.getCustomerCar());
+        eventToChange.setDate(carEvent.getDate());
+        eventToChange.setFinalized(carEvent.getFinalized());
+        eventToChange.setTotalPrice(carEvent.getTotalPrice());
+
+        carEventRepository.saveAndFlush(eventToChange);
+    }
 }

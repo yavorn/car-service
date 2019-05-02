@@ -9,4 +9,10 @@ public interface ProcedureVisitService {
     List<ProcedureVisit> getAllProcedureVisits();
    List<ProcedureVisit> getAllProcedureVisitsByCarEventCustomerCarID(Long id);
    void addProcedureVisit(ProcedureVisit procedureVisit);
+
+    List<ProcedureVisit> getAllProcedureVisitsByCarEventCustomerCarID(long id);
+
+    void editPdfGenerated(ProcedureVisit procedureVisit);
+
+    ProcedureVisit findProcedureVisitByCarEventId(long id);
 }

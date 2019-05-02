@@ -18,7 +18,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    
+
     //security
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
@@ -29,16 +29,20 @@ dependencies {
 
     //password
     compile group: 'org.passay', name: 'passay', version: '1.4.0'
-    
+
     //email
     compile 'org.springframework.boot:spring-boot-starter-mail:2.1.4.RELEASE'
 
     //jQuery
     compile group: 'org.webjars', name: 'jquery', version: '3.3.1'
-    
+
     //Bootstrap
     compile group: 'org.webjars', name: 'bootstrap', version: '4.3.1'
 
     //Spring Boot Dev Tools (Auto Reload Static Resources)
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
+    compile group: 'com.itextpdf', name: 'itextpdf', version: '5.5.13'
+
 }
