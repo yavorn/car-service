@@ -1,13 +1,7 @@
 package com.telerikacademy.carservice.controllers;
 
-import com.telerikacademy.carservice.models.CarEvent;
-import com.telerikacademy.carservice.models.Customer;
-import com.telerikacademy.carservice.models.Models;
-import com.telerikacademy.carservice.repository.CarEventRepository;
-import com.telerikacademy.carservice.service.contracts.CarEventService;
-import com.telerikacademy.carservice.service.contracts.CustomerCarsService;
-import com.telerikacademy.carservice.service.contracts.CustomerService;
-import com.telerikacademy.carservice.service.contracts.ProcedureService;
+import com.telerikacademy.carservice.models.*;
+import com.telerikacademy.carservice.service.contracts.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,16 +16,19 @@ public class CarEventController {
     private CustomerService customerService;
     private CustomerCarsService customerCarsService;
     private ProcedureService procedureService;
+    private ProcedureVisitService procedureVisitService;
 
 
     public CarEventController(CarEventService carEventService,
                               CustomerService customerService,
                               CustomerCarsService customerCarsService,
-                              ProcedureService procedureService) {
+                              ProcedureService procedureService,
+                              ProcedureVisitService procedureVisitService    ) {
         this.carEventService = carEventService;
         this.customerService = customerService;
         this.customerCarsService = customerCarsService;
         this.procedureService = procedureService;
+        this.procedureVisitService = procedureVisitService;
     }
 
 
@@ -49,6 +46,23 @@ public class CarEventController {
             return "add-carevent";
         }
         carEventService.addCarEvent(carEvent);
+        return "redirect:/carevents/add-procedurevisit";
+    }
+
+    @GetMapping("/add-procedurevisit")
+    public String addProcedureVisitForm(Model model) {
+
+        model.addAttribute("procedureVisit", new ProcedureVisit());
+        model.addAttribute("allcarEvents",carEventService.getAllCarEvents());
+        model.addAttribute("allProcedures",procedureService.getAllProcedures() );
+        return "add-procedurevisit";
+    }
+    @PostMapping("/add-procedurevisit")
+    public String addProcedureVisit(@Valid @ModelAttribute ProcedureVisit procedureVisit, BindingResult bindingErrors) {
+        if(bindingErrors.hasErrors()) {
+            return "add-procedurevisit";
+        }
+        procedureVisitService.addProcedureVisit(procedureVisit);
         return "redirect:/cars";
     }
 

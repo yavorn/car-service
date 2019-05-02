@@ -61,4 +61,11 @@ public class ProcedureVisitServiceImpl implements ProcedureVisitService {
 
     }
 
+    @Override
+    public void addProcedureVisit(ProcedureVisit procedureVisit) {
+
+         procedureVisitRepository.save(procedureVisit);
+
+    }
+
 }
