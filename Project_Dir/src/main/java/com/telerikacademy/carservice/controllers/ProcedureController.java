@@ -27,6 +27,7 @@ public class ProcedureController {
     }
 
     @PostMapping()
+    @ResponseBody
     public void addProcedure(@RequestBody Procedure procedure) {
         procedureService.addProcedure(procedure);
     }
