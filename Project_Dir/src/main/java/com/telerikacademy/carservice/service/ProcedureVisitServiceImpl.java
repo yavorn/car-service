@@ -25,6 +25,11 @@ public class ProcedureVisitServiceImpl implements ProcedureVisitService {
     }
 
     @Override
+    public List<ProcedureVisit> getAllProcedureVisitsByCarEventCustomerCarID(Long id) {
+        return null;
+    }
+
+    @Override
     public List<ProcedureVisit> getAllProcedureVisitsByCarEventCustomerCarID(long id) {
 
         List<ProcedureVisit> visits = procedureVisitRepository.findAllByCarEvent_CustomerCar_CustomerCarID(id);
@@ -54,4 +59,12 @@ public class ProcedureVisitServiceImpl implements ProcedureVisitService {
         }
         return procedureVisitToFind;
     }
+
+    @Override
+    public void addProcedureVisit(ProcedureVisit procedureVisit) {
+
+         procedureVisitRepository.save(procedureVisit);
+
+    }
+
 }

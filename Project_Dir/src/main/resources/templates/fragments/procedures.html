@@ -11,14 +11,14 @@
             </div>
 
             <div class="modal-body">
-                <form id="add-procedure-form">
+                <form id="add-procedure-form" th:action="@{/procedures}" th:object="${procedure}" method="post">
 
                     <div class="form-group">
                         <label class="control-label">Procedure Name</label>
                         <div>
                             <input type="text" class="form-control input-lg" id="procedure-name-input" minlength="3"
                                    maxlength="45"
-                                   required>
+                                   required th:field="*{procedureName}">
                             <small id="nameHelpBlock" class="form-text text-muted">
                                 Procedure name must be 3-45 characters long.
                             </small>
@@ -34,7 +34,7 @@
                             <input type="number" class="form-control" aria-label="Amount(to the nearest dollar)"
                                    id="procedure-price-input"
                                    minlength="0"
-                                   maxlength="5" required>
+                                   maxlength="5" required th:field="*{procedurePrice}">
                         </div>
                         <small id="priceHelpBlock" class="form-text text-muted">
                             Price must contain only digits.

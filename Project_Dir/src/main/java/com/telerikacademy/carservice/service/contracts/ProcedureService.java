@@ -11,7 +11,7 @@ public interface ProcedureService {
 
     Boolean checkIfProcedureExists(String name);
 
-    void addProcedure(Procedure procedure);
+    Procedure addProcedure(Procedure procedure);
 
     void deleteProcedure(Long procedureID);
 

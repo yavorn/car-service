@@ -7,6 +7,8 @@ import java.util.List;
 public interface ProcedureVisitService {
 
     List<ProcedureVisit> getAllProcedureVisits();
+   List<ProcedureVisit> getAllProcedureVisitsByCarEventCustomerCarID(Long id);
+   void addProcedureVisit(ProcedureVisit procedureVisit);
 
     List<ProcedureVisit> getAllProcedureVisitsByCarEventCustomerCarID(long id);
 

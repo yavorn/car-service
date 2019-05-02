@@ -18,8 +18,8 @@
         <td><label th:text="#{label.customerName}">Country</label></td>
         <td>
             <div class="form-group">
-                <select th:field="*{customerCar}" class="form-control" id="country">
-                    <option >--- Select ---</option>
+                <select th:field="*{customerCar}" >
+                    <!--<option >-&#45;&#45; Select -&#45;&#45;</option>-->
                     <option th:each="car : ${allCustomerCars}"
                             th:value="${car.getCustomerCarID()}"
                             th:text="${car.getCustomer().getName() + ' - '+ car.getModel().getMake().getMakeName() + ' ' + car.getModel().getModelName() + ' - '+ car.getLicensePlate()}">Wireframe
@@ -30,15 +30,19 @@
 
     </tr>
 
+
     <!--<tr>-->
-        <!--<td>Certificate</td>-->
+        <!--<td><label th:text="#{label.customerName}">Country</label></td>-->
         <!--<td>-->
-            <!--<th:block th:each="car : ${allCustomerCars}">-->
-                <!--<input type="checkbox" name="cers" th:value="${car.getCustomerCarID()}"/>-->
+            <!--<th th:each="car : ${allCustomerCars}">-->
+                <!--<input type="checkbox" th:field="*{customerCar}" name="cers" th:value="${car.getCustomerCarID()}"/>-->
                 <!--<label th:text="${car.getCustomer().getName() + ' - '+ car.getModel().getMake().getMakeName() + ' ' + car.getModel().getModelName() + ' - '+ car.getLicensePlate()}"></label>-->
-            <!--</th:block>-->
+            <!--</th>-->
         <!--</td>-->
+
     <!--</tr>-->
+
+
 
 
     <tr>
