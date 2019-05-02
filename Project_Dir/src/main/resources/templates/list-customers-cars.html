@@ -17,16 +17,16 @@
         <thead>
         <tr>
             <th align="left" th:text="#{label.customerName}"></th>
-            <td  th:text="${customer.getCustomerID().getName()}">name</td>
+            <td  th:text="${customer.getCustomer().getName()}">name</td>
         </tr>
 
         <tr>
             <th align="left" th:text="#{label.makeName}"></th>
-            <td  th:text="${customer.getModelID().getMake().getMakeName()}">name</td>
+            <td  th:text="${customer.getModel().getMake().getMakeName()}">name</td>
         </tr>
         <tr>
             <th align="left" th:text="#{label.modelName}"></th>
-            <td  th:text="${customer.getModelID().getModelName()}">name</td>
+            <td  th:text="${customer.getModel().getModelName()}">name</td>
         </tr>
 
         <tr>
@@ -41,7 +41,7 @@
 
         <tr>
             <th align="left" th:text="#{label.VINnumber}"></th>
-            <td  th:text="${customer.getVINnumber()}">name</td>
+            <td  th:text="${customer.getVinNumber()}">name</td>
         </tr>
 
         </thead>
