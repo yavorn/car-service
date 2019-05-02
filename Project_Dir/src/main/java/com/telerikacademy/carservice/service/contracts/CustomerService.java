@@ -31,4 +31,6 @@ public interface CustomerService {
     void disableCustomer(CustomerDto customerDto);
 
     void enableCustomer(CustomerDto customerDto);
+
+    void createCustomerCar(CustomerCars carToAdd, String email);
 }
