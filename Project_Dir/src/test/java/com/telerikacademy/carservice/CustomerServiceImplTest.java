@@ -1,9 +1,6 @@
 package com.telerikacademy.carservice;
 
-import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
-import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
-import com.telerikacademy.carservice.exceptions.UserRightsNotDisabledException;
-import com.telerikacademy.carservice.exceptions.UsernameExistsException;
+import com.telerikacademy.carservice.exceptions.*;
 import com.telerikacademy.carservice.models.*;
 import com.telerikacademy.carservice.repository.CustomerCarsRepository;
 import com.telerikacademy.carservice.repository.CustomerRepository;
@@ -25,7 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class CustomerServiceImplTest {
@@ -49,6 +46,8 @@ public class CustomerServiceImplTest {
     private CustomerDto customerDto = new CustomerDto();
     private List<GrantedAuthority> userAuthorities = AuthorityUtils.createAuthorityList("ROLE_USER");
     private List<GrantedAuthority> adminAuthorities = AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
+    CustomerCars car = new CustomerCars();
+    List<CustomerCars> cars = new ArrayList<>();
 
     @Before
     public void setUp() {
@@ -104,7 +103,7 @@ public class CustomerServiceImplTest {
         Assert.assertNull(customerToFind);
     }
 
-    @Test(expected = UsernameExistsException.class)
+    @Test(expected = DatabaseItemAlreadyExistsException.class)
     public void customer_ShouldThrow_WhenUserExists() throws Exception {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
@@ -138,7 +137,7 @@ public class CustomerServiceImplTest {
         assertEquals(1, result.size());
     }
 
-    @Test(expected = UsernameExistsException.class)
+    @Test(expected = DatabaseItemAlreadyExistsException.class)
     public void addAdmin_ShouldThrow_WhenUserExists() throws Exception {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
@@ -172,11 +171,9 @@ public class CustomerServiceImplTest {
     public void listOfYears_ShouldReturn_WhenValidArgsPassed() {
         int startYear = 1960;
         int endYear = Calendar.getInstance().get(Calendar.YEAR);
-        List<Integer> listYears = new ArrayList<>();
         int sizeToCheck = 0;
         for (int index = endYear; index >= startYear; index--) {
             sizeToCheck++;
-            listYears.add(sizeToCheck);
         }
 
         List<Integer> result = customerServiceImpl.listOfYears();
@@ -195,7 +192,7 @@ public class CustomerServiceImplTest {
         assertEquals(1, result.size());
     }
 
-    @Test(expected = ResponseStatusException.class)
+    @Test(expected = DatabaseItemNotFoundException.class)
     public void getAllCustomerCars_ShouldThrow_WhenInvalidArgsPassed() {
         when(customerServiceImpl.getAllCustomerCars()).thenReturn(null);
 
@@ -214,7 +211,7 @@ public class CustomerServiceImplTest {
         assertEquals(1, result.size());
     }
 
-    @Test(expected = ResponseStatusException.class)
+    @Test(expected = DatabaseItemNotFoundException.class)
     public void getCustomerCarById_ShouldThrow_WhenInvalidArgsPassed() {
         when(customerCarsRepository.findCustomerCarsByCustomerCarID(anyLong())).thenReturn(null);
         CustomerCars car = customerServiceImpl.getCustomerCarById(0L);
@@ -265,5 +262,26 @@ public class CustomerServiceImplTest {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         customer.setIsDeleted(0);
         customerServiceImpl.enableCustomer(customerDto);
+    }
+
+    @Test(expected = DatabaseItemAlreadyExistsException.class)
+    public void createCustomerCar_ShouldThrow_WhenCustomerHasThisCarAlready(){
+        cars.add(car);
+        when(customerRepository.findCustomerByEmail(customerDto.getEmail())).thenReturn(customer);
+        when(customerCarsRepository.findAll()).thenReturn(cars);
+        customerServiceImpl.createCustomerCar(car, customer.getEmail());
+    }
+
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void createCustomerCar_ShouldThrow_WhenCustomerDoesNotExist(){
+        when(customerRepository.findCustomerByEmail(customerDto.getEmail())).thenReturn(null);
+        customerServiceImpl.createCustomerCar(car, customer.getEmail());
+    }
+
+    @Test
+    public void createCustomerCar_ShouldReturn_WhenValidArgsPassed(){
+        when(customerRepository.findCustomerByEmail(customerDto.getEmail())).thenReturn(customer);
+        customerServiceImpl.createCustomerCar(car, customer.getEmail());
+        assertNotNull(customerCarsRepository.findAll());
     }
 }

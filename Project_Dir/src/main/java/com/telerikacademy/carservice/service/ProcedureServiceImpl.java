@@ -18,6 +18,9 @@ import java.util.List;
 @Service
 public class ProcedureServiceImpl implements ProcedureService {
 
+    private static final String PROCEDURE_DELETED_EXCEPTION_MSG = "Procedure with name: %s already deleted!";
+    private static final String PROCEDURE_EXIST_EXCEPTION_MSG = "Procedure with name: %s already exist!";
+
     private ProcedureRepository procedureRepository;
 
     @Autowired
@@ -65,18 +68,15 @@ public class ProcedureServiceImpl implements ProcedureService {
 
 
 
-    public void addProcedure(Procedure procedure) {
-        try {
-            if (procedureRepository.findProcedureByProcedureName(procedure.getProcedureName()) == procedure) {
-                throw new DatabaseItemAlreadyExistsException("Procedure");
-            }
-            procedureRepository.save(procedure);
-        } catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Procedure parameters are wrong or not complete."
-            );
-        }
+    public Procedure addProcedure(Procedure procedure) {
+        Procedure existingProcedure = procedureRepository.findProcedureByProcedureName(procedure.getProcedureName());
+
+       if (existingProcedure != null && existingProcedure.isProcedureDeleted()){
+           throw new DatabaseItemAlreadyDeletedException(String.format(PROCEDURE_DELETED_EXCEPTION_MSG,procedure.getProcedureName()));
+       } else if(existingProcedure != null && !existingProcedure.isProcedureDeleted()){
+           throw new DatabaseItemAlreadyExistsException(String.format(PROCEDURE_EXIST_EXCEPTION_MSG, procedure.getProcedureName()));
+       }
+       return procedureRepository.save(procedure);
     }
 
 

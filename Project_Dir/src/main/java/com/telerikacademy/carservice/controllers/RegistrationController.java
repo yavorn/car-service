@@ -1,6 +1,5 @@
 package com.telerikacademy.carservice.controllers;
 
-import com.telerikacademy.carservice.exceptions.UsernameExistsException;
 import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerDto;
 import com.telerikacademy.carservice.service.contracts.CustomerService;
@@ -16,12 +15,10 @@ import java.util.List;
 
 @Controller
 public class RegistrationController {
-    private UserDetailsManager userDetailsManager;
     private CustomerService customerService;
 
     @Autowired
-    public RegistrationController(UserDetailsManager userDetailsManager, CustomerService customerService) {
-        this.userDetailsManager = userDetailsManager;
+    public RegistrationController(CustomerService customerService) {
         this.customerService = customerService;
     }
 
@@ -32,7 +29,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/customer")
-    public String registerNewCustomer(@ModelAttribute CustomerDto customerDto) throws UsernameExistsException {
+    public String registerNewCustomer(@ModelAttribute CustomerDto customerDto) {
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
         customerService.addCustomer(customerDto, authorities);
         return "new-customer-confirmation";
@@ -57,7 +54,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/admin")
-    public String registerAdministrator(@ModelAttribute CustomerDto customerDto) throws UsernameExistsException {
+    public String registerAdministrator(@ModelAttribute CustomerDto customerDto) {
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
         customerService.addAdmin(customerDto, authorities);
         return "new-customer-confirmation";
