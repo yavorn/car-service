@@ -103,7 +103,7 @@ public class CustomerServiceImplTest {
         Assert.assertNull(customerToFind);
     }
 
-    @Test(expected = UsernameExistsException.class)
+    @Test(expected = DatabaseItemAlreadyExistsException.class)
     public void customer_ShouldThrow_WhenUserExists() throws Exception {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
@@ -137,7 +137,7 @@ public class CustomerServiceImplTest {
         assertEquals(1, result.size());
     }
 
-    @Test(expected = UsernameExistsException.class)
+    @Test(expected = DatabaseItemAlreadyExistsException.class)
     public void addAdmin_ShouldThrow_WhenUserExists() throws Exception {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
@@ -192,7 +192,7 @@ public class CustomerServiceImplTest {
         assertEquals(1, result.size());
     }
 
-    @Test(expected = ResponseStatusException.class)
+    @Test(expected = DatabaseItemNotFoundException.class)
     public void getAllCustomerCars_ShouldThrow_WhenInvalidArgsPassed() {
         when(customerServiceImpl.getAllCustomerCars()).thenReturn(null);
 
@@ -211,7 +211,7 @@ public class CustomerServiceImplTest {
         assertEquals(1, result.size());
     }
 
-    @Test(expected = ResponseStatusException.class)
+    @Test(expected = DatabaseItemNotFoundException.class)
     public void getCustomerCarById_ShouldThrow_WhenInvalidArgsPassed() {
         when(customerCarsRepository.findCustomerCarsByCustomerCarID(anyLong())).thenReturn(null);
         CustomerCars car = customerServiceImpl.getCustomerCarById(0L);

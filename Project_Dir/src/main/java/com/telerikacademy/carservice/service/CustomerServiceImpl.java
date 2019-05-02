@@ -65,12 +65,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void addCustomer(CustomerDto customerDto, List<GrantedAuthority> authorities) throws UsernameExistsException {
+    public void addCustomer(CustomerDto customerDto, List<GrantedAuthority> authorities) {
         createCustomerOrAdmin(customerDto, authorities);
     }
 
     @Override
-    public void addAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) throws UsernameExistsException {
+    public void addAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) {
         createCustomerOrAdmin(customerDto, authorities);
     }
 
@@ -85,100 +85,50 @@ public class CustomerServiceImpl implements CustomerService {
         String generatedNewPassword = passwordService.generateRandomPassword();
         String passwordEncoded = passwordEncoder.encode(generatedNewPassword);
 
-        try {
-            customerRepository.updatePassword(passwordEncoded, customer.getEmail());
-            customerRepository.saveAndFlush(customer);
-            emailService.sendSimpleMessageForPasswordResetUsingTemplate(customer.getEmail(),
-                    "Password reset",
-                    String.format("Dear Customer,\n\n " +
-                                    "Please find your temporary password: %s\n\n " +
-                                    "Best Regards,\n " +
-                                    "Team 6 Car Service",
-                            generatedNewPassword));
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-        } catch (DatabaseItemNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
-        }
+        customerRepository.updatePassword(passwordEncoded, customer.getEmail());
+        customerRepository.saveAndFlush(customer);
+        emailService.sendSimpleMessageForPasswordResetUsingTemplate(customer.getEmail(),
+                "Password reset",
+                String.format("Dear Customer,\n\n " +
+                                "Please find your temporary password: %s\n\n " +
+                                "Best Regards,\n " +
+                                "Team 6 Car Service",
+                        generatedNewPassword));
     }
 
     @Override
     @Transactional
     public void changePassword(CustomerDto customerDto) {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         Customer customer = customerRepository.findCustomerByEmail(currentPrincipalName);
 
         String newPassword = customerDto.getPasswordConfirmation();
-        try {
-            String newEncodedPassword = passwordEncoder.encode(newPassword);
-            customerRepository.updatePassword(newEncodedPassword, currentPrincipalName);
-            customerRepository.saveAndFlush(customer);
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-        } catch (DatabaseItemNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
-        }
+
+        String newEncodedPassword = passwordEncoder.encode(newPassword);
+        customerRepository.updatePassword(newEncodedPassword, currentPrincipalName);
+        customerRepository.saveAndFlush(customer);
+
     }
 
     @Override
     public CustomerCars getCustomerCarById(long id) {
-        try {
-            CustomerCars carToFind = customerCarsRepository.findCustomerCarsByCustomerCarID(id);
+        CustomerCars carToFind = customerCarsRepository.findCustomerCarsByCustomerCarID(id);
 
-            if (carToFind == null) {
-                throw new DatabaseItemNotFoundException(String.format("Car with id %d not found", id));
-            }
-            return carToFind;
-
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-
-        } catch (DatabaseItemNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
+        if (carToFind == null) {
+            throw new DatabaseItemNotFoundException(String.format("Car with id %d not found", id));
         }
+        return carToFind;
     }
 
     @Override
     public List<CustomerCars> getAllCustomerCars() {
-        try {
-            List<CustomerCars> allCars = customerCarsRepository.findAll();
+        List<CustomerCars> allCars = customerCarsRepository.findAll();
 
-            if (allCars.size() == 0) {
-                throw new DatabaseItemNotFoundException("No cars found");
-            }
-            return allCars;
-
-        } catch (DatabaseItemNotFoundException ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    ex.getMessage()
-            );
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
+        if (allCars.size() == 0) {
+            throw new DatabaseItemNotFoundException("No cars found");
         }
+        return allCars;
     }
 
     @Override
@@ -194,27 +144,9 @@ public class CustomerServiceImpl implements CustomerService {
             throw new UserRightsNotDisabledException(customerDto.getEmail());
         }
 
-        try {
-            customerRepository.enableUser(customerToEnable.getEmail());
-            customerToEnable.setIsDeleted(0);
-            customerRepository.saveAndFlush(customerToEnable);
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-
-        } catch (UserRightsNotDisabledException ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST
-            );
-
-        } catch (DatabaseItemNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
-        }
+        customerRepository.enableUser(customerToEnable.getEmail());
+        customerToEnable.setIsDeleted(0);
+        customerRepository.saveAndFlush(customerToEnable);
     }
 
     @Override
@@ -230,27 +162,9 @@ public class CustomerServiceImpl implements CustomerService {
             throw new DatabaseItemAlreadyDeletedException(customerToDisable.getEmail());
         }
 
-        try {
-            customerRepository.disableUser(customerToDisable.getEmail());
-            customerToDisable.setIsDeleted(1);
-            customerRepository.saveAndFlush(customerToDisable);
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-
-        } catch (DatabaseItemAlreadyDeletedException ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST
-            );
-
-        } catch (DatabaseItemNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
-        }
+        customerRepository.disableUser(customerToDisable.getEmail());
+        customerToDisable.setIsDeleted(1);
+        customerRepository.saveAndFlush(customerToDisable);
     }
 
     @Override
@@ -265,26 +179,8 @@ public class CustomerServiceImpl implements CustomerService {
             throw new DatabaseItemNotFoundException(String.format("Customer with username %s not found.", email));
         }
 
-        try {
-            carToAdd.setCustomer(customer);
-            customerCarsRepository.saveAndFlush(carToAdd);
-
-        } catch (DatabaseItemAlreadyExistsException ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    ex.getMessage()
-            );
-        } catch (DatabaseItemNotFoundException ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    ex.getMessage()
-            );
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-        }
+        carToAdd.setCustomer(customer);
+        customerCarsRepository.saveAndFlush(carToAdd);
     }
 
     @Override
@@ -298,11 +194,11 @@ public class CustomerServiceImpl implements CustomerService {
         return listYears;
     }
 
-    private void createCustomerOrAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) throws UsernameExistsException {
+    private void createCustomerOrAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) {
         Customer existingCustomer = customerRepository.findCustomerByEmail(customerDto.getEmail());
 
         if (existingCustomer != null) {
-            throw new UsernameExistsException(String.format("User with username %s already exists", customerDto.getEmail()));
+            throw new DatabaseItemAlreadyExistsException(String.format("User with username %s already exists", customerDto.getEmail()));
         }
 
         String password = passwordService.generateRandomPassword();
@@ -315,26 +211,10 @@ public class CustomerServiceImpl implements CustomerService {
 
         User newUser = new User(customerDto.getEmail(), passwordEncoded, authorities);
 
-        try {
-            userDetailsManager.createUser(newUser);
-            customerRepository.saveAndFlush(newCustomer);
-            emailService.sendSimpleMessageUsingTemplateWhenCreatingCustomer(newCustomer.getEmail(),
-                    emailTemplate, newCustomer.getName(), newCustomer.getEmail(), password);
-        } catch (DatabaseItemAlreadyExistsException ex){
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    ex.getMessage()
-            );
-        } catch (DatabaseItemNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
-        } catch (HibernateException he) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed to access database."
-            );
-        }
+        userDetailsManager.createUser(newUser);
+        customerRepository.saveAndFlush(newCustomer);
+        emailService.sendSimpleMessageUsingTemplateWhenCreatingCustomer(newCustomer.getEmail(),
+                emailTemplate, newCustomer.getName(), newCustomer.getEmail(), password);
+
     }
 }
