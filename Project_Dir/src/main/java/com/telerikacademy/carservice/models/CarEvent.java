@@ -6,20 +6,24 @@ import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "car_event")
 public class CarEvent {
 
     public CarEvent(){
-        this.date = LocalDate.now();
+       // this.date = LocalDate.now();
+        this.procedures = new HashSet<>();
 
     }
 
-    public CarEvent(LocalDate date, CustomerCars customerCar, @DecimalMin(value = "0.0", message = "Price should be a positive number") double totalPrice) {
+    public CarEvent(LocalDateTime date, CustomerCars customerCar, @DecimalMin(value = "0.0", message = "Price should be a positive number") double totalPrice) {
         this.date = date;
         this.customerCar = customerCar;
         this.totalPrice = totalPrice;
+        this.procedures = new HashSet<>();
 
     }
 
@@ -34,7 +38,7 @@ public class CarEvent {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name ="date")
-    private LocalDate date;
+    private LocalDateTime date;
 
     @DecimalMin(value = "0.0", message = "Price should be a positive number")
     @Column(name = "total_price")
@@ -45,6 +49,12 @@ public class CarEvent {
 
     @Column(name = "is_deleted", nullable = false, columnDefinition = "tinyint(4) default 0")
     private boolean carEventDeleted;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "procedure_visit",
+            joinColumns = { @JoinColumn(name = "car_event_id") },
+            inverseJoinColumns = { @JoinColumn(name = "procedure_id") })
+    private Set<Procedure> procedures ;
 
 
     public CustomerCars getCustomerCar() {
@@ -64,11 +74,11 @@ public class CarEvent {
         this.carEventID = carEventID;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -94,5 +104,13 @@ public class CarEvent {
 
     public void setCarEventDeleted() {
         this.carEventDeleted = true;
+    }
+
+    public Set<Procedure> getProcedures() {
+        return this.procedures;
+    }
+
+    public void setProcedures(Set<Procedure> procedures) {
+        this.procedures = procedures;
     }
 }

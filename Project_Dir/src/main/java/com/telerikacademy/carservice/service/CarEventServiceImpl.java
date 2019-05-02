@@ -3,6 +3,7 @@ package com.telerikacademy.carservice.service;
 
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import com.telerikacademy.carservice.models.CarEvent;
+import com.telerikacademy.carservice.models.Procedure;
 import com.telerikacademy.carservice.repository.CarEventRepository;
 import com.telerikacademy.carservice.service.contracts.CarEventService;
 import org.hibernate.HibernateException;
@@ -11,7 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,10 +72,38 @@ public class CarEventServiceImpl implements CarEventService {
         return null;
     }
 
+    private double carEventPrice(Set<Procedure> procedures){
+        double price = 0.0;
+        for(Procedure pr : procedures){
+            price += pr.getProcedurePrice();
+        }
+        return price;
+    }
 
     @Override
     public void addCarEvent(CarEvent carEvent) {
-        carEventRepository.save(carEvent);
+
+        try {
+
+
+            double totalPrice = carEventPrice(carEvent.getProcedures());
+            carEvent.setTotalPrice(totalPrice);
+            carEvent.setDate(LocalDateTime.now());
+
+
+            carEventRepository.save(carEvent);
+        } catch (HibernateException he) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Failed to access database."
+            );
+        }
+
+
+
+
+
+
     }
 
     @Override

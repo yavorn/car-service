@@ -37,6 +37,8 @@ public class CarEventController {
     public String addCarEventForm(Model model) {
 
         model.addAttribute("carEvent", new CarEvent());
+        model.addAttribute("allProcedures",procedureService.getAllProcedures() );
+
         model.addAttribute("allCustomerCars",customerCarsService.getAllCustomerCars());
         return "add-carevent";
     }
@@ -46,23 +48,6 @@ public class CarEventController {
             return "add-carevent";
         }
         carEventService.addCarEvent(carEvent);
-        return "redirect:/carevents/add-procedurevisit";
-    }
-
-    @GetMapping("/add-procedurevisit")
-    public String addProcedureVisitForm(Model model) {
-
-        model.addAttribute("procedureVisit", new ProcedureVisit());
-        model.addAttribute("allcarEvents",carEventService.getAllCarEvents());
-        model.addAttribute("allProcedures",procedureService.getAllProcedures() );
-        return "add-procedurevisit";
-    }
-    @PostMapping("/add-procedurevisit")
-    public String addProcedureVisit(@Valid @ModelAttribute ProcedureVisit procedureVisit, BindingResult bindingErrors) {
-        if(bindingErrors.hasErrors()) {
-            return "add-procedurevisit";
-        }
-        procedureVisitService.addProcedureVisit(procedureVisit);
         return "redirect:/cars";
     }
 

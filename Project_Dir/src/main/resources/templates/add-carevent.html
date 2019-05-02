@@ -15,7 +15,7 @@
 <table>
 
     <tr>
-        <td><label th:text="#{label.customerName}">Country</label></td>
+        <td><label th:text="#{label.CustomerCar}">Customer Car</label></td>
         <td>
             <div class="form-group">
                 <select th:field="*{customerCar}" >
@@ -42,6 +42,17 @@
 
     <!--</tr>-->
 
+    <div class="col-sm-4">
+
+        <select class="form-group" name="procedures" id="procedures" multiple="multiple">
+
+            <option
+                    th:each="procedure :${allProcedures}"
+                    th:value="${procedure.getProcedureID()}"
+                    th:text="${procedure.getProcedureName()}">
+            </option>
+        </select>
+    </div>
 
 
 
