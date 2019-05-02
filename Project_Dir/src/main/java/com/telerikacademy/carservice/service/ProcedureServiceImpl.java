@@ -44,7 +44,6 @@ public class ProcedureServiceImpl implements ProcedureService {
             if (procedureToFind == null) {
                 throw new DatabaseItemNotFoundException(String.format("Procedure with id %d not found.", procedureID));
             }
-
             return procedureToFind;
 
         } catch (HibernateException he) {
@@ -59,6 +58,12 @@ public class ProcedureServiceImpl implements ProcedureService {
             );
         }
     }
+
+    public Boolean checkIfProcedureExists(String name){
+        return procedureRepository.existsByProcedureName(name);
+    }
+
+
 
     public void addProcedure(Procedure procedure) {
         try {

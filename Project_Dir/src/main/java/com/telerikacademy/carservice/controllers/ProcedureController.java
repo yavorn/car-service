@@ -21,31 +21,32 @@ public class ProcedureController {
     }
 
     @GetMapping
-    public String listProcedures(Model model){
-        model.addAttribute("newProcedure", new Procedure());
+    public String listProcedures(Model model) {
         model.addAttribute("allProcedures", procedureService.getAllProcedures());
         return "procedures";
     }
 
-    @PostMapping
-    public String addProcedure(@Valid @ModelAttribute Procedure procedure , BindingResult bindingErrors) {
-
-        if(bindingErrors.hasErrors()) {
-            return "procedures";
-        }
+    @PostMapping()
+    public void addProcedure(@RequestBody Procedure procedure) {
         procedureService.addProcedure(procedure);
-        return "redirect:/procedures";
     }
 
     @GetMapping("/{procedureID}")
     @ResponseBody
-    public Procedure getProcedureById(@PathVariable Long procedureID){
+    public Procedure getProcedureById(@PathVariable Long procedureID) {
         return procedureService.getProcedureByID(procedureID);
     }
 
+    @GetMapping("/check/{procedureName}")
+    @ResponseBody
+    public Boolean getProcedureById(@PathVariable String procedureName) {
+        return procedureService.checkIfProcedureExists(procedureName);
+    }
+
+
     @DeleteMapping("/{procedureID}")
     @ResponseBody
-    public String deleteProcedureById(@PathVariable Long procedureID){
+    public String deleteProcedureById(@PathVariable Long procedureID) {
         procedureService.deleteProcedure(procedureID);
         return "redirect:/procedures";
     }

@@ -1,25 +1,8 @@
 'use strict';
 let apiUrl = 'http://localhost:8080/';
 
-//Initilize Procedure table
-let table = $('#procedures-table').DataTable( {
-    "columnDefs": [ {
-        "searchable": false,
-        "orderable": false,
-        "targets": 0
-    } ],
-    "order": [[ 1, 'asc' ]]
-} );
-
-table.on( 'order.dt search.dt', function () {
-    table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-        cell.innerHTML = i+1;
-    } );
-} ).draw();
-
-
-
-
+//Initialize Procedure table
+$('#procedures-table').DataTable();
 
 
 
@@ -28,6 +11,9 @@ table.on( 'order.dt search.dt', function () {
 function addProcedure() {
 
     $('#add-procedure-modal').modal();
+
+
+
 }
 
 function deleteProcedure() {
@@ -53,7 +39,25 @@ function deleteProcedure() {
             }
         });
     });
-
-
 }
 
+function checkIfProcedureExists(procedureName) {
+    let result = false;
+
+    $.ajax({
+        url: apiUrl + 'procedures/check/' + procedureName,
+        type: 'GET',
+        data: '_method=GET',
+
+        success: function (data) {
+            console.log('OK');
+            console.log(JSON.stringify(data));
+            result = data;
+        },
+        error: function (error) {
+            console.log('Error with checking if procedure exists!');
+            console.log(JSON.stringify(error));
+        }
+    });
+    return result;
+}
