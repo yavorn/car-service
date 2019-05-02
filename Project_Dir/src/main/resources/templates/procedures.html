@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Procedures</title>
+    <div th:replace="fragments/components :: head"></div>
+
+</head>
+
+<body>
+
+
+<div th:replace="fragments/components :: navbar"></div>
+
+<div class="container body-content">
+    <div class="page-header">
+        <label class="heading"><h1>Procedures Table</h1></label>
+        <div class="form-group">
+            <fieldset>
+                <div class="table-responsive">
+                    <div class="table-responsive">
+
+                        <table id="procedures-table" class="table table-striped table-bordered" cellspacing="0"
+                               width="100%">
+                            <thead>
+                            <tr>
+                                <th>Procedure</th>
+                                <th>Price</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="model : ${allProcedures}">
+                                <td th:text="${model.getProcedureName()}"></td>
+                                <td th:text="${model.getProcedurePrice()}"></td>
+                                <td>
+                                    <button type="submit" class="btn btn-outline-secondary" title="Edit"
+                                            id="edit-procedure-button">
+                                        <i class="far fa-edit"></i> Edit
+                                    </button>
+                                </td>
+
+                                <td>
+                                    <button th:value="${model.getProcedureID()}" class="btn btn-danger" title="Delete"
+                                            id="delete-procedure-button2" onclick="deleteProcedure()"><i
+                                            class="fas fa-trash-alt"></i> Delete
+                                    </button>
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <button th:text="#{label.addProcedure}" class="btn btn-success" id="add-procedure-button"
+                        onclick="addProcedure()">Add Procedures
+                </button>
+
+                <form>
+                    Test duplicates: <input type="text" name="firstname" id="test-true">
+
+                    <input type="submit" value="Submit" id="test-button">
+                </form>
+
+            </fieldset>
+        </div>
+        <hr/>
+    </div>
+</div>
+
+
+
+
+<div th:replace="fragments/procedures :: addProcedureModal"></div>
+<div th:replace="fragments/components :: infoModal"></div>
+<div th:replace="fragments/components :: confirmationModal"></div>
+
+
+
+<footer th:replace="fragments/components :: footer"></footer>
+
+
+<div th:replace="fragments/components :: js"></div>
+<script th:src="@{/js/procedures.js}"></script>
+
+
+</body>
+</html>
