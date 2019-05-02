@@ -33,6 +33,8 @@ public class ProcedureVisit {
     @Column(name = "is_deleted", nullable = false, columnDefinition = "tinyint(4) default 0")
     private boolean procedureVisitDeleted;
 
+    private boolean isPdfGenerated;
+
     public Long getProcedureVisitID() {
         return procedureVisitID;
     }
@@ -67,5 +69,13 @@ public class ProcedureVisit {
 
     public void setProcedureVisitNotDeleted() {
         this.procedureVisitDeleted = false;
+    }
+
+    public boolean isPdfGenerated() {
+        return isPdfGenerated;
+    }
+
+    public void setPdfGenerated(boolean pdfGenerated) {
+        isPdfGenerated = pdfGenerated;
     }
 }
