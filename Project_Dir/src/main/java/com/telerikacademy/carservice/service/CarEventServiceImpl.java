@@ -98,12 +98,6 @@ public class CarEventServiceImpl implements CarEventService {
                     "Failed to access database."
             );
         }
-
-
-
-
-
-
     }
 
     @Override
@@ -111,6 +105,7 @@ public class CarEventServiceImpl implements CarEventService {
         carEventRepository.deleteById(carEventID);
     }
 
+    //TODO: functionality not tested in frontend
     @Override
     public void editCarEvent(CarEvent carEvent, Long carEventID) {
         CarEvent eventToChange = carEventRepository.findCarEventByCarEventID(carEventID);
