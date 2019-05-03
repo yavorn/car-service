@@ -1,10 +1,7 @@
 package com.telerikacademy.carservice.models;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,20 +9,6 @@ import java.util.Set;
 @Entity
 @Table(name = "car_event")
 public class CarEvent {
-
-    public CarEvent(){
-       // this.date = LocalDate.now();
-        this.procedures = new HashSet<>();
-
-    }
-
-    public CarEvent(LocalDateTime date, CustomerCars customerCar, @DecimalMin(value = "0.0", message = "Price should be a positive number") double totalPrice) {
-        this.date = date;
-        this.customerCar = customerCar;
-        this.totalPrice = totalPrice;
-        this.procedures = new HashSet<>();
-
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,6 +39,20 @@ public class CarEvent {
             inverseJoinColumns = { @JoinColumn(name = "procedure_id") })
     private Set<Procedure> procedures ;
 
+    public CarEvent(){
+        // this.date = LocalDate.now();
+        this.procedures = new HashSet<>();
+
+    }
+
+
+    public CarEvent(LocalDateTime date, CustomerCars customerCar, @DecimalMin(value = "0.0", message = "Price should be a positive number") double totalPrice) {
+        this.date = date;
+        this.customerCar = customerCar;
+        this.totalPrice = totalPrice;
+        this.procedures = new HashSet<>();
+
+    }
 
     public CustomerCars getCustomerCar() {
         return customerCar;
