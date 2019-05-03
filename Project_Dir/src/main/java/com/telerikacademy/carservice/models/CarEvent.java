@@ -33,6 +33,9 @@ public class CarEvent {
     @Column(name = "is_deleted", nullable = false, columnDefinition = "tinyint(4) default 0")
     private boolean carEventDeleted;
 
+    @Column(name = "pdf_generated", nullable = false, columnDefinition = "tinyint(4) default 0")
+    private boolean pdfGenerated;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "procedure_visit",
             joinColumns = { @JoinColumn(name = "car_event_id") },
@@ -107,5 +110,13 @@ public class CarEvent {
 
     public void setProcedures(Set<Procedure> procedures) {
         this.procedures = procedures;
+    }
+
+    public boolean isPdfGenerated() {
+        return pdfGenerated;
+    }
+
+    public void setPdfGenerated(boolean pdfGenerated) {
+        this.pdfGenerated = pdfGenerated;
     }
 }
