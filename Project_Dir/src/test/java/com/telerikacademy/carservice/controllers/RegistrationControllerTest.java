@@ -32,31 +32,31 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    public void testRegisterNewCustomer() throws Exception {
+    public void testRegisterNewCustomer() {
         String result = registrationController.registerNewCustomer(new CustomerDto());
         Assert.assertEquals("new-customer-confirmation", result);
     }
 
     @Test
-    public void testDisableCustomer() throws Exception {
+    public void testDisableCustomer() {
         String result = registrationController.disableCustomer(new CustomerDto());
         Assert.assertEquals("redirect:admin-portal", result);
     }
 
     @Test
-    public void testEnableCustomer() throws Exception {
+    public void testEnableCustomer() {
         String result = registrationController.enableCustomer(new CustomerDto());
         Assert.assertEquals("redirect:admin-portal", result);
     }
 
     @Test
-    public void testShowAdminRegister() throws Exception {
+    public void testShowAdminRegister() {
         String result = registrationController.showAdminRegister(model);
         Assert.assertEquals("admin", result);
     }
 
     @Test
-    public void testRegisterAdministrator() throws Exception {
+    public void testRegisterAdministrator() {
         String result = registrationController.registerAdministrator(new CustomerDto());
         Assert.assertEquals("new-customer-confirmation", result);
     }
