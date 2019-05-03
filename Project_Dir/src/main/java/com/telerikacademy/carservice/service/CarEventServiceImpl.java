@@ -7,6 +7,7 @@ import com.telerikacademy.carservice.models.Procedure;
 import com.telerikacademy.carservice.repository.CarEventRepository;
 import com.telerikacademy.carservice.service.contracts.CarEventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -81,6 +82,12 @@ public class CarEventServiceImpl implements CarEventService {
         eventToChange.setTotalPrice(carEvent.getTotalPrice());
 
         carEventRepository.save(eventToChange);
+    }
+
+    @Override
+    public void editPdfGenerated(CarEvent carEvent) {
+        carEvent.setPdfGenerated(true);
+        carEventRepository.save(carEvent);
     }
 
     private double carEventPrice(Set<Procedure> procedures) {

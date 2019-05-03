@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource securityDataSource;
-    private final String[] ADMIN_RIGHTS = {"/admin-portal", "/customer", "/admin", "/cars/edit-make/*"};
+    private final String[] ADMIN_RIGHTS = {"/admin-portal", "/customer", "/admin", "/cars/edit-make/*", "/new-customer-car"};
 
     @Autowired
     public SecurityConfig(DataSource dataSource) {
@@ -48,7 +48,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                     .antMatchers("/password", "/password-confirmation").permitAll()
-                    .antMatchers("/test").permitAll()
                     .antMatchers("/").hasRole("USER")
                     .antMatchers(ADMIN_RIGHTS).hasRole("ADMIN")
                     .anyRequest().authenticated()
