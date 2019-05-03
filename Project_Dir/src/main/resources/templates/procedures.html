@@ -8,7 +8,6 @@
 
 <body>
 
-
 <div th:replace="fragments/components :: navbar"></div>
 
 <div class="container body-content">
@@ -31,20 +30,23 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="model : ${allProcedures}">
+                            <tr th:each="model : ${procedures}">
                                 <td th:text="${model.getProcedureName()}"></td>
                                 <td th:text="${model.getProcedurePrice()}"></td>
                                 <td>
-                                    <button type="submit" class="btn btn-outline-secondary" title="Edit"
-                                            id="edit-procedure-button">
+                                    <button class="btn btn-outline-secondary" title="Edit"
+                                            id="edit-procedure-button" th:onclick="'javascript:editProcedure(\'' + ${model.getProcedureID()} +'\',\''+${model.getProcedurePrice()}+'\');'">
+
+                                            <!--th:onclick="|editProcedure(${model.getProcedureID()} + ${c} & ',' & ${model.getProcedurePrice()} )|">-->
+
                                         <i class="far fa-edit"></i> Edit
                                     </button>
                                 </td>
-
                                 <td>
-                                    <button th:value="${model.getProcedureID()}" class="btn btn-danger" title="Delete"
-                                            id="delete-procedure-button2" onclick="deleteProcedure()"><i
-                                            class="fas fa-trash-alt"></i> Delete
+                                    <button class="btn btn-danger pull-right" title="Delete"
+                                            id="delete-procedure-button"
+                                            th:onclick="|deleteProcedure(${model.getProcedureID()})|">
+                                        <i class="fas fa-trash-alt"></i> Delete
                                     </button>
                                 </td>
 
@@ -58,33 +60,154 @@
                         onclick="addProcedure()">Add Procedures
                 </button>
 
-                <form>
-                    Test duplicates: <input type="text" name="firstname" id="test-true">
-
-                    <input type="submit" value="Submit" id="test-button">
-                </form>
-
             </fieldset>
         </div>
         <hr/>
     </div>
 </div>
 
+<!-- Add Procedure Modal -->
+<div id="add-procedure-modal" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h1 class="modal-title" id="add-modal-title">Add New Procedure</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="add-procedure-form" th:action="@{/procedures}" th:object="${procedure}" method="post">
+
+                    <div class="form-group">
+                        <label class="control-label">Procedure Name</label>
+                        <div>
+                            <input type="text" class="form-control input-lg" id="procedure-name-input" minlength="3"
+                                   maxlength="45"
+                                   required th:field="*{procedureName}">
+                            <small id="nameHelpBlock" class="form-text text-muted">
+                                Procedure name must be 3-45 characters long.
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Procedure Price</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input type="number" class="form-control" aria-label="Amount(to the nearest dollar)"
+                                   id="procedure-price-input"
+                                   minlength="0"
+                                   maxlength="5" required th:field="*{procedurePrice}">
+                        </div>
+                        <small id="priceHelpBlock" class="form-text text-muted">
+                            Price must contain only digits.
+                        </small>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--EditProcedure Modal-->
+<div id="edit-procedure-modal" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h1 class="modal-title" id="edit-modal-title">Edit Procedure</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="edit-procedure-form" th:object="${procedure}" method="put">
+
+                    <div class="form-group">
+                        <label class="control-label">Procedure Name</label>
+                        <div>
+                            <input type="text" class="form-control input-lg" id="edit-procedure-name-input"
+                                   minlength="3"
+                                   maxlength="45"
+                                   required th:field="*{procedureName}">
+                            <small id="edit-nameHelpBlock" class="form-text text-muted">
+                                Procedure name must be 3-45 characters long.
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Procedure Price</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input type="number" class="form-control" aria-label="Amount(to the nearest dollar)"
+                                   id="edit-procedure-price-input"
+                                   minlength="0"
+                                   maxlength="5" required th:field="*{procedurePrice}">
+                        </div>
+                        <small id="edit-priceHelpBlock" class="form-text text-muted">
+                            Price must contain only digits.
+                        </small>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
+<!-- Confirmation Modal -->
+<div class="modal" id="confirmation-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
-<div th:replace="fragments/procedures :: addProcedureModal"></div>
-<div th:replace="fragments/components :: infoModal"></div>
-<div th:replace="fragments/components :: confirmationModal"></div>
+            <div class="modal-header">
+                <h4 class="modal-title">Car Service</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
 
+            <div class="modal-body">
+                <h4>Are you sure you wish to delete this procedure?</h4>
+                <h2 id="info-modal-text"></h2>
+            </div>
 
+            <div class="modal-footer">
+                <form id="delete-form" th:object="${procedures}" th:method="delete">
+                    <button type="submit" class="btn btn-danger pull-right" title="Yes">
+                        <i class="fas fa-trash-alt"></i> Yes
+                    </button>
+                </form>
+                <button type="button" class="btn btn-success" data-dismiss="modal" title="No">No</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 <footer th:replace="fragments/components :: footer"></footer>
 
-
 <div th:replace="fragments/components :: js"></div>
 <script th:src="@{/js/procedures.js}"></script>
-
 
 </body>
 </html>

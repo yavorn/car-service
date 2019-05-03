@@ -20,21 +20,19 @@
                         <table id="customers-table" class="table table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                             <tr>
-                                <th>#</th>
+
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                <th>Roles</th>
 
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="customer : ${allCustomers}">
-                                <td></td>
+
                                 <td th:text="${customer.getName()}"> </td>
                                 <td th:text="${customer.getEmail()}"> </td>
                                 <td th:text="${customer.getPhone()}"> </td>
-                                <td><span sec:authentication="principal.authorities"/></td>
                                 <!--<td th:each="customerCar : ${allCustomersCars}" th:if="${customer.getCustomerId() == customerCar.getCustomer()}"-->
                                     <!--th:text="${customerCar.getLicensePlate()}"></td>-->
 

@@ -32,6 +32,7 @@ public class ProcedureVisit {
 
 
     private boolean isPdfGenerated;
+    private boolean procedureVisitDeleted;
 
     public Long getProcedureVisitID() {
         return procedureVisitID;

@@ -62,11 +62,6 @@ public class ProcedureServiceImpl implements ProcedureService {
         }
     }
 
-    public Boolean checkIfProcedureExists(String name){
-        return procedureRepository.existsByProcedureName(name);
-    }
-
-
 
     public Procedure addProcedure(Procedure procedure) {
         Procedure existingProcedure = procedureRepository.findProcedureByProcedureName(procedure.getProcedureName());
