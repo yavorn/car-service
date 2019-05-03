@@ -18,7 +18,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -257,7 +256,7 @@ public class CustomerServiceImplTest {
         assertEquals(1, customer.getIsDeleted());
     }
 
-    @Test(expected = UserRightsNotDisabledException.class)
+    @Test(expected = DatabaseItemAlreadyUnDeletedException.class)
     public void enableCustomer_ShouldThrow_WhenUserAlreadyEnabled(){
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         customer.setIsDeleted(0);
