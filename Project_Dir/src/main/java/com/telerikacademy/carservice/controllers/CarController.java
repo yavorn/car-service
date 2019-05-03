@@ -1,9 +1,9 @@
 package com.telerikacademy.carservice.controllers;
 
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
-import com.telerikacademy.carservice.models.Make;
-import com.telerikacademy.carservice.models.Models;
+import com.telerikacademy.carservice.models.*;
 import com.telerikacademy.carservice.service.contracts.CarService;
+import com.telerikacademy.carservice.service.contracts.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,9 +16,12 @@ import javax.validation.Valid;
 public class CarController {
 
     private CarService carService;
+    private CustomerService customerService;
 
-    public CarController(CarService carService) {
+
+    public CarController(CarService carService, CustomerService customerService) {
         this.carService = carService;
+        this.customerService = customerService;
     }
 
     @GetMapping("/model/{id}")
@@ -150,4 +153,18 @@ public class CarController {
         return "redirect:/cars";
     }
 
+
+    @GetMapping("/new-customer-car")
+    public String showNewCarPage(Model model) {
+        model.addAttribute("customerDto", new CustomerDto());
+        model.addAttribute("customerCar", new CustomerCars());
+
+        return "new-customer-car";
+    }
+
+    @PostMapping("/new-customer-car")
+    public String addCustomerCar(@ModelAttribute CustomerCars customerCar, String email){
+        customerService.createCustomerCar(customerCar, email);
+        return "redirect:/customers/car";
+    }
 }
