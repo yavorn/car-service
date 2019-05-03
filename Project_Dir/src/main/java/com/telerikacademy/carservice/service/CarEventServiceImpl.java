@@ -7,6 +7,7 @@ import com.telerikacademy.carservice.models.Procedure;
 import com.telerikacademy.carservice.repository.CarEventRepository;
 import com.telerikacademy.carservice.service.contracts.CarEventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,14 +33,16 @@ public class CarEventServiceImpl implements CarEventService {
     @Override
     public CarEvent getCarEventByID(long id) {
         CarEvent eventToFind = carEventRepository.findCarEventByCarEventID(id);
-        if (eventToFind == null) throw new DatabaseItemNotFoundException(String.format("Car event with id %d not found.", id));
+        if (eventToFind == null)
+            throw new DatabaseItemNotFoundException(String.format("Car event with id %d not found.", id));
         return eventToFind;
     }
 
     @Override
     public List<CarEvent> getCarEventsByCustomerCarID(long id) {
         List<CarEvent> result = carEventRepository.findAllByCustomerCar_CustomerCarID(id);
-        if (result.size() == 0) throw new DatabaseItemNotFoundException(String.format("Car event for car id %d not found.", id));
+        if (result.size() == 0)
+            throw new DatabaseItemNotFoundException(String.format("Car event for car id %d not found.", id));
 
         return result;
     }
@@ -47,7 +50,8 @@ public class CarEventServiceImpl implements CarEventService {
     @Override
     public void addCarEvent(CarEvent carEvent) {
         Set<Procedure> procedures = carEvent.getProcedures();
-        if (procedures.size() == 0) throw new DatabaseItemNotFoundException(String.format("Procedure list for car event with id %d is empty", carEvent.getCarEventID()));
+        if (procedures.size() == 0)
+            throw new DatabaseItemNotFoundException(String.format("Procedure list for car event with id %d is empty", carEvent.getCarEventID()));
 
         double totalPrice = carEventPrice(procedures);
         carEvent.setTotalPrice(totalPrice);
@@ -75,6 +79,12 @@ public class CarEventServiceImpl implements CarEventService {
         eventToChange.setTotalPrice(carEvent.getTotalPrice());
 
         carEventRepository.save(eventToChange);
+    }
+
+    @Override
+    public void editPdfGenerated(CarEvent carEvent) {
+        carEvent.setPdfGenerated(true);
+        carEventRepository.save(carEvent);
     }
 
     private double carEventPrice(Set<Procedure> procedures) {
