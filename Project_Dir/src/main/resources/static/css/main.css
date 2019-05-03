@@ -55,15 +55,23 @@ carsTable.dataTable tbody td {
     vertical-align: top;
 }
 
+.modal-dialog {
 
-.modal-body {
-    position: relative;
-    overflow-y: auto;
-    width: auto !important;
-    max-height: 600px;
-    padding: 15px;
+    width: fit-content;
+    padding-left: 20%;
+    padding-right: 20%;
+    max-width: 80%;
+    max-height: 80%;
 }
 
+.navbar-hidden{
+    display:none;
+}
+
+.navbar-visible{
+    display:inline;
+    color: #1BBBF5;
+}
 
 /*home page*/
 .error {

@@ -1,5 +1,6 @@
 package com.telerikacademy.carservice.controllers;
 
+import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerCars;
 import com.telerikacademy.carservice.models.Models;
 import com.telerikacademy.carservice.service.contracts.*;
@@ -35,6 +36,7 @@ public class CustomerController {
     public String listAllCustomersAndTheirCars(Model model) {
         model.addAttribute("allCustomers", customerService.getAllCustomers());
         model.addAttribute("allCustomersCars", customerService.getAllCustomerCars());
+        model.addAttribute("customer", new Customer());
         return "customers";
     }
 

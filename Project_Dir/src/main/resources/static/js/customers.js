@@ -31,7 +31,7 @@ function viewCars() {
 }
 
 function addUser() {
-    let modal = $('#add-user-modal');
+    let modal = $('#add-customer-modal');
     modal.modal();
     modal.on('hidden.bs.modal', function () {
         table.reset();

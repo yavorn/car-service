@@ -35,9 +35,9 @@
                                 <td th:text="${model.getProcedurePrice()}"></td>
                                 <td>
                                     <button class="btn btn-outline-secondary" title="Edit"
-                                            id="edit-procedure-button" th:onclick="'javascript:editProcedure(\'' + ${model.getProcedureID()} +'\',\''+${model.getProcedurePrice()}+'\');'">
-
-                                            <!--th:onclick="|editProcedure(${model.getProcedureID()} + ${c} & ',' & ${model.getProcedurePrice()} )|">-->
+                                            id="edit-procedure-button"
+                                            th:onclick="|editProcedure(${model.getProcedureID()})|">
+                                        <!--th:onclick="|editProcedure(${model.getProcedureID()} + ${c} & ',' & ${model.getProcedurePrice()} )|">-->
 
                                         <i class="far fa-edit"></i> Edit
                                     </button>
@@ -77,7 +77,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="add-procedure-form" th:action="@{/procedures}" th:object="${procedure}" method="post">
+                <form id="add-procedure-form" th:action="@{/procedures}" th:object="${procedure}" th:method="post">
 
                     <div class="form-group">
                         <label class="control-label">Procedure Name</label>
@@ -131,7 +131,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="edit-procedure-form" th:object="${procedure}" method="put">
+                <form id="edit-procedure-form" th:object="${procedure}" th:method="put">
 
                     <div class="form-group">
                         <label class="control-label">Procedure Name</label>
@@ -177,7 +177,7 @@
 
 
 <!-- Confirmation Modal -->
-<div class="modal" id="confirmation-modal" role="dialog">
+<div class="modal fade" id="confirmation-modal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
 

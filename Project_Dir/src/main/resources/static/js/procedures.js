@@ -19,10 +19,11 @@ function addProcedure() {
     })
 }
 
-function editProcedure(procedureID, procedureName, procedurePrice) {
+function editProcedure(procedureID) {
     let modal = $('#edit-procedure-modal');
-    document.getElementById('edit-procedure-name-input').innerHTML = procedureName;
-    document.getElementById('edit-procedure-price-input').innerHTML = procedurePrice;
+
+    $('#edit-procedure-name-input').val();
+    $('#edit-procedure-price-input').val(procedureID);
     modal.modal();
 
     $('#edit-procedure-form').attr("action", '/procedures/' + procedureID);

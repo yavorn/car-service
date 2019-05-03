@@ -13,9 +13,11 @@
 
 
 <!-- Navbar Fragment -->
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" th:fragment="navbar" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" th:fragment="navbar"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <a class="navbar-brand" th:href="@{/}">Car Service</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -30,7 +32,31 @@
             <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/procedures' ? 'active':''}">
                 <a class="nav-link" th:href="@{/procedures}">Procedures</a>
             </li>
+
+            <li class="nav-item dropdown navbar-hidden" th:classappend="${#httpServletRequest.getRequestURI() == '/procedures' ? 'navbar-visible':''}">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Manage Procedures
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownProcedures">
+                    <a class="dropdown-item" onclick="addProcedure()">Add Procedure</a>
+                    <!--<div class="dropdown-divider"></div>-->
+
+                </div>
+            </li>
+
+            <li class="nav-item dropdown navbar-hidden" th:classappend="${#httpServletRequest.getRequestURI() == '/customers' ? 'navbar-visible':''}">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCustomers" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Manage Customers
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" onclick="addUser()">Add customer</a>
+                </div>
+            </li>
+
         </ul>
+
 
         <ul class="nav navbar-nav ml-auto">
 
@@ -39,9 +65,10 @@
             </li>
             <li class="nav-item">
                 <form th:action="@{/logout}" method="post">
-                <a class="nav-link"><span class="fas fa-sign-in-alt"></span>
-                    <input type="submit" style="border: none; background: none; padding: 0; color: lightgray" value="Logout">
-                </a>
+                    <a class="nav-link"><span class="fas fa-sign-in-alt"></span>
+                        <input type="submit" style="border: none; background: none; padding: 0; color: lightgray"
+                               value="Logout">
+                    </a>
 
                 </form>
             </li>
