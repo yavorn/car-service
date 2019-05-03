@@ -18,4 +18,6 @@ public interface CarEventService {
     void deleteCarEvent(long CarEventID);
 
     void editCarEvent(CarEvent carEvent, long carEventID);
+
+    public void editPdfGenerated(CarEvent carEvent);
 }
