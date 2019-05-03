@@ -58,20 +58,20 @@
             <td  th:text="${event.getDate()}">Date</td>
         </tr>
 
-        <tr th:each="procedure : ${listProcedureVisit}">
+        <tr th:each="procedure : ${event.getProcedures()}">
             <table>
-                <thead th:if="${event.getCarEventID() == procedure.getCarEvent().getCarEventID()}">
+
                 <tr>
                     <th align="left" th:text="#{label.procedure}"></th>
-                    <td  th:text="${procedure.getProcedure().getProcedureName()}">Procedure</td>
+                    <td  th:text="${procedure.getProcedureName()}">Procedure</td>
                 </tr>
 
                 <tr>
                     <th align="left" th:text="#{label.price}"></th>
-                    <td  th:text="${procedure.getProcedure().getProcedurePrice()}">Price</td>
+                    <td  th:text="${procedure.getProcedurePrice()}">Price</td>
                 </tr>
 
-                </thead>
+
             </table>
 
         </tr>

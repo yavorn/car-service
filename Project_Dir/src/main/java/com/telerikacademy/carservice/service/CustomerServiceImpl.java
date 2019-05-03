@@ -141,7 +141,9 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         if (customerToEnable.getIsDeleted() == 0) {
-            throw new UserRightsNotDisabledException(customerDto.getEmail());
+
+            // TODO: check the thrown exception
+           // throw new UserRightsNotDisabledException(customerDto.getEmail());
         }
 
         customerRepository.enableUser(customerToEnable.getEmail());

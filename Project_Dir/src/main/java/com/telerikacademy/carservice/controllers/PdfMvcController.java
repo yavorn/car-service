@@ -1,10 +1,8 @@
 package com.telerikacademy.carservice.controllers;
 
 import com.telerikacademy.carservice.models.CarEvent;
-import com.telerikacademy.carservice.models.ProcedureVisit;
 import com.telerikacademy.carservice.service.contracts.CarEventService;
 import com.telerikacademy.carservice.service.contracts.PdfService;
-import com.telerikacademy.carservice.service.contracts.ProcedureVisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,15 +18,13 @@ import java.util.List;
 @RequestMapping("/")
 public class PdfMvcController {
     private CarEventService eventService;
-    private ProcedureVisitService procedureVisitService;
     private ServletContext context;
     private PdfService pdfService;
 
     @Autowired
-    public PdfMvcController(CarEventService eventService, ProcedureVisitService procedureVisitService,
+    public PdfMvcController(CarEventService eventService,
                             ServletContext context, PdfService pdfService) {
         this.eventService = eventService;
-        this.procedureVisitService = procedureVisitService;
         this.context = context;
         this.pdfService = pdfService;
     }
@@ -36,14 +32,14 @@ public class PdfMvcController {
     @RequestMapping(value = {"/car-visit/pdf/{id}", "/admin/car-visit/pdf/{id}"}, method = RequestMethod.GET)
     public void createPdf(@PathVariable long id, HttpServletRequest request, HttpServletResponse response) {
         CarEvent carEvent = eventService.getCarEventByID(id);
-        List<ProcedureVisit> procedureVisits = procedureVisitService.getAllProcedureVisitsByCarEventCustomerCarID(id);
-        boolean isPdfGen = pdfService.createPdf(carEvent, procedureVisits, context, request, response);
+
+        boolean isPdfGen = pdfService.createPdf(carEvent,  context, request, response);
 
         if (isPdfGen) {
             String fullPath = request.getServletContext().getRealPath("/resources/reports/"
                     + carEvent.getDate() + ", " + carEvent.getCustomerCar().getLicensePlate() +  ".pdf");
             pdfService.fileDownload(fullPath, response);
-            procedureVisitService.editPdfGenerated(procedureVisitService.findProcedureVisitByCarEventId(carEvent.getCarEventID()));
+           // procedureVisitService.editPdfGenerated(procedureVisitService.findProcedureVisitByCarEventId(carEvent.getCarEventID()));
         }
     }
 }

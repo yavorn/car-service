@@ -16,19 +16,16 @@ public class CarEventController {
     private CustomerService customerService;
     private CustomerCarsService customerCarsService;
     private ProcedureService procedureService;
-    private ProcedureVisitService procedureVisitService;
 
 
     public CarEventController(CarEventService carEventService,
                               CustomerService customerService,
                               CustomerCarsService customerCarsService,
-                              ProcedureService procedureService,
-                              ProcedureVisitService procedureVisitService    ) {
+                              ProcedureService procedureService   ) {
         this.carEventService = carEventService;
         this.customerService = customerService;
         this.customerCarsService = customerCarsService;
         this.procedureService = procedureService;
-        this.procedureVisitService = procedureVisitService;
     }
 
 

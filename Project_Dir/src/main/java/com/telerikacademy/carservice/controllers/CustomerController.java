@@ -20,17 +20,14 @@ public class CustomerController {
 
     private CustomerService customerService;
     private CarEventService carEventService;
-    private ProcedureVisitService procedureVisitService;
     private CustomerCarsService customerCarsService;
 
 
     public CustomerController(CustomerService customerService,
                               CarEventService carEventService,
-                              ProcedureVisitService procedureVisitService,
                               CustomerCarsService customerCarsService) {
         this.customerService = customerService;
         this.carEventService = carEventService;
-        this.procedureVisitService = procedureVisitService;
         this.customerCarsService = customerCarsService;
     }
 
@@ -60,7 +57,6 @@ public class CustomerController {
         CustomerCars customerCar = customerService.getCustomerCarById(id);
         model.addAttribute("customerCar", customerCar);
         model.addAttribute("listCustomerCarEvents", carEventService.getCarEventByCustomerCarID(id));
-        model.addAttribute("listProcedureVisit", procedureVisitService.getAllProcedureVisitsByCarEventCustomerCarID(id));
 
         return "customer-car";
     }
