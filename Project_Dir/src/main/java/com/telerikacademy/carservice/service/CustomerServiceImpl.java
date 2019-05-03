@@ -9,9 +9,7 @@ import com.telerikacademy.carservice.repository.CustomerRepository;
 import com.telerikacademy.carservice.service.contracts.CustomerService;
 import com.telerikacademy.carservice.service.contracts.EmailService;
 import com.telerikacademy.carservice.service.contracts.PassayService;
-import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -141,9 +138,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         if (customerToEnable.getIsDeleted() == 0) {
-
-            // TODO: check the thrown exception
-           // throw new UserRightsNotDisabledException(customerDto.getEmail());
+            throw new DatabaseItemAlreadyUnDeletedException(customerDto.getEmail());
         }
 
         customerRepository.enableUser(customerToEnable.getEmail());

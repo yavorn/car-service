@@ -9,15 +9,13 @@ import java.util.List;
 public interface CarEventService {
     List<CarEvent> getAllCarEvents();
 
-    CarEvent getCarEventByID(Long CarEventID);
+    CarEvent getCarEventByID(long CarEventID);
 
-    List<CarEvent> getCarEventByCustomerCarID(Long id);
-
-    Long getCarEventIDbyCustomerCarID(Long id);
+    List<CarEvent> getCarEventsByCustomerCarID(long id);
 
     void addCarEvent(CarEvent CarEvent);
 
-    void deleteCarEvent(Long CarEventID);
+    void deleteCarEvent(long CarEventID);
 
-    void editCarEvent(CarEvent carEvent, Long carEventID);
+    void editCarEvent(CarEvent carEvent, long carEventID);
 }

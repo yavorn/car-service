@@ -40,8 +40,6 @@ public class CarEvent {
     private Set<Procedure> procedures ;
 
     public CarEvent(){
-        // this.date = LocalDate.now();
-        this.procedures = new HashSet<>();
 
     }
 
