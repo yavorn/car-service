@@ -10,6 +10,8 @@ public interface CarEventRepository extends JpaRepository<CarEvent, Long> {
 
     CarEvent findCarEventByCarEventID(Long id);
 
+    CarEvent findCarEventByCarEventIDAndCarEventDeletedFalse(Long id);
+
     List<CarEvent> findCarEventByCustomerCar_CustomerCarID(Long id);
 
     List<CarEvent> findAllByCustomerCar_CustomerCarID(Long id);

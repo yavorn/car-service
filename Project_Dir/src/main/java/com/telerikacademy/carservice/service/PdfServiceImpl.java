@@ -7,7 +7,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.telerikacademy.carservice.models.CarEvent;
 import com.telerikacademy.carservice.models.Procedure;
-import com.telerikacademy.carservice.models.ProcedureVisit;
 import com.telerikacademy.carservice.service.contracts.PdfService;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PdfServiceImpl implements PdfService {
 
     @Override
     public boolean createPdf(CarEvent carEvent,
-                             List<ProcedureVisit> procedures,
                              ServletContext context,
                              HttpServletRequest request,
                              HttpServletResponse response) {
@@ -101,8 +100,10 @@ public class PdfServiceImpl implements PdfService {
             eventTable.setSpacingBefore(10);
             eventTable.setSpacingAfter(10);
 
-            for (ProcedureVisit p : procedures) {
-                PdfPCell procedure = new PdfPCell( new Paragraph( p.getProcedure().getProcedureName(), tableBody));
+            Set<Procedure> visitProcedures = carEvent.getProcedures();
+
+            for (Procedure p : visitProcedures) {
+                PdfPCell procedure = new PdfPCell( new Paragraph( p.getProcedureName(), tableBody));
 
                 procedure.setBorderColor(BaseColor.BLACK);
                 procedure.setPaddingLeft(10);
@@ -112,7 +113,7 @@ public class PdfServiceImpl implements PdfService {
                 procedure.setExtraParagraphSpace(5);
                 eventTable.addCell(procedure);
 
-                PdfPCell price = new PdfPCell(new Paragraph(String.valueOf(p.getProcedure().getProcedurePrice()), tableBody));
+                PdfPCell price = new PdfPCell(new Paragraph(String.valueOf(p.getProcedurePrice()), tableBody));
                 price.setBorderColor(BaseColor.BLACK);
                 price.setPaddingLeft(10);
                 price.setHorizontalAlignment(Element.ALIGN_RIGHT);

@@ -64,10 +64,10 @@
 								</thead>
 								<tbody>
 								<tr th:each="car : ${customerCars}">
-									<td th:text="${car.getCustomerID().getName()} + ', ' + ${car.getCustomerID().getPhone()} + ', ' + ${car.getCustomerID().getEmail()}"></td>
-									<td th:text="${car.getModelID().getMake().getMakeName()} + ${car.getModelID().getModelName()} + ${car.getYearOfProduction()}"> </td>
+									<td th:text="${car.getCustomer().getName()} + ', ' + ${car.getCustomer().getPhone()} + ', ' + ${car.getCustomer().getEmail()}"></td>
+									<td th:text="${car.getModel().getMake().getMakeName()} + ${car.getModel().getModelName()} + ${car.getYearOfProduction()}"> </td>
 									<td th:text="${car.getLicensePlate()}"> </td>
-									<td th:text="${car.getVINnumber()}"> </td>
+									<td th:text="${car.getVinNumber()}"> </td>
 								</tr>
 								</tbody>
 							</table>
@@ -99,9 +99,9 @@
 								</thead>
 								<tbody>
 								<tr th:each="car : ${customerCars}">
-									<td th:text="${car.getModelID().getMake().getMakeName()} + ' ' + ${car.getModelID().getModelName()} + ', ' + ${car.getYearOfProduction()}"> </td>
+									<td th:text="${car.getModel().getMake().getMakeName()} + ' ' + ${car.getModel().getModelName()} + ', ' + ${car.getYearOfProduction()}"> </td>
 									<td th:text="${car.getLicensePlate()}"> </td>
-									<td th:text="${car.getVINnumber()}"> </td>
+									<td th:text="${car.getVinNumber()}"> </td>
 								</tr>
 								</tbody>
 							</table>
