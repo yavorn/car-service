@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface CarEventRepository extends JpaRepository<CarEvent, Long> {
 
-    CarEvent findCarEventByCarEventID(Long id);
+    CarEvent findCarEventByCarEventID(long id);
 
-    CarEvent findCarEventByCarEventIDAndCarEventDeletedFalse(Long id);
+    CarEvent findCarEventByCarEventIDAndCarEventDeletedFalse(long id);
 
-    List<CarEvent> findCarEventByCustomerCar_CustomerCarID(Long id);
+    List<CarEvent> findCarEventByCustomerCar_CustomerCarID(long id);
 
-    List<CarEvent> findAllByCustomerCar_CustomerCarID(Long id);
+    List<CarEvent> findAllByCustomerCar_CustomerCarID(long id);
 
-    void deleteById(Long carEventID);
+    void deleteById(long carEventID);
 }
