@@ -33,16 +33,15 @@ public class CarEventController {
 
 
 
-    @GetMapping("/add-carevent")
-    public String addCarEventForm(Model model) {
+    @GetMapping("/add-carevent/{customerCarId}")
+    public String addCarEventForm(Model model, @PathVariable Long customerCarId) {
 
         model.addAttribute("carEvent", new CarEvent());
         model.addAttribute("allProcedures",procedureService.getAllProcedures() );
-
-        model.addAttribute("allCustomerCars",customerCarsService.getAllCustomerCars());
+        model.addAttribute("car",customerCarsService.getCustomerCarById(customerCarId));
         return "add-carevent";
     }
-    @PostMapping("/add-carevent")
+    @PostMapping("/add-carevent/{customerCarId}")
     public String addCarEvent(@Valid @ModelAttribute CarEvent carEvent, BindingResult bindingErrors) {
         if(bindingErrors.hasErrors()) {
             return "add-carevent";

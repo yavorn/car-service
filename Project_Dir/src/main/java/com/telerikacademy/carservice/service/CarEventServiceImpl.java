@@ -85,7 +85,6 @@ public class CarEventServiceImpl implements CarEventService {
 
         try {
 
-
             double totalPrice = carEventPrice(carEvent.getProcedures());
             carEvent.setTotalPrice(totalPrice);
             carEvent.setDate(LocalDateTime.now());
@@ -98,11 +97,6 @@ public class CarEventServiceImpl implements CarEventService {
                     "Failed to access database."
             );
         }
-
-
-
-
-
 
     }
 

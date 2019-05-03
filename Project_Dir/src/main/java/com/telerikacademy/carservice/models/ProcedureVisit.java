@@ -53,19 +53,6 @@ public class ProcedureVisit {
         return procedure;
     }
 
-
-    public boolean isProcedureVisitDeleted() {
-        return procedureVisitDeleted;
-    }
-
-    public void setProcedureVisitDeleted() {
-        this.procedureVisitDeleted = true;
-    }
-
-    public void setProcedureVisitNotDeleted() {
-        this.procedureVisitDeleted = false;
-    }
-
     public boolean isPdfGenerated() {
         return isPdfGenerated;
     }

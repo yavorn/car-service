@@ -32,6 +32,9 @@ public class CustomerCars  {
     @Size(min = 16, max = 18, message = "Incorrect size for VIN Number.")
     private String vinNumber;
 
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "tinyint(4) default 0")
+    private boolean customerCarDeleted;
+
     public CustomerCars() {
 
     }
@@ -95,5 +98,17 @@ public class CustomerCars  {
 
     public void setVinNumber(String vinNumber) {
         this.vinNumber = vinNumber;
+    }
+
+    public boolean isCustomerCarDeleted() {
+        return customerCarDeleted;
+    }
+
+    public void setCustomerCarDeleted(boolean customerCarDeleted) {
+        this.customerCarDeleted = true;
+    }
+
+    public void setCustomerCarUndeleted(boolean customerCarDeleted) {
+        this.customerCarDeleted = false;
     }
 }

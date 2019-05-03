@@ -12,6 +12,9 @@ import java.util.List;
 @Service
 public class CustomerCarsServiceImpl implements CustomerCarsService {
 
+    private static final String CUSTOMER_CAR_NOT_FOUND_EXCEPTION_MSG = "Customer Car with ID: %s not found!";
+
+
     private CustomerCarsRepository customerCarsRepository;
 
     @Autowired
@@ -35,5 +38,14 @@ public class CustomerCarsServiceImpl implements CustomerCarsService {
             throw new DatabaseItemNotFoundException(String.format("No customer cars found for customer with id %d", id));
         }
         return result;
+    }
+
+    @Override
+    public CustomerCars getCustomerCarById(Long id) {
+        CustomerCars customerCar = customerCarsRepository.findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(id);
+        if (customerCar == null) {
+            throw new DatabaseItemNotFoundException(String.format(CUSTOMER_CAR_NOT_FOUND_EXCEPTION_MSG, id));
+        }
+        return customerCarsRepository.findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(id);
     }
 }

@@ -9,4 +9,6 @@ public interface CustomerCarsService {
     List<CustomerCars> getAllCustomerCars();
 
     List<CustomerCars> getAllCustomerCarsByCustomerId(Long id);
+
+    CustomerCars getCustomerCarById(Long id);
 }
