@@ -1,5 +1,6 @@
 package com.telerikacademy.carservice;
 
+import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerCars;
 import com.telerikacademy.carservice.models.Make;
@@ -13,42 +14,71 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.when;
 
 public class CustomerCarsServiceImplTest {
     @Mock
     CustomerCarsRepository customerCarsRepository;
     @InjectMocks
-    CustomerCarsServiceImpl customerCarsServiceImpl;
-    CustomerCars car = new CustomerCars();
+    private CustomerCarsServiceImpl customerCarsServiceImpl;
+    private CustomerCars testCarOne = new CustomerCars();
+    private CustomerCars testCarTwo = new CustomerCars();
+    private Customer customer = new Customer();
+    private Models model = new Models();
+    private List<CustomerCars> carsList = new ArrayList();
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        testCarOne.setCustomer(customer);
+        testCarOne.setLicensePlate("plateNo");
+        testCarOne.setVinNumber("vinNo");
+        testCarOne.setYearOfProduction(2000);
+        testCarOne.setModel(model);
+
+        testCarTwo.setCustomer(customer);
+        testCarTwo.setLicensePlate("plateNo2");
+        testCarTwo.setVinNumber("vinNo2");
+        testCarTwo.setYearOfProduction(2000);
+        testCarTwo.setModel(model);
+
+        carsList.add(testCarOne);
+        carsList.add(testCarTwo);
     }
 
     @Test
-    public void testGetAllCustomerCars() {
+    public void getAllCustomerCars_ShouldReturn_WhenValidArgsPassed() {
+        when(customerCarsRepository.findAll()).thenReturn(carsList);
         List<CustomerCars> result = customerCarsServiceImpl.getAllCustomerCars();
-        Assert.assertEquals(Arrays.<CustomerCars>asList(
-                new CustomerCars(new Customer("email", "phone", "name", 0),
-                        new Models(new Make("makeName"),
-                                "modelName"), 2001, "licensePlate", "vinNumber"),
-                new CustomerCars(new Customer("email1", "phone1", "name1", 0),
-                        new Models(new Make("makeName1"),
-                                "modelName1"), 2000, "licensePlate1", "vinNumber1")),
-                result);
+        assertEquals(2, result.size());
+    }
+
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void getAllCustomerCars_ShouldThrow_WhenNoCarsFound() {
+        when(customerCarsRepository.findAll()).thenReturn(new ArrayList<CustomerCars>());
+        List<CustomerCars> result = customerCarsServiceImpl.getAllCustomerCars();
+        assertEquals(1, result.size());
     }
 
     @Test
-    public void testGetAllCustomerCarsByCustomerId() {
-        when(customerCarsRepository.findCustomerCarsByCustomer_CustomerId(anyLong())).thenReturn(Arrays.<CustomerCars>asList(new CustomerCars(new Customer("email", "phone", "name", 0), new Models(new Make("makeName"), "modelName"), Integer.valueOf(0), "licensePlate", "vinNumber")));
+    public void getAllCustomerCarsByCustomerId_ShouldReturn_WhenValidArgsPassed() {
+        when(customerCarsRepository.findCustomerCarsByCustomer_CustomerId(1L)).thenReturn(carsList);
 
-        List<CustomerCars> result = customerCarsServiceImpl.getAllCustomerCarsByCustomerId(Long.valueOf(1));
-        Assert.assertEquals(Arrays.<CustomerCars>asList(new CustomerCars(new Customer("email", "phone", "name", 0), new Models(new Make("makeName"), "modelName"), Integer.valueOf(0), "licensePlate", "vinNumber")), result);
+        List<CustomerCars> result = customerCarsServiceImpl.getAllCustomerCarsByCustomerId(1L);
+        assertEquals(2, result.size());
+    }
+
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void getAllCustomerCarsByCustomerId_ShouldThrow_WhenNoCarsFound() {
+        when(customerCarsRepository.findCustomerCarsByCustomer_CustomerId(1L)).thenReturn(new ArrayList<CustomerCars>());
+        List<CustomerCars> result = customerCarsServiceImpl.getAllCustomerCarsByCustomerId(1L);
+        assertEquals(1, result.size());
     }
 }
 
