@@ -103,7 +103,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test(expected = DatabaseItemAlreadyExistsException.class)
-    public void customer_ShouldThrow_WhenUserExists() throws Exception {
+    public void customer_ShouldThrow_WhenUserExists() {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
         when(passwordEncoder.encode("generateRandomPasswordResponse")).thenReturn("$2y$10$SWb8bU0QIEb067afKMIj6.nTSNXDUDTKLNye/jXi7WBBpXfv8Izg6");
@@ -111,7 +111,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void addCustomer_ShouldReturn_WhenValidArgsPassed() throws Exception {
+    public void addCustomer_ShouldReturn_WhenValidArgsPassed() {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
         when(passwordEncoder.encode("generateRandomPasswordResponse")).thenReturn("$2y$10$SWb8bU0QIEb067afKMIj6.nTSNXDUDTKLNye/jXi7WBBpXfv8Izg6");
@@ -137,7 +137,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test(expected = DatabaseItemAlreadyExistsException.class)
-    public void addAdmin_ShouldThrow_WhenUserExists() throws Exception {
+    public void addAdmin_ShouldThrow_WhenUserExists() {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
         when(passwordEncoder.encode("generateRandomPasswordResponse")).thenReturn("$2y$10$SWb8bU0QIEb067afKMIj6.nTSNXDUDTKLNye/jXi7WBBpXfv8Izg6");
