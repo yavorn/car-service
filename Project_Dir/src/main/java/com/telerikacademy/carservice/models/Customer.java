@@ -27,12 +27,12 @@ public class Customer {
     private String name;
 
     @Column(name = "is_deleted")
-    private int isDeleted;
+    private boolean isDeleted;
 
     public Customer() {
     }
 
-    public Customer(String email, String phone, String name, int isDeleted) {
+    public Customer(String email, String phone, String name, boolean isDeleted) {
         this.email = email;
         this.phone = phone;
         this.name = name;
@@ -71,11 +71,11 @@ public class Customer {
         this.name = name;
     }
 
-    public int getIsDeleted() {
+    public boolean getIsDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(int isDeleted) {
+    public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 }

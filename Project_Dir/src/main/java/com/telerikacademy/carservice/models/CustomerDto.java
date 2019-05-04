@@ -20,7 +20,7 @@ public class CustomerDto {
 
     private String phone;
 
-    private int isDeleted;
+    private boolean isDeleted;
 
     private Set<Long> customerCars;
 
@@ -67,11 +67,11 @@ public class CustomerDto {
         this.passwordConfirmation = passwordConfirmation;
     }
 
-    public int getIsDeleted() {
+    public boolean getIsDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(int isDeleted) {
+    public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 

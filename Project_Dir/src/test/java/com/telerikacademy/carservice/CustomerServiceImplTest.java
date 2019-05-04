@@ -54,21 +54,21 @@ public class CustomerServiceImplTest {
         customer.setEmail("email");
         customer.setPhone("phone");
         customer.setName("name");
-        customer.setIsDeleted(0);
+        customer.setIsDeleted(false);
 
         customerDto.setEmail("email");
         customerDto.setPassword("password");
         customerDto.setPasswordConfirmation("passwordConfirm");
         customerDto.setPhone("phone");
         customerDto.setName("name");
-        customerDto.setIsDeleted(0);
+        customerDto.setIsDeleted(false);
     }
 
     @Test
     public void getAllCustomers_ShouldReturn_WhenValidArgsPassed() {
         when(customerRepository.findAll()).thenReturn(Arrays.<Customer>asList(
-                new Customer("email", "phone", "name", 0),
-                new Customer("email1", "phone", "name1", 0)));
+                new Customer("email", "phone", "name", false),
+                new Customer("email1", "phone", "name1", false)));
 
         List<Customer> result = customerServiceImpl.getAllCustomers();
         assertEquals(2, result.size());
@@ -77,8 +77,8 @@ public class CustomerServiceImplTest {
     @Test
     public void getAllCustomers_ShouldReturn_WhenInvalidArgsPassed() {
         when(customerRepository.findAll()).thenReturn(Arrays.<Customer>asList(
-                new Customer("email", "phone", "name", 0),
-                new Customer("email1", "phone", "name1", 0)));
+                new Customer("email", "phone", "name", false),
+                new Customer("email1", "phone", "name1", false)));
 
         List<Customer> result = customerServiceImpl.getAllCustomers();
         Assert.assertNotEquals(3, result.size());
@@ -221,7 +221,7 @@ public class CustomerServiceImplTest {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
         customerServiceImpl.disableCustomer(customerDto);
 
-        assertEquals(1, customer.getIsDeleted());
+        assertTrue(customer.getIsDeleted());
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
@@ -235,17 +235,17 @@ public class CustomerServiceImplTest {
     @Test(expected = DatabaseItemAlreadyDeletedException.class)
     public void disableCustomer_ShouldThrow_WhenUserAlreadyDisabled(){
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
-        customer.setIsDeleted(1);
+        customer.setIsDeleted(true);
         customerServiceImpl.disableCustomer(customerDto);
     }
 
     @Test
     public void enableCustomer_ShouldReturn_WhenValidArgsPassed() {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
-        customer.setIsDeleted(1);
+        customer.setIsDeleted(true);
         customerServiceImpl.enableCustomer(customerDto);
 
-        assertEquals(0, customer.getIsDeleted());
+        assertFalse(customer.getIsDeleted());
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
@@ -253,13 +253,13 @@ public class CustomerServiceImplTest {
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
         customerServiceImpl.enableCustomer(customerDto);
 
-        assertEquals(1, customer.getIsDeleted());
+        assertTrue(customer.getIsDeleted());
     }
 
     @Test(expected = DatabaseItemAlreadyUnDeletedException.class)
     public void enableCustomer_ShouldThrow_WhenUserAlreadyEnabled(){
         when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
-        customer.setIsDeleted(0);
+        customer.setIsDeleted(false);
         customerServiceImpl.enableCustomer(customerDto);
     }
 
