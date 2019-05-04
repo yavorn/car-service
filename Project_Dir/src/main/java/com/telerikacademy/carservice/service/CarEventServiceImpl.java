@@ -7,7 +7,6 @@ import com.telerikacademy.carservice.models.Procedure;
 import com.telerikacademy.carservice.repository.CarEventRepository;
 import com.telerikacademy.carservice.service.contracts.CarEventService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -56,7 +55,7 @@ public class CarEventServiceImpl implements CarEventService {
         Set<Procedure> procedures = carEvent.getProcedures();
         if (procedures.size() == 0) throw new DatabaseItemNotFoundException(PROCEDURE_LIST_EMPTY);
 
-        double totalPrice = carEventPrice(procedures);
+        double totalPrice = calculateCarEventTotalPrice(procedures);
         carEvent.setTotalPrice(totalPrice);
         carEvent.setDate(LocalDateTime.now());
 
@@ -71,15 +70,20 @@ public class CarEventServiceImpl implements CarEventService {
     //TODO: functionality not tested in frontend. Will probably throw DatabaseItemAlreadyExistsException!!!
     @Override
     public void editCarEvent(CarEvent carEvent, long id) {
+
         CarEvent eventToChange = carEventRepository.findCarEventByCarEventID(id);
 
         if (eventToChange == null) {
             throw new DatabaseItemNotFoundException(String.format(CAR_EVENT_BY_ID_EXCEPTION, id));
         }
-        eventToChange.setCustomerCar(carEvent.getCustomerCar());
-        eventToChange.setDate(carEvent.getDate());
+
+
+        Set<Procedure> procedures = carEvent.getProcedures();
+        if (procedures.size() == 0) throw new DatabaseItemNotFoundException(PROCEDURE_LIST_EMPTY);
+        double totalPrice = calculateCarEventTotalPrice(procedures);
+        eventToChange.setProcedures(carEvent.getProcedures());
         eventToChange.setFinalized(carEvent.getFinalized());
-        eventToChange.setTotalPrice(carEvent.getTotalPrice());
+        eventToChange.setTotalPrice(totalPrice);
 
         carEventRepository.save(eventToChange);
     }
@@ -90,7 +94,7 @@ public class CarEventServiceImpl implements CarEventService {
         carEventRepository.save(carEvent);
     }
 
-    private double carEventPrice(Set<Procedure> procedures) {
+    private double calculateCarEventTotalPrice(Set<Procedure> procedures) {
         double price = 0.0;
         if (procedures.size() == 0) throw new DatabaseItemNotFoundException(PROCEDURE_LIST_EMPTY);
 
