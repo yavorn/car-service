@@ -4,6 +4,7 @@ import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import com.telerikacademy.carservice.models.Make;
 import com.telerikacademy.carservice.models.Models;
 import com.telerikacademy.carservice.service.contracts.CarService;
+import com.telerikacademy.carservice.service.contracts.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,9 +17,11 @@ import javax.validation.Valid;
 public class CarController {
 
     private CarService carService;
+    private CustomerService customerService;
 
-    public CarController(CarService carService) {
+    public CarController(CarService carService, CustomerService customerService) {
         this.carService = carService;
+        this.customerService = customerService;
     }
 
     @GetMapping("/model/{id}")
@@ -33,11 +36,18 @@ public class CarController {
 //        }
     }
 
-    @GetMapping
-    public String listCars(Model model) {
-        model.addAttribute("carModels", carService.getAllModels());
-        return "list-cars";
+//    @GetMapping
+//    public String listCars(Model model) {
+//        model.addAttribute("carModels", carService.getAllModels());
+//        return "list-cars";
+//
+//    }
 
+    @GetMapping
+    public String listCustomerCars(Model model){
+        model.addAttribute("allCustomers", customerService.getAllCustomers());
+        model.addAttribute("allCustomersCars", customerService.getAllCustomerCars());
+        return "cars";
     }
 
     @GetMapping("/models-from-make/{id}")

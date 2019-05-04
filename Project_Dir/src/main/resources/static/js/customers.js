@@ -11,20 +11,9 @@ let table = $('#customers-table').DataTable({
     ]
 });
 
-let carsTable = $('#cars-table').DataTable({
-    autoWidth: false,
-    columns: [
-        {width: '50px'},
-        {width: '50px'},
-        {width: '50px'},
-        {width: '50px'},
-        {width: '50px'},
-        {width: '50px'}
-    ]
-});
+let carsTable = $('#cars-table').DataTable();
 
 function viewCars() {
-
 
     let modal = $('#view-cars-modal');
     modal.modal();
@@ -38,3 +27,13 @@ function addUser() {
     })
 }
 
+function deleteUser(email) {
+    let modal = $('#confirmation-modal');
+    modal.modal();
+
+    $('#user-to-delete').attr("value", email);
+
+    modal.on('hidden.bs.modal', function () {
+        table.reset();
+    })
+}

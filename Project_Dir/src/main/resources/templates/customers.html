@@ -40,7 +40,8 @@
                             </td>
                             <td>
                                 <button class="btn btn-danger" title="Delete User"
-                                        id="delete-user">
+                                        id="delete-user" th:value="${customer.getEmail()}"
+                                        th:onclick="deleteUser(value)">
                                     <i class="fas fa-trash-alt"></i> Delete User
                                 </button>
                             </td>
@@ -48,7 +49,6 @@
                         </tbody>
                     </table>
                 </div>
-                <button class="btn btn-success" id="add-user-button" onclick="addUser()">Add User</button>
             </fieldset>
         </div>
         <hr/>
@@ -137,7 +137,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" align="center">Cars of customer:</h4>
+                <h4 class="modal-title" align="center">Cars of customer: <span type="text" id="customer-name"></span></h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body" align="center">
@@ -153,7 +153,9 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="car : ${allCustomersCars}">
+                        <tr th:each="car : ${allCustomersCars}"
+                            th:object="${car}"
+                            th:if="${car.getCustomer().getCustomerId()} == '21'">
 
                             <td th:text="${car.getModel().getMake().getMakeName()}"></td>
                             <td th:text="${car.getModel().getModelName()}"></td>
@@ -172,6 +174,35 @@
                 </div>
 
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmation-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Car Service</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <h4>Are you sure you wish to delete this customer?</h4>
+                <h2 id="info-modal-text"></h2>
+            </div>
+
+            <div class="modal-footer">
+                <form id="delete-form" th:action="@{/customer}" th:object="${customer}" th:method="delete">
+                    <input type="text" id="user-to-delete" th:field="*{email}" hidden>
+                    <button type="submit" class="btn btn-danger pull-right" title="Yes">
+                        <i class="fas fa-trash-alt"></i> Yes
+                    </button>
+                </form>
+                <button type="button" class="btn btn-success" data-dismiss="modal" title="No">No</button>
+            </div>
+
         </div>
     </div>
 </div>

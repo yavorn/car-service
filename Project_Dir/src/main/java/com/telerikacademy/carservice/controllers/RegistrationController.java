@@ -38,7 +38,7 @@ public class RegistrationController {
     @DeleteMapping("/customer")
     public String disableCustomer(@ModelAttribute CustomerDto customerDto) {
         customerService.disableCustomer(customerDto);
-        return "redirect:admin-portal";
+        return "redirect:customers";
     }
 
     @PutMapping("/customer")

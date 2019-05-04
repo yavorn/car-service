@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Customers</title>
+    <div th:replace="fragments/components :: head"></div>
+</head>
+<body>
+<footer th:replace="fragments/components :: navbar"></footer>
+
+
+<div class="container body-content">
+    <h1>Choose a customer</h1>
+    <select class="selectpicker" id="select-customer" data-style="btn-primary">
+        <option> Choose a customer</option>
+        <option
+                th:each="customer :${allCustomers}"
+                th:value="${customer.getCustomerId()}"
+                th:text="${customer.getName()}">
+        </option>
+    </select><br>
+
+    <div class="page-header">
+        <label class="heading"><h1>Cars Table</h1></label>
+        <div class="form-group">
+            <fieldset>
+                <div class="table-responsive">
+                    <div class="table-responsive">
+
+                        <table id="cars-table" class="table table-striped table-bordered display" cellspacing="0"
+                               width="100%">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Make</th>
+                                <th>Model</th>
+                                <th>Year</th>
+                                <th>License Plate</th>
+                                <th>VIN</th>
+                            </tr>
+                            </thead>
+                            <tbody id="customer">
+                            <tr th:each="car : ${allCustomersCars}">
+                                <td th:text="${car.getCustomer().getCustomerId()}"></td>
+                                <td th:text="${car.getModel().getMake().getMakeName()}"></td>
+                                <td th:text="${car.getModel().getModelName()}"></td>
+                                <td th:text="${car.getYearOfProduction()}"></td>
+                                <td th:text="${car.getLicensePlate()}"></td>
+                                <td th:text="${car.vinNumber}"></td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <hr/>
+    </div>
+</div>
+
+
+
+<footer th:replace="fragments/components :: footer"></footer>
+<div th:replace="fragments/components :: js"></div>
+<script th:src="@{/js/cars.js}"></script>
+
+</body>
+</html>
