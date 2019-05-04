@@ -47,4 +47,18 @@ public class CarEventController {
         return "redirect:/cars";
     }
 
+    @GetMapping("/edit-carevent/{id}")
+    public String editCarEventForm(Model model, @PathVariable long id) {
+
+        model.addAttribute("carEvent", carEventService.getCarEventByID(id));
+        model.addAttribute("allProcedures",procedureService.getAllProcedures() );
+        return "edit-carevent";
+    }
+    @PostMapping("/edit-carevent/{id}")
+    public String editCarEvent(@Valid @ModelAttribute CarEvent carEvent, @PathVariable long id) {
+
+        carEventService.editCarEvent(carEvent, id);
+        return "redirect:/cars";
+    }
+
 }

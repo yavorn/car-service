@@ -23,7 +23,7 @@ import java.util.Set;
 public class PdfServiceImpl implements PdfService {
 
     @Override
-    public boolean createPdf(CarEvent carEvent, Set<Procedure> procedures, ServletContext context, HttpServletRequest request, HttpServletResponse response) {
+    public boolean createPdf(CarEvent carEvent,  ServletContext context, HttpServletRequest request, HttpServletResponse response) {
 
         String visitIdParagraphText = "Visit No: " + carEvent.getCarEventID();
         String customerParagraphText = String.format("Customer: %s, %s, %s", carEvent.getCustomerCar().getCustomer().getName(), carEvent.getCustomerCar().getCustomer().getEmail(), carEvent.getCustomerCar().getCustomer().getPhone());
