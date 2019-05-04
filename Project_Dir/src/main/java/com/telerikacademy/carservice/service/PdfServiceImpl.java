@@ -25,15 +25,16 @@ public class PdfServiceImpl implements PdfService {
     @Override
     public boolean createPdf(CarEvent carEvent,  ServletContext context, HttpServletRequest request, HttpServletResponse response) {
 
-        String visitIdParagraphText = "Visit No: " + carEvent.getCarEventID();
-        String customerParagraphText = String.format("Customer: %s, %s, %s", carEvent.getCustomerCar().getCustomer().getName(), carEvent.getCustomerCar().getCustomer().getEmail(), carEvent.getCustomerCar().getCustomer().getPhone());
-        String dateParagraphText = "Date: " + carEvent.getDate();
-        String carParagraphText = String.format("Vehicle: %s, %s, %d", carEvent.getCustomerCar().getModel().getMake().getMakeName(), carEvent.getCustomerCar().getModel().getModelName(), carEvent.getCustomerCar().getYearOfProduction());
-        String licensePlateParagraphText = String.format("Car plate number: %s", carEvent.getCustomerCar().getLicensePlate());
         int pageMarginLeft = 15;
         int pageMarginRight = 15;
         int pageMarginTop = 45;
         int pageMarginBottom= 30;
+        String visitIdParagraphText = "Visit No: " + carEvent.getCarEventID();
+        String customerParagraphText = String.format("Customer: %s, %s, %s", carEvent.getCustomerCar().getCustomer().getName(), carEvent.getCustomerCar().getCustomer().getEmail(), carEvent.getCustomerCar().getCustomer().getPhone());
+        String dateParagraphText = "Date: " + carEvent.getDate();
+        String carParagraphText = String.format("Vehicle: %s %s, %d", carEvent.getCustomerCar().getModel().getMake().getMakeName(), carEvent.getCustomerCar().getModel().getModelName(), carEvent.getCustomerCar().getYearOfProduction());
+        String licensePlateParagraphText = String.format("Car plate number: %s", carEvent.getCustomerCar().getLicensePlate());
+        String totalPriceParagraphText = "Total price: " + carEvent.getTotalPrice();
 
         try {
             Document document = new Document(PageSize.A4, pageMarginLeft, pageMarginRight, pageMarginTop, pageMarginBottom);
@@ -85,14 +86,14 @@ public class PdfServiceImpl implements PdfService {
 
             Font tableBody = FontFactory.getFont("Arial", 15, BaseColor.WHITE);
 
-            PdfPTable eventTable = new PdfPTable(3);
+            PdfPTable eventTable = new PdfPTable(2);
             eventTable.setWidthPercentage(100);
             eventTable.setSpacingBefore(10);
             eventTable.setSpacingAfter(10);
 
-            Set<Procedure> visitProcedures = carEvent.getProcedures();
+            Set<Procedure> procedures = carEvent.getProcedures();
 
-            for (Procedure p : visitProcedures) {
+            for (Procedure p : procedures) {
                 PdfPCell procedure = new PdfPCell( new Paragraph( p.getProcedureName(), tableBody));
 
                 setPdfPCellTextAlignment(procedure, Element.ALIGN_LEFT);
@@ -103,7 +104,7 @@ public class PdfServiceImpl implements PdfService {
                 eventTable.addCell(price);
             }
 
-            Paragraph totalPriceParagraph = new Paragraph("Total price: " + carEvent.getTotalPrice(), mainFont);
+            Paragraph totalPriceParagraph = new Paragraph(totalPriceParagraphText, mainFont);
             setParagraphTextAlignment(totalPriceParagraph, Element.ALIGN_RIGHT);
 
             document.add(eventTable);
@@ -124,7 +125,7 @@ public class PdfServiceImpl implements PdfService {
             try {
                 FileInputStream inputStream = new FileInputStream(file);
                 response.setContentType("application/pdf");
-                response.setHeader("content-disposition", "attachment; filename=" + "invoice.pdf");
+                response.setHeader("content-disposition", "attachment; filename=" + "MyCar'sProcedureList.pdf");
                 OutputStream outputStream = response.getOutputStream();
                 byte[] buffer = new byte[BUFFER_SIZE];
                 int bytesRead = -1;
@@ -142,11 +143,11 @@ public class PdfServiceImpl implements PdfService {
         }
     }
 
-    private void setPdfPCellTextAlignment(PdfPCell procedure, int alignLeft) {
+    private void setPdfPCellTextAlignment(PdfPCell procedure, int textAlign) {
         procedure.setBorderColor(BaseColor.BLACK);
         procedure.setPaddingLeft(10);
-        procedure.setHorizontalAlignment(alignLeft);
-        procedure.setVerticalAlignment(alignLeft);
+        procedure.setHorizontalAlignment(textAlign);
+        procedure.setVerticalAlignment(textAlign);
         procedure.setBackgroundColor(BaseColor.GRAY);
         procedure.setExtraParagraphSpace(5);
     }
