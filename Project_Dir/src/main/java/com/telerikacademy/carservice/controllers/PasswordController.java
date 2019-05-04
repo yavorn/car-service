@@ -1,6 +1,5 @@
 package com.telerikacademy.carservice.controllers;
 
-import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import com.telerikacademy.carservice.models.CustomerDto;
 import com.telerikacademy.carservice.service.contracts.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +26,13 @@ public class PasswordController {
     }
 //todo: error handling
     @PostMapping("/password")
-    public String resetPassword(@ModelAttribute CustomerDto customerDto, Model model) throws DatabaseItemNotFoundException {
+    public String resetPassword(@ModelAttribute CustomerDto customerDto, Model model) {
         customerService.resetPassword(customerDto.getEmail());
         return "password-confirmation";
     }
 
     @PutMapping("/password")
-    public String changePassword(@ModelAttribute CustomerDto customerDto, Model model) throws DatabaseItemNotFoundException {
+    public String changePassword(@ModelAttribute CustomerDto customerDto, Model model) {
         if (!customerDto.getPassword().equals(customerDto.getPasswordConfirmation())) {
             model.addAttribute("error", "Passwords do not match!");
             return "password";

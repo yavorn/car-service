@@ -1,8 +1,7 @@
 package com.telerikacademy.carservice.controllers;
 
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
-import com.telerikacademy.carservice.models.Make;
-import com.telerikacademy.carservice.models.Models;
+import com.telerikacademy.carservice.models.*;
 import com.telerikacademy.carservice.service.contracts.CarService;
 import com.telerikacademy.carservice.service.contracts.CustomerService;
 import org.springframework.stereotype.Controller;
@@ -18,6 +17,7 @@ public class CarController {
 
     private CarService carService;
     private CustomerService customerService;
+
 
     public CarController(CarService carService, CustomerService customerService) {
         this.carService = carService;
@@ -36,18 +36,11 @@ public class CarController {
 //        }
     }
 
-//    @GetMapping
-//    public String listCars(Model model) {
-//        model.addAttribute("carModels", carService.getAllModels());
-//        return "list-cars";
-//
-//    }
-
     @GetMapping
-    public String listCustomerCars(Model model){
-        model.addAttribute("allCustomers", customerService.getAllCustomers());
-        model.addAttribute("allCustomersCars", customerService.getAllCustomerCars());
-        return "cars";
+    public String listCars(Model model) {
+        model.addAttribute("carModels", carService.getAllModels());
+        return "list-cars";
+
     }
 
     @GetMapping("/models-from-make/{id}")
@@ -160,4 +153,18 @@ public class CarController {
         return "redirect:/cars";
     }
 
+
+    @GetMapping("/new-customer-car")
+    public String showNewCarPage(Model model) {
+        model.addAttribute("customerDto", new CustomerDto());
+        model.addAttribute("customerCar", new CustomerCars());
+
+        return "new-customer-car";
+    }
+
+    @PostMapping("/new-customer-car")
+    public String addCustomerCar(@ModelAttribute CustomerCars customerCar, String email){
+        customerService.createCustomerCar(customerCar, email);
+        return "redirect:/customers/car";
+    }
 }

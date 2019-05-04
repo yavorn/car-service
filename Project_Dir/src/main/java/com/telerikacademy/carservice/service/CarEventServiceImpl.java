@@ -7,6 +7,7 @@ import com.telerikacademy.carservice.models.Procedure;
 import com.telerikacademy.carservice.repository.CarEventRepository;
 import com.telerikacademy.carservice.service.contracts.CarEventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,12 @@ import java.util.Set;
 
 @Service
 public class CarEventServiceImpl implements CarEventService {
+
+    private static final String PROCEDURE_LIST_EMPTY = "Procedure list is empty!";
+    private static final String CAR_EVENT_BY_CAR_ID_EXCEPTION = "Car events for car ID %d not found!";
+    private static final String CAR_EVENT_BY_ID_EXCEPTION = "Car event with ID %d not found!";
+    private static final String CAR_EVENT_EXCEPTION = "No car events found!";
+
 
     private CarEventRepository carEventRepository;
 
@@ -25,21 +32,21 @@ public class CarEventServiceImpl implements CarEventService {
 
     public List<CarEvent> getAllCarEvents() {
         List<CarEvent> result = carEventRepository.findAll();
-        if (result.size() == 0) throw new DatabaseItemNotFoundException("No car events found.");
+        if (result.size() == 0) throw new DatabaseItemNotFoundException(CAR_EVENT_EXCEPTION);
         return result;
     }
 
     @Override
     public CarEvent getCarEventByID(long id) {
         CarEvent eventToFind = carEventRepository.findCarEventByCarEventID(id);
-        if (eventToFind == null) throw new DatabaseItemNotFoundException(String.format("Car event with id %d not found.", id));
+        if (eventToFind == null) throw new DatabaseItemNotFoundException(String.format(CAR_EVENT_BY_ID_EXCEPTION, id));
         return eventToFind;
     }
 
     @Override
     public List<CarEvent> getCarEventsByCustomerCarID(long id) {
         List<CarEvent> result = carEventRepository.findAllByCustomerCar_CustomerCarID(id);
-        if (result.size() == 0) throw new DatabaseItemNotFoundException(String.format("Car event for car id %d not found.", id));
+        if (result.size() == 0) throw new DatabaseItemNotFoundException(String.format(CAR_EVENT_BY_CAR_ID_EXCEPTION, id));
 
         return result;
     }
@@ -47,7 +54,7 @@ public class CarEventServiceImpl implements CarEventService {
     @Override
     public void addCarEvent(CarEvent carEvent) {
         Set<Procedure> procedures = carEvent.getProcedures();
-        if (procedures.size() == 0) throw new DatabaseItemNotFoundException(String.format("Procedure list for car event with id %d is empty", carEvent.getCarEventID()));
+        if (procedures.size() == 0) throw new DatabaseItemNotFoundException(PROCEDURE_LIST_EMPTY);
 
         double totalPrice = carEventPrice(procedures);
         carEvent.setTotalPrice(totalPrice);
@@ -67,7 +74,7 @@ public class CarEventServiceImpl implements CarEventService {
         CarEvent eventToChange = carEventRepository.findCarEventByCarEventID(id);
 
         if (eventToChange == null) {
-            throw new DatabaseItemNotFoundException(String.format("Car event with id %d not found.", id));
+            throw new DatabaseItemNotFoundException(String.format(CAR_EVENT_BY_ID_EXCEPTION, id));
         }
         eventToChange.setCustomerCar(carEvent.getCustomerCar());
         eventToChange.setDate(carEvent.getDate());
@@ -77,9 +84,15 @@ public class CarEventServiceImpl implements CarEventService {
         carEventRepository.save(eventToChange);
     }
 
+    @Override
+    public void editPdfGenerated(CarEvent carEvent) {
+        carEvent.setPdfGenerated(true);
+        carEventRepository.save(carEvent);
+    }
+
     private double carEventPrice(Set<Procedure> procedures) {
         double price = 0.0;
-        if (procedures.size() == 0) throw new DatabaseItemNotFoundException("Procedure list is empty");
+        if (procedures.size() == 0) throw new DatabaseItemNotFoundException(PROCEDURE_LIST_EMPTY);
 
         for (Procedure pr : procedures) {
             price += pr.getProcedurePrice();
