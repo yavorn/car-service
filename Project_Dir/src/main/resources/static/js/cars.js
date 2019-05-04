@@ -1,5 +1,13 @@
 'use strict';
-let carsTable = $('#cars-table').dataTable();
+
+
+let carsTable = $('#cars-table').dataTable({
+    "columnDefs": [{
+        "visible": false, "targets": [0],
+        "bProcessing": true
+    }
+    ]
+});
 
 $('#select-customer').on('change',function(){
     let selectedValue = $(this).val();

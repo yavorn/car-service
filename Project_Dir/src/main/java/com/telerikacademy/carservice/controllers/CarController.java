@@ -36,11 +36,18 @@ public class CarController {
 //        }
     }
 
-    @GetMapping
-    public String listCars(Model model) {
-        model.addAttribute("carModels", carService.getAllModels());
-        return "list-cars";
+//    @GetMapping
+//    public String listCars(Model model) {
+//        model.addAttribute("carModels", carService.getAllModels());
+//        return "list-cars";
+//
+//    }
 
+    @GetMapping
+    public String listCustomerCars(Model model){
+        model.addAttribute("allCustomers", customerService.getAllCustomers());
+        model.addAttribute("allCustomersCars", customerService.getAllCustomerCars());
+        return "cars";
     }
 
     @GetMapping("/models-from-make/{id}")
