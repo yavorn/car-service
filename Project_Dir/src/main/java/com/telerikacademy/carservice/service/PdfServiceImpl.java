@@ -13,29 +13,39 @@ import org.springframework.stereotype.Service;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.Set;
 
 @Service
 public class PdfServiceImpl implements PdfService {
 
     @Override
-    public boolean createPdf(CarEvent carEvent,
-                             ServletContext context,
-                             HttpServletRequest request,
-                             HttpServletResponse response) {
+    public boolean createPdf(CarEvent carEvent, Set<Procedure> procedures, ServletContext context, HttpServletRequest request, HttpServletResponse response) {
+
+        String visitIdParagraphText = "Visit No: " + carEvent.getCarEventID();
+        String customerParagraphText = String.format("Customer: %s, %s, %s", carEvent.getCustomerCar().getCustomer().getName(), carEvent.getCustomerCar().getCustomer().getEmail(), carEvent.getCustomerCar().getCustomer().getPhone());
+        String dateParagraphText = "Date: " + carEvent.getDate();
+        String carParagraphText = String.format("Vehicle: %s, %s, %d", carEvent.getCustomerCar().getModel().getMake().getMakeName(), carEvent.getCustomerCar().getModel().getModelName(), carEvent.getCustomerCar().getYearOfProduction());
+        String licensePlateParagraphText = String.format("Car plate number: %s", carEvent.getCustomerCar().getLicensePlate());
+        int pageMarginLeft = 15;
+        int pageMarginRight = 15;
+        int pageMarginTop = 45;
+        int pageMarginBottom= 30;
+
         try {
-            Document document = new Document(PageSize.A4, 15, 15, 45, 30);
+            Document document = new Document(PageSize.A4, pageMarginLeft, pageMarginRight, pageMarginTop, pageMarginBottom);
 
             String filePath = context.getRealPath("/resources/reports");
             File file = new File(filePath);
-            boolean existPath = new File(filePath).exists();
+            boolean existingPath = new File(filePath).exists();
 
-            if (!existPath) {
+            if (!existingPath) {
                 new File(filePath).mkdirs();
             }
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file + "/" + "invoice" + ".pdf"));
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file + "/"+ "reference" + ".pdf"));
             document.open();
 
             LineSeparator lineSeparator = new LineSeparator();
@@ -45,49 +55,29 @@ public class PdfServiceImpl implements PdfService {
             Font titleFont = FontFactory.getFont("Arial", 25, BaseColor.BLACK);
 
             Paragraph paragraph = new Paragraph("Car Visit Details", titleFont);
-            paragraph.setAlignment(Element.ALIGN_CENTER);
-            paragraph.setIndentationLeft(50);
-            paragraph.setIndentationRight(50);
-            paragraph.setSpacingAfter(10);
+            setParagraphTextAlignment(paragraph, Element.ALIGN_CENTER);
 
             document.add(paragraph);
             document.add(lineSeparator);
 
-            Paragraph visitIdParagraph = new Paragraph("Visit No: " + carEvent.getCarEventID(), mainFont);
-            visitIdParagraph.setAlignment(Element.ALIGN_LEFT);
-            visitIdParagraph.setIndentationLeft(50);
-            visitIdParagraph.setIndentationRight(50);
-            visitIdParagraph.setSpacingAfter(10);
+            Paragraph visitIdParagraph = new Paragraph(visitIdParagraphText, mainFont);
+            setParagraphTextAlignment(visitIdParagraph, Element.ALIGN_LEFT);
 
-            Paragraph dateParagraph = new Paragraph("Date: " + carEvent.getDate(), mainFont);
-            dateParagraph.setAlignment(Element.ALIGN_LEFT);
-            dateParagraph.setIndentationLeft(50);
-            dateParagraph.setIndentationRight(50);
-            dateParagraph.setSpacingAfter(10);
+            Paragraph serviceEventDateParagraph = new Paragraph(dateParagraphText, mainFont);
+            setParagraphTextAlignment(serviceEventDateParagraph, Element.ALIGN_LEFT);
 
             document.add(visitIdParagraph);
-            document.add(dateParagraph);
+            document.add(serviceEventDateParagraph);
             document.add(new Chunk(lineSeparator));
 
-            Paragraph customerParagraph = new Paragraph("Customer: " + carEvent.getCustomerCar().getCustomer().getName() + ", "
-                    + carEvent.getCustomerCar().getCustomer().getEmail() + ", " + carEvent.getCustomerCar().getCustomer().getPhone());
-            customerParagraph.setAlignment(Element.ALIGN_LEFT);
-            customerParagraph.setIndentationLeft(50);
-            customerParagraph.setIndentationRight(50);
-            customerParagraph.setSpacingAfter(10);
+            Paragraph customerParagraph = new Paragraph(customerParagraphText);
+            setParagraphTextAlignment(customerParagraph, Element.ALIGN_LEFT);
 
-            Paragraph carParagraph = new Paragraph("Vehicle: " + carEvent.getCustomerCar().getModel().getMake().getMakeName() +
-                    ", " + carEvent.getCustomerCar().getModel().getModelName() + ", " + carEvent.getCustomerCar().getYearOfProduction());
-            carParagraph.setAlignment(Element.ALIGN_LEFT);
-            carParagraph.setIndentationLeft(50);
-            carParagraph.setIndentationRight(50);
-            carParagraph.setSpacingAfter(10);
+            Paragraph carParagraph = new Paragraph(carParagraphText);
+            setParagraphTextAlignment(carParagraph, Element.ALIGN_LEFT);
 
-            Paragraph licensePlateParagraph = new Paragraph("Plate Number: " + carEvent.getCustomerCar().getLicensePlate());
-            licensePlateParagraph.setAlignment(Element.ALIGN_LEFT);
-            licensePlateParagraph.setIndentationLeft(50);
-            licensePlateParagraph.setIndentationRight(50);
-            licensePlateParagraph.setSpacingAfter(10);
+            Paragraph licensePlateParagraph = new Paragraph(licensePlateParagraphText);
+            setParagraphTextAlignment(licensePlateParagraph, Element.ALIGN_LEFT);
 
             document.add(customerParagraph);
             document.add(carParagraph);
@@ -105,29 +95,16 @@ public class PdfServiceImpl implements PdfService {
             for (Procedure p : visitProcedures) {
                 PdfPCell procedure = new PdfPCell( new Paragraph( p.getProcedureName(), tableBody));
 
-                procedure.setBorderColor(BaseColor.BLACK);
-                procedure.setPaddingLeft(10);
-                procedure.setHorizontalAlignment(Element.ALIGN_LEFT);
-                procedure.setVerticalAlignment(Element.ALIGN_LEFT);
-                procedure.setBackgroundColor(BaseColor.GRAY);
-                procedure.setExtraParagraphSpace(5);
+                setPdfPCellTextAlignment(procedure, Element.ALIGN_LEFT);
                 eventTable.addCell(procedure);
 
                 PdfPCell price = new PdfPCell(new Paragraph(String.valueOf(p.getProcedurePrice()), tableBody));
-                price.setBorderColor(BaseColor.BLACK);
-                price.setPaddingLeft(10);
-                price.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                price.setVerticalAlignment(Element.ALIGN_RIGHT);
-                price.setBackgroundColor(BaseColor.GRAY);
-                price.setExtraParagraphSpace(5);
+                setPdfPCellTextAlignment(price, Element.ALIGN_RIGHT);
                 eventTable.addCell(price);
             }
 
             Paragraph totalPriceParagraph = new Paragraph("Total price: " + carEvent.getTotalPrice(), mainFont);
-            totalPriceParagraph.setAlignment(Element.ALIGN_RIGHT);
-            totalPriceParagraph.setIndentationLeft(50);
-            totalPriceParagraph.setIndentationRight(50);
-            totalPriceParagraph.setSpacingAfter(10);
+            setParagraphTextAlignment(totalPriceParagraph, Element.ALIGN_RIGHT);
 
             document.add(eventTable);
             document.add(totalPriceParagraph);
@@ -137,7 +114,6 @@ public class PdfServiceImpl implements PdfService {
         } catch (Exception e) {
             return false;
         }
-
     }
 
     @Override
@@ -164,5 +140,21 @@ public class PdfServiceImpl implements PdfService {
                 throw new RuntimeException();
             }
         }
+    }
+
+    private void setPdfPCellTextAlignment(PdfPCell procedure, int alignLeft) {
+        procedure.setBorderColor(BaseColor.BLACK);
+        procedure.setPaddingLeft(10);
+        procedure.setHorizontalAlignment(alignLeft);
+        procedure.setVerticalAlignment(alignLeft);
+        procedure.setBackgroundColor(BaseColor.GRAY);
+        procedure.setExtraParagraphSpace(5);
+    }
+
+    private void setParagraphTextAlignment(Paragraph paragraph, int textAlign) {
+        paragraph.setAlignment(textAlign);
+        paragraph.setIndentationLeft(50);
+        paragraph.setIndentationRight(50);
+        paragraph.setSpacingAfter(10);
     }
 }
