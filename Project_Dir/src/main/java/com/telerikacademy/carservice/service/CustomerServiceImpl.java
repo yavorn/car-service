@@ -137,12 +137,12 @@ public class CustomerServiceImpl implements CustomerService {
             throw new DatabaseItemNotFoundException(customerDto.getEmail());
         }
 
-        if (customerToEnable.getIsDeleted() == 0) {
+        if (!customerToEnable.getIsDeleted()) {
             throw new DatabaseItemAlreadyUnDeletedException(customerDto.getEmail());
         }
 
         customerRepository.enableUser(customerToEnable.getEmail());
-        customerToEnable.setIsDeleted(0);
+        customerToEnable.setIsDeleted(false);
         customerRepository.saveAndFlush(customerToEnable);
     }
 
@@ -155,12 +155,12 @@ public class CustomerServiceImpl implements CustomerService {
             throw new DatabaseItemNotFoundException(customerDto.getName());
         }
 
-        if (customerToDisable.getIsDeleted() == 1) {
+        if (customerToDisable.getIsDeleted()) {
             throw new DatabaseItemAlreadyDeletedException(customerToDisable.getEmail());
         }
 
         customerRepository.disableUser(customerToDisable.getEmail());
-        customerToDisable.setIsDeleted(1);
+        customerToDisable.setIsDeleted(true);
         customerRepository.saveAndFlush(customerToDisable);
     }
 
