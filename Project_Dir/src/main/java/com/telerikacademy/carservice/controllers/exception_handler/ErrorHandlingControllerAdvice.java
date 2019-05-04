@@ -40,7 +40,7 @@ public class ErrorHandlingControllerAdvice {
         ErrorHandler error = new ErrorHandler();
 
         error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        error.setMessage("Have you paid the Internet?");
+        error.setMessage(e.getMessage());
 
         return getModelAndView(error);
     }
