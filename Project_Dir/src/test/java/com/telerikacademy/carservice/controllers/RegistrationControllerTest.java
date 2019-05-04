@@ -40,7 +40,7 @@ public class RegistrationControllerTest {
     @Test
     public void testDisableCustomer() {
         String result = registrationController.disableCustomer(new CustomerDto());
-        Assert.assertEquals("redirect:admin-portal", result);
+        Assert.assertEquals("redirect:customers", result);
     }
 
     @Test
