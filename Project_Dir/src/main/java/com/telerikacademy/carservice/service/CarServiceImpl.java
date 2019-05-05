@@ -20,8 +20,6 @@ import java.util.List;
 public class CarServiceImpl implements CarService {
 
     private static final String MAKE_EXIST_EXCEPTION_MSG = "Car Make with name/ID: %s already exist!";
-    private static final String MAKE_DELETED_EXCEPTION_MSG = "Car Make with name/ID: %s already deleted!";
-    private static final String MAKE_NOT_DELETED_EXCEPTION_MSG = "Car Make with name/ID: %s is not deleted!";
     private static final String MODEL_EXIST_EXCEPTION_MSG = "Car Model with name/ID: %s already exist!";
     private static final String MODEL_DELETED_EXCEPTION_MSG = "Car Model with name/ID: %s already deleted!";
     private static final String MODEL_NOT_DELETED_EXCEPTION_MSG = "Car Model with name/ID: %s is not deleted!";
@@ -43,12 +41,9 @@ public class CarServiceImpl implements CarService {
     @Override
     public void addMake(Make make) {
 
-        Make existingMake = makeRepository.findMakeByMakeName(make.getMakeName());
+        Make existingMake = makeRepository.findMakeByMakeNameAndMakeDeletedFalse(make.getMakeName());
 
-        if (existingMake != null && existingMake.isMakeDeleted()) {
-            throw new DatabaseItemAlreadyDeletedException(String.format(MAKE_DELETED_EXCEPTION_MSG, make.getMakeName()));
-        }
-        else if(existingMake != null && !existingMake.isMakeDeleted()){
+        if(existingMake != null){
             throw new DatabaseItemAlreadyExistsException(String.format(MAKE_EXIST_EXCEPTION_MSG, make.getMakeName()));
         }
         makeRepository.save(make);
@@ -58,7 +53,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public void editMake(Long id, Make newMake) {
 
-        Make makeToUpdate = makeRepository.findMakeByMakeID(id);
+        Make makeToUpdate = makeRepository.findMakeByMakeIDAndMakeDeletedFalse(id);
 
         if(makeToUpdate == null){
             throw new DatabaseItemNotFoundException(String.format(MAKE_NOT_FOUND_EXCEPTION_MSG, newMake.getMakeName()));
@@ -100,11 +95,11 @@ public class CarServiceImpl implements CarService {
     @Override
     public Make getMakeById(Long id) {
 
-            Make make = makeRepository.findMakeByMakeID(id);
+            Make make = makeRepository.findMakeByMakeIDAndMakeDeletedFalse(id);
             if (make == null) {
                 throw new DatabaseItemNotFoundException(String.format(MAKE_NOT_FOUND_EXCEPTION_MSG, id));
             }
-            return makeRepository.findMakeByMakeID(id);
+            return makeRepository.findMakeByMakeIDAndMakeDeletedFalse(id);
 
 
     }
@@ -153,34 +148,24 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public void deleteCarMakeByID(Long id) {
-        Make make =  makeRepository.findMakeByMakeID(id);
+        Make make =  makeRepository.findMakeByMakeIDAndMakeDeletedFalse(id);
         if (make == null) {
             throw new DatabaseItemNotFoundException(String.format(MAKE_NOT_FOUND_EXCEPTION_MSG, id.toString()));
         }
 
-        if (!make.isMakeDeleted()) {
-            make.setMakeDeleted();
-        }
-        else {
-            throw new DatabaseItemAlreadyDeletedException(String.format(MAKE_DELETED_EXCEPTION_MSG, id.toString()));
-        }
+        make.setMakeDeleted();
         makeRepository.save(make);
 
     }
 
     @Override
     public void undeleteCarMakeByID(Long id) {
-        Make make =  makeRepository.findMakeByMakeID(id);
+        Make make =  makeRepository.findMakeByMakeIDAndMakeDeletedTrue(id);
         if (make == null) {
             throw new DatabaseItemNotFoundException(String.format(MAKE_NOT_FOUND_EXCEPTION_MSG, id.toString()));
         }
+        make.setMakeUndeleted();
 
-        if (make.isMakeDeleted()) {
-            make.setMakeUndeleted();
-        }
-        else {
-            throw new DatabaseItemAlreadyDeletedException(String.format(MAKE_NOT_DELETED_EXCEPTION_MSG, id.toString()));
-        }
         makeRepository.save(make);
 
     }
