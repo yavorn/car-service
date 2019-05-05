@@ -1,6 +1,65 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
+<table class="table">
+    <tbody>
+    <tr>
+        <tr th:text="#{label.customerName}">Customer Name</th>
+        <td th:text="${car.getCustomer().getName()}">Customer Name</td>
+    </tr>
+    <tr>
+        <th th:text="#{label.makeName}">Make</th>
+        <td th:text="${car.getModel().getMake().getMakeName()}">Make</td>
+    </tr>
+    <tr>
+        <th th:text="#{label.modelName}">Model</th>
+        <td th:text="${car.getModel().getModelName()}">Model</td>
+    </tr>
+    <tr>
+        <th th:text="#{label.year}">Year</th>
+        <td th:text="${car.getYearOfProduction()}">Year</td>
+    </tr>
+    <tr>
+        <th th:text="#{label.licensePlate}">License Plate</th>
+        <td th:text="${car.getLicensePlate()}">License Plate</td>
+    </tr>
+
+    <tr>
+        <th th:text="#{label.VINnumber}">VIN</th>
+        <td th:text="${car.getVinNumber()}">VIN</td>
+    </tr>
+
+    </tbody>
+</table>
 
 
+<table class="table">
+    <thead>
+    <tr>
+        <th align="left" th:text="#{label.customerName}"></th>
+        <td th:text="${car.getCustomer().getName()}">Customer Name</td>
+    </tr>
+
+    <tr>
+        <th align="left" th:text="#{label.makeName}"></th>
+        <td th:text="${car.getModel().getMake().getMakeName()}">Make</td>
+    </tr>
+    <tr>
+        <th align="left" th:text="#{label.modelName}"></th>
+        <td th:text="${car.getModel().getModelName()}">Model</td>
+    </tr>
+    <tr>
+        <th align="left" th:text="#{label.year}"></th>
+        <td th:text="${car.getYearOfProduction()}">Year</td>
+    </tr>
+    <tr>
+        <th align="left" th:text="#{label.licensePlate}"></th>
+        <td th:text="${car.getLicensePlate()}">License Plate</td>
+    </tr>
+    <tr>
+        <th align="left" th:text="#{label.VINnumber}"></th>
+        <td th:text="${car.getVinNumber()}">VIN</td>
+    </tr>
+    </thead>
+</table>
 
 </html>

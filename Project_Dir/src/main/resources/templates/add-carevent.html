@@ -4,85 +4,76 @@
     <meta charset="UTF-8">
     <title>Add Car Event</title>
     <div th:replace="fragments/components :: head"></div>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/multi-select.css}"/>
 </head>
 <body>
 <header th:replace="fragments/components :: navbar"></header>
-<p>
-<h2>Add New Car Event</h2>
-</p>
 
-
-<table>
-    <thead>
-    <tr>
-        <th align="left" th:text="#{label.customerName}"></th>
-        <td th:text="${car.getCustomer().getName()}">name</td>
-    </tr>
-
-    <tr>
-        <th align="left" th:text="#{label.makeName}"></th>
-        <td th:text="${car.getModel().getMake().getMakeName()}">name</td>
-    </tr>
-    <tr>
-        <th align="left" th:text="#{label.modelName}"></th>
-        <td th:text="${car.getModel().getModelName()}">name</td>
-    </tr>
-
-    <tr>
-        <th align="left" th:text="#{label.year}"></th>
-        <td th:text="${car.getYearOfProduction()}">name</td>
-    </tr>
-
-    <tr>
-        <th align="left" th:text="#{label.licensePlate}"></th>
-        <td th:text="${car.getLicensePlate()}">name</td>
-    </tr>
-
-    <tr>
-        <th align="left" th:text="#{label.VINnumber}"></th>
-        <td th:text="${car.getVinNumber()}">name</td>
-    </tr>
-
-    </thead>
-</table>
-
-<br>
-<br>
-<p>
-<h4>Choose Procedures</h4>
-</p>
-<form action="#" th:action="@{'/carevents/add-carevent/' + ${car.getCustomerCarID()}}" th:object="${carEvent}"
-      method="post">
-
-    <table>
-
-        <div class="col-sm-4">
-
-            <select class="form-group" name="procedures" id="procedures" multiple="multiple">
-
-                <option
-                        th:each="procedure :${allProcedures}"
-                        th:value="${procedure.getProcedureID()}"
-                        th:text="${procedure.getProcedureName()}">
-                </option>
-            </select>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h4>Customer car details:</h4>
+            <table class="table table-striped table-dark">
+                <tbody>
+                <tr>
+                    <th th:text="#{label.customerName}">Customer Name</th>
+                    <td th:text="${car.getCustomer().getName()}">Customer Name</td>
+                </tr>
+                <tr>
+                    <th th:text="#{label.makeName}">Make</th>
+                    <td th:text="${car.getModel().getMake().getMakeName()}">Make</td>
+                </tr>
+                <tr>
+                    <th th:text="#{label.modelName}">Model</th>
+                    <td th:text="${car.getModel().getModelName()}">Model</td>
+                </tr>
+                <tr>
+                    <th th:text="#{label.year}">Year</th>
+                    <td th:text="${car.getYearOfProduction()}">Year</td>
+                </tr>
+                <tr>
+                    <th th:text="#{label.licensePlate}">License Plate</th>
+                    <td th:text="${car.getLicensePlate()}">License Plate</td>
+                </tr>
+                <tr>
+                    <th th:text="#{label.VINnumber}">VIN</th>
+                    <td th:text="${car.getVinNumber()}">VIN</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
 
-        <tr>
-            <td><input type="hidden" th:value="${car.getCustomerCarID()}" th:attr="name= 'customerCar'"/></td>
-        </tr>
+        <div class="col">
+            <h4>Choose procedures to apply</h4>
+            <form th:action="@{'/carevents/add-carevent/' + ${car.getCustomerCarID()}}" th:object="${carEvent}"
+                  method="post">
 
-        <tr>
-            <td><input type="submit" value="Save"/></td>
-        </tr>
-    </table>
+                <table>
+                    <select class="form-group" name="procedures" multiple="multiple" id="my-select">
+                        <option
+                                th:each="procedure :${allProcedures}"
+                                th:value="${procedure.getProcedureID()}"
+                                th:text="${procedure.getProcedureName()}">
+                        </option>
+                    </select>
+                    <tr>
+                        <td><input type="hidden" th:value="${car.getCustomerCarID()}" th:attr="name= 'customerCar'"/>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><input class="btn btn-success" type="submit" value="Save"/></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
 
 
-</form>
-
-
+</div>
 <footer th:replace="fragments/components :: footer"></footer>
 <div th:replace="fragments/components :: js"></div>
+<script th:src="@{/js/jquery.multi-select.js}"></script>
 <script th:src="@{/js/add-carevent.js}"></script>
 
 </body>

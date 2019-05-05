@@ -6,6 +6,10 @@ $(function () {
     })
 });
 
+$('#my-select').multiSelect()
+
+
+
 //
 // //return select user ID and list him cars
 // $('#selectCustomer').on('change', (function () {
