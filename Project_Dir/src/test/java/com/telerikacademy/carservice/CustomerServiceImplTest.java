@@ -66,7 +66,7 @@ public class CustomerServiceImplTest {
 
     @Test
     public void getAllCustomers_ShouldReturn_WhenValidArgsPassed() {
-        when(customerRepository.findAll()).thenReturn(Arrays.<Customer>asList(
+        when(customerRepository.findAllByIsDeletedFalse()).thenReturn(Arrays.<Customer>asList(
                 new Customer("email", "phone", "name", false),
                 new Customer("email1", "phone", "name1", false)));
 

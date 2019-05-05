@@ -1,9 +1,11 @@
 package com.telerikacademy.carservice.controllers;
 
-import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
-import com.telerikacademy.carservice.models.*;
+import com.telerikacademy.carservice.models.Make;
+import com.telerikacademy.carservice.models.Models;
 import com.telerikacademy.carservice.service.contracts.CarService;
 import com.telerikacademy.carservice.service.contracts.CustomerService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +15,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/cars")
+@Api(value = "Cars management system", description = "Contains methods for managing cars in the service.")
 public class CarController {
 
     private CarService carService;
@@ -24,25 +27,15 @@ public class CarController {
         this.customerService = customerService;
     }
 
+    @ApiOperation(value = "Returns the details of a car.")
     @GetMapping("/model/{id}")
     public String modelDetails(Model model, @PathVariable Long id) {
-       // try {
             Models carModel = carService.getModelById(id);
             model.addAttribute("modelOfCar", carModel);
             return "car";
-//        } catch (DatabaseItemNotFoundException ex) {
-//            model.addAttribute("error", ex);
-//            return "error";
-//        }
     }
 
-//    @GetMapping
-//    public String listCars(Model model) {
-//        model.addAttribute("carModels", carService.getAllModels());
-//        return "list-cars";
-//
-//    }
-
+    @ApiOperation(value = "Returns a list of all customer cars.")
     @GetMapping
     public String listCustomerCars(Model model){
         model.addAttribute("allCustomers", customerService.getAllCustomers());
@@ -50,6 +43,7 @@ public class CarController {
         return "cars";
     }
 
+    @ApiOperation(value = "Returns all models from a certain make.")
     @GetMapping("/models-from-make/{id}")
     public String listModelsFromMake(Model model, @PathVariable Long id) {
         model.addAttribute("modelsFromMake", carService.findModelsByMakeID(id));
@@ -57,6 +51,7 @@ public class CarController {
 
     }
 
+    @ApiOperation(value = "Returns the form where car make is added in the database.")
     @GetMapping("/add-make")
     public String addMakeForm(Model model) {
 
@@ -64,6 +59,7 @@ public class CarController {
         return "add-make";
     }
 
+    @ApiOperation(value = "Returns the form where car make is added in the database.")
     @PostMapping("/add-make")
     public String addMake(@Valid @ModelAttribute Make make, BindingResult bindingErrors) {
 
@@ -74,7 +70,7 @@ public class CarController {
         return "redirect:/cars";
     }
 
-
+    @ApiOperation(value = "Returns the form where car make is edited in the database.")
     @GetMapping("/edit-make/{id}")
     public String getEditMake(@PathVariable Long id, Model model) {
         Make make = carService.getMakeById(id);
@@ -83,7 +79,7 @@ public class CarController {
         return "edit-make";
     }
 
-
+    @ApiOperation(value = "Returns the form where car make is edited in the database.")
     @PostMapping("/edit-make/{id}")
     public String editMake(@ModelAttribute Make make, @PathVariable Long id) {
         carService.editMake(id, make);
@@ -92,7 +88,7 @@ public class CarController {
 
     }
 
-
+    @ApiOperation(value = "Returns the form where car model is added in the database.")
     @GetMapping("/add-car")
     public String addModelForm(Model model) {
 
@@ -101,6 +97,7 @@ public class CarController {
         return "add-car";
     }
 
+    @ApiOperation(value = "Returns the form where car model is added in the database.")
     @PostMapping("/add-car")
     public String addModel(@Valid @ModelAttribute Models model, BindingResult bindingErrors) {
 
@@ -111,6 +108,7 @@ public class CarController {
         return "redirect:/cars";
     }
 
+    @ApiOperation(value = "Returns the form where car model is edited in the database.")
     @GetMapping("/edit-carModel/{id}")
     public String getEditModel(@PathVariable Long id, Model model) {
         Models carModel = carService.getModelById(id);
@@ -121,6 +119,7 @@ public class CarController {
     }
 
 
+    @ApiOperation(value = "Returns the form where car model is edited in the database.")
     @PostMapping("/edit-carModel/{id}")
     public String editModel(@ModelAttribute Models carModel, @PathVariable Long id) {
         carService.editModel(id, carModel);
@@ -129,6 +128,7 @@ public class CarController {
 
     }
 
+    @ApiOperation(value = "Returns the form where car make is deleted in the database.")
     @GetMapping("/delete_make/{id}")
     public String deleteMakeByID(@PathVariable Long id) {
         carService.deleteAllModelsByMakeID(carService.findModelsByMakeID(id));
@@ -136,42 +136,31 @@ public class CarController {
         return "redirect:/cars";
     }
 
+    @ApiOperation(value = "Returns the form where car make is un-deleted in the database.")
     @GetMapping("/undelete_make/{id}")
     public String undeleteMakeByID(@PathVariable Long id) {
         carService.undeleteCarMakeByID(id);
         return "redirect:/cars";
     }
 
+    @ApiOperation(value = "Returns the form where car model is deleted in the database.")
     @GetMapping("/delete_model/{id}")
     public String deleteModelByID(@PathVariable Long id) {
         carService.deleteCarModelByID(id);
         return "redirect:/cars";
     }
 
+    @ApiOperation(value = "Returns the form where car model is un-deleted in the database.")
     @GetMapping("/undelete_model/{id}")
     public String undeleteModelByID(@PathVariable Long id) {
         carService.undeleteCarModelByID(id);
         return "redirect:/cars";
     }
 
+    @ApiOperation(value = "Returns the form where all car models from a specific make are deleted in the database.")
     @GetMapping("/undelete_modelsByMakeId/{id}")
     public String undeleteModelsByMakeID(@PathVariable Long id) {
         carService.undeleteAllModelsByMakeID(carService.findModelsByMakeID(id));
         return "redirect:/cars";
-    }
-
-
-    @GetMapping("/new-customer-car")
-    public String showNewCarPage(Model model) {
-        model.addAttribute("customerDto", new CustomerDto());
-        model.addAttribute("customerCar", new CustomerCars());
-
-        return "new-customer-car";
-    }
-
-    @PostMapping("/new-customer-car")
-    public String addCustomerCar(@ModelAttribute CustomerCars customerCar, String email){
-        customerService.createCustomerCar(customerCar, email);
-        return "redirect:/customers/car";
     }
 }
