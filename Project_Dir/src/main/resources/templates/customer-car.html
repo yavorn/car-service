@@ -10,47 +10,40 @@
 <body>
 <header th:replace="fragments/components :: navbar"></header>
 
-<p>
-<h2>Customer Car Details</h2>
-</p>
-
-<table>
-    <thead>
-<tr>
-    <th align="left" th:text="#{label.customerName}"></th>
-    <td  th:text="${customerCar.getCustomer().getName()}">name</td>
-</tr>
-
-<tr>
-    <th align="left" th:text="#{label.makeName}"></th>
-    <td  th:text="${customerCar.getModel().getMake().getMakeName()}">name</td>
-</tr>
-<tr>
-    <th align="left" th:text="#{label.modelName}"></th>
-    <td  th:text="${customerCar.getModel().getModelName()}">name</td>
-</tr>
-
-<tr>
-    <th align="left" th:text="#{label.year}"></th>
-    <td  th:text="${customerCar.getYearOfProduction()}">name</td>
-</tr>
-
-<tr>
-    <th align="left" th:text="#{label.licensePlate}"></th>
-    <td  th:text="${customerCar.getLicensePlate()}">name</td>
-</tr>
-
-<tr>
-    <th align="left" th:text="#{label.VINnumber}"></th>
-    <td  th:text="${customerCar.getVinNumber()}">name</td>
-</tr>
-
-    </thead>
+<div class="container">
+    <h2>Customer Car Details</h2>
+<table class="table table-striped table-dark">
+    <tbody>
+    <tr>
+        <th th:text="#{label.customerName}">Customer Name</th>
+        <td th:text="${customerCar.getCustomer().getName()}">Customer Name</td>
+    </tr>
+    <tr>
+        <th th:text="#{label.makeName}">Make</th>
+        <td th:text="${customerCar.getModel().getMake().getMakeName()}">Make</td>
+    </tr>
+    <tr>
+        <th th:text="#{label.modelName}">Model</th>
+        <td th:text="${customerCar.getModel().getModelName()}">Model</td>
+    </tr>
+    <tr>
+        <th th:text="#{label.year}">Year</th>
+        <td th:text="${customerCar.getYearOfProduction()}">Year</td>
+    </tr>
+    <tr>
+        <th th:text="#{label.licensePlate}">License Plate</th>
+        <td th:text="${customerCar.getLicensePlate()}">License Plate</td>
+    </tr>
+    <tr>
+        <th th:text="#{label.VINnumber}">VIN</th>
+        <td th:text="${customerCar.getVinNumber()}">VIN</td>
+    </tr>
+    </tbody>
 </table>
 
-<p>
-<h2>Car Events</h2>
-</p>
+
+<h1>Car Events</h1>
+<br>
 
 <tr th:each="event : ${listCustomerCarEvents}">
     <table>
@@ -72,27 +65,21 @@
                     <th align="left" th:text="#{label.price}"></th>
                     <td  th:text="${procedure.getProcedurePrice()}">Price</td>
                 </tr>
-
-
             </table>
-
         </tr>
-
         <tr>
             <th align="left" th:text="#{label.totalPrice}"></th>
             <td  th:text="${event.getTotalPrice()}">TotalPrice</td>
         </tr>
-
-
-
-
         </thead>
     </table>
+
     <br>
     <br>
     <br>
 </tr>
 
+</div>
 <footer th:replace="fragments/components :: footer"></footer>
 <div th:replace="fragments/components :: js"></div>
 </body>

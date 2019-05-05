@@ -21,11 +21,11 @@ $('#select-customer').on('change',function(){
 
 
 function addProcedure(customerCarId){
-    window.location.replace('/carevents/add-carevent/' + customerCarId);
+    window.location.href ='/carevents/add-carevent/' + customerCarId;
 }
 
 function viewProcedures(customerCarId) {
-    window.location.replace('/customers/car/' + customerCarId);
+    window.location.href = '/customers/car/' + customerCarId;
 }
 
 $(function () {
