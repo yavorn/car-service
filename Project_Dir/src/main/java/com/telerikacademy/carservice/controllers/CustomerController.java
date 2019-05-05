@@ -18,16 +18,19 @@ import java.util.List;
 @RequestMapping("/customers")
 @Api(value = "Customers management system", description = "Contains the methods for managing customer cars in the service.")
 public class CustomerController {
+    private CarService carService;
     private CustomerService customerService;
     private CarEventService carEventService;
     private CustomerCarsService customerCarsService;
 
     public CustomerController(CustomerService customerService,
                               CarEventService carEventService,
-                              CustomerCarsService customerCarsService) {
+                              CustomerCarsService customerCarsService,
+                              CarService carService) {
         this.customerService = customerService;
         this.carEventService = carEventService;
         this.customerCarsService = customerCarsService;
+        this.carService = carService;
     }
 
     @ApiOperation(value = "Returns the form where all customers and their cars are listed.")
@@ -35,7 +38,11 @@ public class CustomerController {
     public String listAllCustomersAndTheirCars(Model model) {
         model.addAttribute("allCustomers", customerService.getAllCustomers());
         model.addAttribute("allCustomersCars", customerService.getAllCustomerCars());
+        model.addAttribute("allMakes", carService.getAllMakes());
+        model.addAttribute("allModels", carService.getAllModels());
+        model.addAttribute("customerDto", new CustomerDto());
         model.addAttribute("customer", new Customer());
+        model.addAttribute("customerCar", new CustomerCars());
         return "customers";
     }
 

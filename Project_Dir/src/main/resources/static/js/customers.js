@@ -13,7 +13,10 @@ let table = $('#customers-table').DataTable({
 
 let carsTable = $('#cars-table').DataTable();
 
-function createCar(){
+function createCar(email){
+    $('#user-name').attr("value", email);
+    let modal = $('#create-customerCar-modal');
+    modal.modal();
 
 }
 

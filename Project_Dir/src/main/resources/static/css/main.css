@@ -165,8 +165,14 @@ body {
     margin-top: 250px;
 }
 
-#reset-password-text-box{
+#reset-password-text-box {
     margin-top: 250px;
+}
+
+.helpButton {
+    position: absolute; /* or position: absolute; */
+    top: 20px;
+    right: 20px;
 }
 
 footer {

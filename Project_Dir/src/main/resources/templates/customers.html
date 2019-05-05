@@ -32,16 +32,16 @@
                             <td th:text="${customer.getEmail()}"></td>
                             <td th:text="${customer.getPhone()}"></td>
                             <td>
-                                <button class="btn btn-outline-secondary" title="View Cars"
-                                        id="view-cars"
-                                        th:onclick="|createCar()|">
+                                <button class="btn btn-outline-secondary" title="Create car"
+                                        id="view-cars" th:value="${customer.getEmail()}"
+                                        th:onclick="|createCar(value)|">
                                     <i class="fas fa-car"></i> Create a car
                                 </button>
                             </td>
                             <td>
                                 <button class="btn btn-danger" title="Delete User"
                                         id="delete-user" th:value="${customer.getEmail()}"
-                                        th:onclick="deleteUser(value)">
+                                        th:onclick="|deleteUser(value)|">
                                     <i class="fas fa-trash-alt"></i> Delete User
                                 </button>
                             </td>
@@ -137,7 +137,8 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" align="center">Cars of customer: <span type="text" id="customer-name"></span></h4>
+                <h4 class="modal-title" align="center">Cars of customer: <span type="text" id="customer-name"></span>
+                </h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body" align="center">
@@ -185,53 +186,87 @@
             </div>
 
             <div class="modal-body">
-                <form id="create-customerCar-form" th:action="@{/customer}" th:object="${customer}" th:method="post">
+                <form id="create-customerCar-form" th:action="@{new-customer-car}" th:object="${customerCar}"
+                      th:method="post">
+                    <div th:object="${customerDto}">
+                        <input id="user-name" th:field="*{email}" type="text" hidden>
+                    </div>
 
                     <div class="form-group">
-                        <label class="control-label">Personal name</label>
+                        <label class="control-label">Choose car make:</label>
                         <div class="input-group mb-3">
                         </div>
-                        <input type="text" class="form-control" aria-label="Name"
-                               id="name-number-input"
-                               minlength="0"
-                               maxlength="15" required th:field="*{name}">
-                        <small id="nameHelpBlock" class="form-text text-muted">
-                            Name must be 3-45 characters long.
+                        <select class="browser-default custom-select" th:field="*{model.make}">
+                            <option th:each="carMake :${allMakes}"
+                                    th:value="${carMake.getMakeID()}"
+                                    th:text="${carMake.getMakeName()}">
+                            </option>
+                        </select>
+                        <small id="makeHelpBlock" class="form-text text-muted">
+                            Choose a car brand.
                         </small>
                     </div>
 
+                    <div class="form-group">
+                        <label class="control-label">Choose a model:</label>
+                        <div class="input-group mb-3">
+                        </div>
+                        <select class="browser-default custom-select" th:field="*{model}">
+                            <option th:each="carModel :${allModels}"
+                                    th:value="${carModel.getModelID()}"
+                                    th:text="${carModel.getModelName()}">
+                            </option>
+                        </select>
+                        <small id="modelHelpBlock" class="form-text text-muted">
+                            Choose a car model.
+                        </small>
+                    </div>
 
                     <div class="form-group">
-                        <label class="control-label">Username</label>
+                        <label class="control-label">Year of manufacture:</label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                                <span class="input-group-text">@</span>
+                                <span class="input-group-text">#</span>
                             </div>
-                            <input type="email" class="form-control" aria-label="Username"
-                                   id="username-input"
-                                   minlength="0"
-                                   maxlength="45" required th:field="*{email}">
+                            <input type="number" class="form-control" aria-label="Year"
+                                   minlength="4"
+                                   maxlength="4" required th:field="*{yearOfProduction}">
                         </div>
-                        <small id="usernameHelpBlock" class="form-text text-muted">
-                            Please use a valid email address as your username.
+                        <small id="yearHelpBlock" class="form-text text-muted">
+                            Enter year with exactly 4 digits.
                         </small>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label">Phone</label>
+                        <label class="control-label">License plate:</label>
                         <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"># </span>
-                            </div>
-                            <input type="number" class="form-control" aria-label="Phone Number"
-                                   id="phone-number-input"
-                                   minlength="0"
-                                   maxlength="15" required th:field="*{phone}">
+                            <input type="text" class="form-control" aria-label="License Plate"
+                                   minlength="5"
+                                   maxlength="6" th:field="*{licensePlate}" required>
                         </div>
-                        <small id="phoneHelpBlock" class="form-text text-muted">
-                            Phone number must contain only digits.
+                        <small id="licenseHelpBlock" class="form-text text-muted">
+                            Enter license plate with 5 or 6 letters and digits and no spaces.
                         </small>
                     </div>
+
+
+                    <!--<div class="form-group">-->
+                    <!--<label class="control-label">Username</label>-->
+                    <!--<div class="input-group mb-3">-->
+                    <!--<div class="input-group-prepend">-->
+                    <!--<span class="input-group-text">@</span>-->
+                    <!--</div>-->
+                    <!--<input type="email" class="form-control" aria-label="Username"-->
+                    <!--id="username-input"-->
+                    <!--minlength="0"-->
+                    <!--maxlength="45" required th:field="*{email}">-->
+                    <!--</div>-->
+                    <!--<small id="usernameHelpBlock" class="form-text text-muted">-->
+                    <!--Please use a valid email address as your username.-->
+                    <!--</small>-->
+                    <!--</div>-->
+
+
 
 
                     <div class="modal-footer">
@@ -246,10 +281,6 @@
         </div>
     </div>
 </div>
-
-
-
-
 
 
 <!-- Confirmation Modal -->
