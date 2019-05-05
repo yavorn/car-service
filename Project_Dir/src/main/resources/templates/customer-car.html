@@ -6,6 +6,21 @@
     <meta charset="UTF-8">
     <title>Customer Car Details</title>
     <div th:replace="fragments/components :: head"></div>
+
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+    </style>
 </head>
 <body>
 <header th:replace="fragments/components :: navbar"></header>
@@ -46,36 +61,35 @@
 <br>
 
 <tr th:each="event : ${listCustomerCarEvents}">
-    <table>
-        <thead>
-        <tr>
-            <th align="left" th:text="#{label.date}"></th>
-            <td  th:text="${event.getDate()}">Date</td>
-        </tr>
+    <div align="left">
+        <th align="right" th:text="#{label.date}" ></th>
+        <td width="20%" th:text="${event.getDate()}">Date</td>
+    </div>
+    <table width="100%">
 
+        <thead>
+        <tr style="font-weight:bold">
+            <th width="80%" align="left" th:text="#{label.procedure}"></th>
+            <th width="20%" align="left" th:text="#{label.price}"></th>
+        </tr>
         <tr th:each="procedure : ${event.getProcedures()}">
             <table>
-
                 <tr>
-                    <th align="left" th:text="#{label.procedure}"></th>
-                    <td  th:text="${procedure.getProcedureName()}">Procedure</td>
-                </tr>
-
-                <tr>
-                    <th align="left" th:text="#{label.price}"></th>
-                    <td  th:text="${procedure.getProcedurePrice()}">Price</td>
+                    <td width="80%" th:text="${procedure.getProcedureName()}">Procedure</td>
+                    <td width="20%" th:text="${procedure.getProcedurePrice() + ' lv.'}">Price</td>
                 </tr>
             </table>
         </tr>
-        <tr>
-            <th align="left" th:text="#{label.totalPrice}"></th>
-            <td  th:text="${event.getTotalPrice()}">TotalPrice</td>
-        </tr>
+        <div align="right" style="font-weight:bold">
+            <th align="right" th:text="#{label.totalPrice}"></th>
+            <td  width="20%" th:text="${event.getTotalPrice() + ' lv.'}">TotalPrice</td>
+        </div>
         </thead>
     </table>
 
     <br>
     <br>
+    <hr>
     <br>
 </tr>
 
