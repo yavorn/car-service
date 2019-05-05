@@ -21,8 +21,6 @@ public class CarServiceImpl implements CarService {
 
     private static final String MAKE_EXIST_EXCEPTION_MSG = "Car Make with name/ID: %s already exist!";
     private static final String MODEL_EXIST_EXCEPTION_MSG = "Car Model with name/ID: %s already exist!";
-    private static final String MODEL_DELETED_EXCEPTION_MSG = "Car Model with name/ID: %s already deleted!";
-    private static final String MODEL_NOT_DELETED_EXCEPTION_MSG = "Car Model with name/ID: %s is not deleted!";
     private static final String MAKE_NOT_FOUND_EXCEPTION_MSG = "Car Make with name/ID: %s not found!";
     private static final String MODEL_NOT_FOUND_EXCEPTION_MSG = "Car Model with name/ID: %s not found!";
     private static final String MODEL_NOT_FOUND_BY_MAKE_ID_EXCEPTION_MSG = "Car Model by Make name/ID: %s not found!";
@@ -67,12 +65,9 @@ public class CarServiceImpl implements CarService {
     @Override
     public Models addModel(Models model) {
 
-        Models existingModel = modelsRepository.findModelsByModelName(model.getModelName());
+        Models existingModel = modelsRepository.findModelsByModelNameAndModelDeletedFalse(model.getModelName());
 
-        if (existingModel != null && existingModel.isModelDeleted()) {
-            throw new DatabaseItemAlreadyDeletedException(String.format(MODEL_DELETED_EXCEPTION_MSG, model.getModelName()));
-        }
-        else if(existingModel != null && !existingModel.isModelDeleted()){
+        if(existingModel != null ){
             throw new DatabaseItemAlreadyExistsException(String.format(MODEL_EXIST_EXCEPTION_MSG, model.getModelName()));
         }
         return modelsRepository.save(model);
@@ -81,7 +76,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public void editModel(Long id, Models newModel) {
-        Models modelToUpdate = modelsRepository.findModelsByModelID(id);
+        Models modelToUpdate = modelsRepository.findModelsByModelIDAndModelDeletedFalse(id);
 
         if(modelToUpdate == null){
             throw new DatabaseItemNotFoundException(String.format(MODEL_NOT_FOUND_EXCEPTION_MSG, newModel.getModelName()));
@@ -107,11 +102,11 @@ public class CarServiceImpl implements CarService {
     @Override
     public Models getModelById(Long id) {
 
-        Models model = modelsRepository.findModelsByModelID(id);
+        Models model = modelsRepository.findModelsByModelIDAndModelDeletedFalse(id);
         if (model == null) {
             throw new DatabaseItemNotFoundException(String.format(MODEL_NOT_FOUND_EXCEPTION_MSG, id));
         }
-        return modelsRepository.findModelsByModelID(id);
+        return modelsRepository.findModelsByModelIDAndModelDeletedFalse(id);
 
     }
 
@@ -171,31 +166,23 @@ public class CarServiceImpl implements CarService {
     }
     @Override
     public void deleteCarModelByID(Long id) {
-        Models model =  modelsRepository.findModelsByModelID(id);
+        Models model =  modelsRepository.findModelsByModelIDAndModelDeletedFalse(id);
         if (model == null) {
             throw new DatabaseItemNotFoundException(String.format(MODEL_NOT_FOUND_EXCEPTION_MSG, id.toString()));
         }
-        if (!model.isModelDeleted()) {
-            model.setModelDeleted();
-        }
-        else {
-            throw new DatabaseItemAlreadyDeletedException(String.format(MODEL_DELETED_EXCEPTION_MSG, id.toString()));
-        }
+        model.setModelDeleted();
+
         modelsRepository.save(model);
     }
 
     @Override
     public void undeleteCarModelByID(Long id) {
-        Models model =  modelsRepository.findModelsByModelID(id);
+        Models model =  modelsRepository.findModelsByModelIDAndModelDeletedTrue(id);
         if (model == null) {
             throw new DatabaseItemNotFoundException(String.format(MODEL_NOT_FOUND_EXCEPTION_MSG, id.toString()));
         }
-        if (model.isModelDeleted()) {
-            model.setModelUndeleted();
-        }
-        else {
-            throw new DatabaseItemAlreadyDeletedException(String.format(MODEL_NOT_DELETED_EXCEPTION_MSG, id.toString()));
-        }
+        model.setModelUndeleted();
+
         modelsRepository.save(model);
     }
 
@@ -235,11 +222,11 @@ public class CarServiceImpl implements CarService {
     @Override
     public List<Models> findModelsByMakeID(Long id) {
 
-        List<Models> existingModels = modelsRepository.findModelsByMake_MakeID(id);
+        List<Models> existingModels = modelsRepository.findModelsByMake_MakeIDAndModelDeletedFalseOrderByModelNameAsc(id);
 
         if (existingModels.size() == 0) {
             throw new DatabaseItemNotFoundException(String.format(MODEL_NOT_FOUND_BY_MAKE_ID_EXCEPTION_MSG, id.toString()));
         }
-        return modelsRepository.findModelsByMake_MakeID(id);
+        return modelsRepository.findModelsByMake_MakeIDAndModelDeletedFalseOrderByModelNameAsc(id);
     }
 }

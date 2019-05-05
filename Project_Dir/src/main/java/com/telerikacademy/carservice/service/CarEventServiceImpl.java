@@ -30,7 +30,7 @@ public class CarEventServiceImpl implements CarEventService {
     }
 
     public List<CarEvent> getAllCarEvents() {
-        List<CarEvent> result = carEventRepository.findAll();
+        List<CarEvent> result = carEventRepository.findAllByCarEventDeletedFalse();
         if (result.size() == 0) {
             throw new DatabaseItemNotFoundException(CAR_EVENT_EXCEPTION);
         }

@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface ProcedureRepository extends JpaRepository<Procedure, Long> {
 
-    Procedure findProcedureByProcedureID(Long id);
+    Procedure findProcedureByProcedureIDAndProcedureDeletedFalse(Long id);
 
-    Procedure findProcedureByProcedureName(String name);
+    Procedure findProcedureByProcedureNameAndProcedureDeletedFalse(String name);
 
-    List<Procedure> findAllByProcedureDeletedIsFalse();
+    List<Procedure> findAllByProcedureDeletedIsFalseOrderByProcedureNameAsc();
 
     List<Procedure> findAll();
 }

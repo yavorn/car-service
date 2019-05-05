@@ -10,10 +10,11 @@ import java.util.List;
 @Repository
 public interface ModelsRepository extends JpaRepository<Models, Long> {
 
-    Models findModelsByModelID(Long id);
+    Models findModelsByModelIDAndModelDeletedFalse(Long id);
+    Models findModelsByModelIDAndModelDeletedTrue(Long id);
 
-    List<Models> findModelsByMake_MakeID(Long id);
+    List<Models> findModelsByMake_MakeIDAndModelDeletedFalseOrderByModelNameAsc(Long id);
     List<Models> getAllByModelDeletedFalse();
-    Models findModelsByModelName(String name);
+    Models findModelsByModelNameAndModelDeletedFalse(String name);
 
 }

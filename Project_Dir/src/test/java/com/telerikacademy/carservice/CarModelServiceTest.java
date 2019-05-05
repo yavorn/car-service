@@ -151,7 +151,7 @@ public class CarModelServiceTest {
     @Test
     public void getModelById_shouldReturnModelWithIdOne_whenArgumentIsSetToOne() {
         //Arrange
-        Mockito.when(mockModelsRepository.findModelsByModelID((long) 1)).thenReturn(carModelA6);
+        Mockito.when(mockModelsRepository.findModelsByModelIDAndModelDeletedFalse((long) 1)).thenReturn(carModelA6);
 
         // Act
         Models carModel = carService.getModelById((long) 1);
@@ -159,7 +159,7 @@ public class CarModelServiceTest {
         // Assert
         assertEquals(carModels.get(0), carModelA6);
         assertEquals("A6", carModel.getModelName());
-        verify(mockModelsRepository, times(2)).findModelsByModelID((long) 1);
+        verify(mockModelsRepository, times(2)).findModelsByModelIDAndModelDeletedFalse((long) 1);
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
@@ -174,7 +174,7 @@ public class CarModelServiceTest {
     public void findModelsByMakeId_shouldReturnModelWithMakeIdOne_whenArgumentIsSetToOne() {
 
         // Arrange
-        when(mockModelsRepository.findModelsByMake_MakeID((long) 1))
+        when(mockModelsRepository.findModelsByMake_MakeIDAndModelDeletedFalseOrderByModelNameAsc((long) 1))
                 .thenReturn(carModels);
 
         // Act
@@ -184,7 +184,7 @@ public class CarModelServiceTest {
         assertEquals(2, result.size());
         assertEquals("A6", result.get(0).getModelName());
         assertEquals("RS6", result.get(1).getModelName());
-        verify(mockModelsRepository, times(2)).findModelsByMake_MakeID((long) 1);
+        verify(mockModelsRepository, times(2)).findModelsByMake_MakeIDAndModelDeletedFalseOrderByModelNameAsc((long) 1);
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
@@ -229,7 +229,7 @@ public class CarModelServiceTest {
     @Test(expected = DatabaseItemAlreadyExistsException.class)
     public void addModel_shouldThrowDatabaseItemAlreadyExistsException_whenCarModelExists() throws DatabaseItemAlreadyExistsException {
         //Arrange
-        when(mockModelsRepository.findModelsByModelName(carModelA6.getModelName()))
+        when(mockModelsRepository.findModelsByModelNameAndModelDeletedFalse(carModelA6.getModelName()))
                 .thenReturn(carModelA6);
 
         // Act
@@ -262,7 +262,7 @@ public class CarModelServiceTest {
     @Test
     public void editModel_shouldInvokeSaveInModelRepository_whenEditSuccessfully() {
 
-        when(mockModelsRepository.findModelsByModelID((long)1))
+        when(mockModelsRepository.findModelsByModelIDAndModelDeletedFalse((long)1))
                 .thenReturn(carModelA6);
         // Act
         carService.editModel((long)1, carModelA6);
@@ -273,7 +273,7 @@ public class CarModelServiceTest {
     @Test(expected = DatabaseItemNotFoundException.class)
     public void editModel_shouldDatabaseItemNotFoundException_whenCarModelDoNotExists() throws DatabaseItemNotFoundException {
 
-        when(mockModelsRepository.findModelsByModelID((long)1))
+        when(mockModelsRepository.findModelsByModelIDAndModelDeletedFalse((long)1))
                 .thenReturn(null);
         // Act
         carService.editModel((long)1, carModelA6);
@@ -306,7 +306,7 @@ public class CarModelServiceTest {
     @Test
     public void deleteCarModelByID_shouldInvokeSaveInModelRepository_whenDeleteSuccessfully() {
 
-        when(mockModelsRepository.findModelsByModelID((long)1))
+        when(mockModelsRepository.findModelsByModelIDAndModelDeletedFalse((long)1))
                 .thenReturn(carModelA6);
         // Act
         carService.deleteCarModelByID((long)1);
@@ -318,7 +318,7 @@ public class CarModelServiceTest {
     @Test(expected = DatabaseItemNotFoundException.class)
     public void deleteCarModelByID_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws DatabaseItemNotFoundException {
 
-        when(mockModelsRepository.findModelsByModelID((long)1))
+        when(mockModelsRepository.findModelsByModelIDAndModelDeletedFalse((long)1))
                 .thenReturn(null);
         // Act
         carService.deleteCarModelByID((long)1);
@@ -354,7 +354,7 @@ public class CarModelServiceTest {
     @Test
     public void undeleteCarModelByID_shouldInvokeSaveInModelRepository_whenUndeleteSuccessfully() {
 
-        when(mockModelsRepository.findModelsByModelID((long)4))
+        when(mockModelsRepository.findModelsByModelIDAndModelDeletedTrue((long)4))
                 .thenReturn(carModelAstra);
         // Act
         carService.undeleteCarModelByID((long)4);
@@ -367,10 +367,10 @@ public class CarModelServiceTest {
     @Test(expected = DatabaseItemNotFoundException.class)
     public void undeleteCarModelByID_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws DatabaseItemNotFoundException {
 
-        when(mockMakeRepository.findMakeByMakeIDAndMakeDeletedFalse((long)3))
+        when(mockModelsRepository.findModelsByModelIDAndModelDeletedTrue((long)3))
                 .thenReturn(null);
         // Act
-        carService.undeleteCarMakeByID((long)3);
+        carService.undeleteCarModelByID((long)3);
 
 
     }
