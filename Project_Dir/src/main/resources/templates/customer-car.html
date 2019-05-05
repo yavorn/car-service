@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <title>Customer Car Details</title>
     <div th:replace="fragments/components :: head"></div>
-
     <style>
         table {
             font-family: arial, sans-serif;
@@ -19,7 +18,6 @@
             text-align: left;
             padding: 8px;
         }
-
     </style>
 </head>
 <body>
@@ -66,7 +64,6 @@
             <td width="20%" th:text="${event.getDate()}">Date</td>
         </div>
         <table width="100%">
-
             <thead>
             <tr style="font-weight:bold">
                 <th width="80%" align="left" th:text="#{label.procedure}"></th>
@@ -83,6 +80,9 @@
             <div align="right" style="font-weight:bold">
                 <th align="right" th:text="#{label.totalPrice}"></th>
                 <td  width="20%" th:text="${event.getTotalPrice() + ' lv.'}">TotalPrice</td>
+                <a th:href="@{'/createPdf/' + ${event.getCarEventID()}}">
+                    <img src="/images/pdf-icon-png-2079-65x65.png" width="40px" alt="Download PDF">
+                </a>
             </div>
             </thead>
         </table>
