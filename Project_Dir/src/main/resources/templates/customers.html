@@ -34,8 +34,8 @@
                             <td>
                                 <button class="btn btn-outline-secondary" title="View Cars"
                                         id="view-cars"
-                                        th:onclick="|viewCars()|">
-                                    <i class="fas fa-car"></i> View all cars
+                                        th:onclick="|createCar()|">
+                                    <i class="fas fa-car"></i> Create a car
                                 </button>
                             </td>
                             <td>
@@ -162,21 +162,95 @@
                             <td th:text="${car.getYearOfProduction()}"></td>
                             <td th:text="${car.getLicensePlate()}"></td>
                             <td th:text="${car.vinNumber}"></td>
-
                         </tr>
                         </tbody>
                     </table>
                 </div>
-
-
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Add CustomerCar Modal-->
+<div id="create-customerCar-modal" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h1 class="modal-title" id="create-customerCar-modal-title">Create new car for this customer</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="create-customerCar-form" th:action="@{/customer}" th:object="${customer}" th:method="post">
+
+                    <div class="form-group">
+                        <label class="control-label">Personal name</label>
+                        <div class="input-group mb-3">
+                        </div>
+                        <input type="text" class="form-control" aria-label="Name"
+                               id="name-number-input"
+                               minlength="0"
+                               maxlength="15" required th:field="*{name}">
+                        <small id="nameHelpBlock" class="form-text text-muted">
+                            Name must be 3-45 characters long.
+                        </small>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label">Username</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">@</span>
+                            </div>
+                            <input type="email" class="form-control" aria-label="Username"
+                                   id="username-input"
+                                   minlength="0"
+                                   maxlength="45" required th:field="*{email}">
+                        </div>
+                        <small id="usernameHelpBlock" class="form-text text-muted">
+                            Please use a valid email address as your username.
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Phone</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"># </span>
+                            </div>
+                            <input type="number" class="form-control" aria-label="Phone Number"
+                                   id="phone-number-input"
+                                   minlength="0"
+                                   maxlength="15" required th:field="*{phone}">
+                        </div>
+                        <small id="phoneHelpBlock" class="form-text text-muted">
+                            Phone number must contain only digits.
+                        </small>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
 
             </div>
         </div>
     </div>
 </div>
+
+
+
+
+
 
 <!-- Confirmation Modal -->
 <div class="modal fade" id="confirmation-modal" role="dialog">

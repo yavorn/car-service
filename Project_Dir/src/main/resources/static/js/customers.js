@@ -13,6 +13,10 @@ let table = $('#customers-table').DataTable({
 
 let carsTable = $('#cars-table').DataTable();
 
+function createCar(){
+
+}
+
 function viewCars() {
 
     let modal = $('#view-cars-modal');

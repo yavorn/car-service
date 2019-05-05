@@ -6,11 +6,8 @@ import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import com.telerikacademy.carservice.models.Procedure;
 import com.telerikacademy.carservice.repository.ProcedureRepository;
 import com.telerikacademy.carservice.service.contracts.ProcedureService;
-import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 

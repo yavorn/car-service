@@ -2,16 +2,14 @@ package com.telerikacademy.carservice.controllers;
 
 import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerCars;
+import com.telerikacademy.carservice.models.CustomerDto;
 import com.telerikacademy.carservice.models.Models;
 import com.telerikacademy.carservice.service.contracts.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -65,4 +63,21 @@ public class CustomerController {
 
         return "customer-car";
     }
+
+    @GetMapping("/new-customer-car")
+    public String showNewCarPage(Model model) {
+
+        model.addAttribute("customerDto", new CustomerDto());
+        model.addAttribute("customerCar", new CustomerCars());
+
+        return "new-customer-car";
+    }
+
+    @PostMapping("/new-customer-car")
+    public String addCustomerCar(@ModelAttribute CustomerCars customerCar, String email){
+        customerService.createCustomerCar(customerCar, email);
+        return "redirect:/customers/car";
+    }
+
+
 }

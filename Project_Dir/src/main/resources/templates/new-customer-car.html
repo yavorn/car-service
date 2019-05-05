@@ -1,42 +1,42 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<title>Add Customer Car</title>
+    <meta charset="UTF-8">
+    <title>Add Customer Car</title>
 </head>
 <body>
 <form th:action="@{new-customer-car}" th:object="${customerCar}" method="post">
-	<p th:object="${customerDto}">
-		Username: <label>
-		<input type="text" th:field="*{email}">
-	</label>
-	</p>
-	<p>
-		Make: <label>
-		<input type="text" th:field="*{model.make}">
-	</label>
-	</p>
-	<p>
-		Model: <label>
-		<input type="text" th:field="*{model}">
-	</label>
-	</p>
-	<p>
-		Year: <label>
-		<input type="text" th:field="*{yearOfProduction}">
-	</label>
-	</p>
-	<p>
-		Plate number: <label>
-		<input type="text" th:field="*{licensePlate}">
-	</label>
-	</p>
-	<p>
-		VIN Number: <label>
-		<input type="text" th:field="*{vinNumber}">
-	</label>
-	</p>
-	<input type="submit" value="Send">
+    <p th:object="${customerDto}">
+        Username: <label>
+        <input type="text" th:field="*{email}">
+    </label>
+    </p>
+    <p>
+        Make: <label>
+        <input type="text" th:field="*{model.make}">
+    </label>
+    </p>
+    <p>
+        Model: <label>
+        <input type="text" th:field="*{model}">
+    </label>
+    </p>
+    <p>
+        Year: <label>
+        <input type="text" th:field="*{yearOfProduction}">
+    </label>
+    </p>
+    <p>
+        Plate number: <label>
+        <input type="text" th:field="*{licensePlate}">
+    </label>
+    </p>
+    <p>
+        VIN Number: <label>
+        <input type="text" th:field="*{vinNumber}">
+    </label>
+    </p>
+    <input type="submit" value="Send">
 </form>
 </body>
 </html>
