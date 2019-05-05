@@ -55,7 +55,7 @@ public class RegistrationController {
 
     @PostMapping("/admin")
     public String registerAdministrator(@ModelAttribute CustomerDto customerDto) {
-        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
+        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_ADMIN");
         customerService.addAdmin(customerDto, authorities);
         return "new-customer-confirmation";
     }
