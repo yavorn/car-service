@@ -45,7 +45,7 @@ public class ProcedureServiceImplTest {
 
     @Test
     public void getAllProcedures_shouldReturn_WhenValidArgsPassed() {
-        when(mockProcedureRepository.findAllByProcedureDeletedIsFalse())
+        when(mockProcedureRepository.findAllByProcedureDeletedIsFalseOrderByProcedureNameAsc())
                 .thenReturn(Arrays.asList(testProcedure, testProcedureTwo));
 
         List<Procedure> result = procedureServiceImpl.getAllProcedures();
@@ -54,7 +54,7 @@ public class ProcedureServiceImplTest {
 
     @Test
     public void getAllProcedures_shouldReturn_WhenInvalidArgsPassed() {
-        when(mockProcedureRepository.findAllByProcedureDeletedIsFalse())
+        when(mockProcedureRepository.findAllByProcedureDeletedIsFalseOrderByProcedureNameAsc())
                 .thenReturn(Arrays.asList(testProcedure, testProcedureTwo));
         List<Procedure> result = procedureServiceImpl.getAllProcedures();
         Assert.assertNotEquals(3, result.size());
@@ -62,7 +62,7 @@ public class ProcedureServiceImplTest {
 
     @Test(expected = NullPointerException.class)
     public void getAllProcedures_ShouldThrow_WhenNullPassed() {
-        when(mockProcedureRepository.findAllByProcedureDeletedIsFalse())
+        when(mockProcedureRepository.findAllByProcedureDeletedIsFalseOrderByProcedureNameAsc())
                 .thenReturn(null);
         List<Procedure> result = procedureServiceImpl.getAllProcedures();
         Assert.assertEquals(1, result.size());
@@ -71,7 +71,7 @@ public class ProcedureServiceImplTest {
 
     @Test
     public void getProcedureByID_shouldReturn_WhenValidArgsPassed() {
-        when(mockProcedureRepository.findProcedureByProcedureID(anyLong()))
+        when(mockProcedureRepository.findProcedureByProcedureIDAndProcedureDeletedFalse(anyLong()))
                 .thenReturn(testProcedure);
 
         Procedure result = procedureServiceImpl.getProcedureByID(1L);
@@ -80,7 +80,7 @@ public class ProcedureServiceImplTest {
 
     @Test(expected = DatabaseItemNotFoundException.class)
     public void getProcedureByID_shouldReturn_WhenInvalidArgsPassed() {
-        when(mockProcedureRepository.findProcedureByProcedureID(anyLong()))
+        when(mockProcedureRepository.findProcedureByProcedureIDAndProcedureDeletedFalse(anyLong()))
                 .thenReturn(null);
 
         Procedure result = procedureServiceImpl.getProcedureByID(3L);
@@ -99,14 +99,14 @@ public class ProcedureServiceImplTest {
 
     @Test(expected = DatabaseItemAlreadyExistsException.class)
     public void addProcedure_shouldReturn_WhenDuplicateNamePassed() {
-        when(mockProcedureRepository.findProcedureByProcedureName(testProcedure.getProcedureName()))
+        when(mockProcedureRepository.findProcedureByProcedureNameAndProcedureDeletedFalse(testProcedure.getProcedureName()))
                 .thenReturn(testProcedure);
         procedureServiceImpl.addProcedure(testProcedure);
     }
 
     @Test
     public void deleteProcedure_shouldReturn_WhenValidArgsPassed()  {
-        when(mockProcedureRepository.findProcedureByProcedureID(anyLong()))
+        when(mockProcedureRepository.findProcedureByProcedureIDAndProcedureDeletedFalse(anyLong()))
                 .thenReturn(testProcedure);
 
         procedureServiceImpl.deleteProcedure(1L);
@@ -114,7 +114,7 @@ public class ProcedureServiceImplTest {
 
     @Test (expected = DatabaseItemNotFoundException.class)
     public void deleteProcedure_shouldReturn_WhenInvalidArgsPassed()  {
-        when(mockProcedureRepository.findProcedureByProcedureID(anyLong()))
+        when(mockProcedureRepository.findProcedureByProcedureIDAndProcedureDeletedFalse(anyLong()))
                 .thenReturn(null);
 
         procedureServiceImpl.deleteProcedure(1L);
@@ -122,7 +122,7 @@ public class ProcedureServiceImplTest {
 
     @Test (expected = DatabaseItemAlreadyDeletedException.class)
     public void deleteProcedure_shouldReturn_WhenItemAlreadyDeleted()  {
-        when(mockProcedureRepository.findProcedureByProcedureID(anyLong()))
+        when(mockProcedureRepository.findProcedureByProcedureIDAndProcedureDeletedFalse(anyLong()))
                 .thenReturn(testProcedureThree);
 
         procedureServiceImpl.deleteProcedure(1L);
@@ -130,7 +130,7 @@ public class ProcedureServiceImplTest {
 
     @Test
     public void editProcedure_shouldReturn_WhenValidArgsPassed() {
-        when(mockProcedureRepository.findProcedureByProcedureID(anyLong())).thenReturn(testProcedure);
+        when(mockProcedureRepository.findProcedureByProcedureIDAndProcedureDeletedFalse(anyLong())).thenReturn(testProcedure);
 
         procedureServiceImpl.editProcedure(new Procedure("procedureNameFour", 0d), 1L);
     }
@@ -138,7 +138,7 @@ public class ProcedureServiceImplTest {
 
     @Test (expected = DatabaseItemNotFoundException.class)
     public void editProcedure_shouldThrow_WhenInvalidArgsPassed(){
-        when(mockProcedureRepository.findProcedureByProcedureID(anyLong())).thenReturn(null);
+        when(mockProcedureRepository.findProcedureByProcedureIDAndProcedureDeletedFalse(anyLong())).thenReturn(null);
 
         procedureServiceImpl.editProcedure(testProcedure, testProcedure.getProcedureID());
     }

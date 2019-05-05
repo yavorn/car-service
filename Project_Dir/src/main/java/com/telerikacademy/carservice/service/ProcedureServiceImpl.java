@@ -31,13 +31,13 @@ public class ProcedureServiceImpl implements ProcedureService {
     }
 
     public List<Procedure> getAllProcedures() {
-        return procedureRepository.findAllByProcedureDeletedIsFalse();
+        return procedureRepository.findAllByProcedureDeletedIsFalseOrderByProcedureNameAsc();
     }
 
 
     public Procedure getProcedureByID(Long procedureID) {
 
-        Procedure procedureToFind = procedureRepository.findProcedureByProcedureID(procedureID);
+        Procedure procedureToFind = procedureRepository.findProcedureByProcedureIDAndProcedureDeletedFalse(procedureID);
 
         if (procedureToFind == null) {
             throw new DatabaseItemNotFoundException(String.format(PROCEDURE_WITH_ID_NOT_FOUND, procedureID));
@@ -48,7 +48,7 @@ public class ProcedureServiceImpl implements ProcedureService {
 
 
     public Procedure addProcedure(Procedure procedure) {
-        Procedure existingProcedure = procedureRepository.findProcedureByProcedureName(procedure.getProcedureName());
+        Procedure existingProcedure = procedureRepository.findProcedureByProcedureNameAndProcedureDeletedFalse(procedure.getProcedureName());
 
         if (existingProcedure != null && existingProcedure.isProcedureDeleted()) {
             throw new DatabaseItemAlreadyDeletedException(String.format(PROCEDURE_DELETED_EXCEPTION_MSG, procedure.getProcedureName()));
@@ -60,7 +60,7 @@ public class ProcedureServiceImpl implements ProcedureService {
 
 
     public void deleteProcedure(Long procedureID) {
-        Procedure procedureToDelete = procedureRepository.findProcedureByProcedureID(procedureID);
+        Procedure procedureToDelete = procedureRepository.findProcedureByProcedureIDAndProcedureDeletedFalse(procedureID);
 
         if (procedureToDelete == null) {
             throw new DatabaseItemNotFoundException(String.format(PROCEDURE_NOT_FOUND_MSG, procedureID));
@@ -77,7 +77,7 @@ public class ProcedureServiceImpl implements ProcedureService {
     }
 
     public void editProcedure(Procedure procedure, Long procedureID) {
-        Procedure procedureToUpdate = procedureRepository.findProcedureByProcedureID(procedureID);
+        Procedure procedureToUpdate = procedureRepository.findProcedureByProcedureIDAndProcedureDeletedFalse(procedureID);
 
         if (procedureToUpdate == null) {
             throw new DatabaseItemNotFoundException(String.format(PROCEDURE_WITH_ID_NOT_FOUND, procedureID));
