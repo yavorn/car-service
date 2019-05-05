@@ -57,7 +57,7 @@ public class CarEventServiceImplTest {
 
     @Test
     public void getCarEventByID_ShouldReturn_WhenValidArgsPassed() {
-        when(carEventRepository.findCarEventByCarEventID(anyLong())).thenReturn(testCarEvent);
+        when(carEventRepository.findCarEventByCarEventIDAndCarEventDeletedFalse(anyLong())).thenReturn(testCarEvent);
 
         CarEvent result = carEventServiceImpl.getCarEventByID(1L);
         assertEquals(testCarEvent, result);
@@ -65,7 +65,7 @@ public class CarEventServiceImplTest {
 
     @Test(expected = DatabaseItemNotFoundException.class)
     public void getCarEventByID_ShouldThrow_WhenInvalidArgsPassed() {
-        when(carEventRepository.findCarEventByCarEventID(anyLong())).thenReturn(null);
+        when(carEventRepository.findCarEventByCarEventIDAndCarEventDeletedFalse(anyLong())).thenReturn(null);
 
         CarEvent result = carEventServiceImpl.getCarEventByID(0L);
         assertEquals(testCarEvent, result);
@@ -74,7 +74,7 @@ public class CarEventServiceImplTest {
     @Test
     public void getCarEventsByCustomerCarID_ShouldReturn_WhenValidArgsPassed() {
         testCarEventList.add(testCarEvent);
-        when(carEventRepository.findAllByCustomerCar_CustomerCarID(anyLong())).thenReturn(testCarEventList);
+        when(carEventRepository.findAllByCustomerCar_CustomerCarIDAndCarEventDeletedFalse(anyLong())).thenReturn(testCarEventList);
 
         List<CarEvent> result = carEventServiceImpl.getCarEventsByCustomerCarID(0L);
         assertEquals(testCarEvent, result.get(0));
@@ -82,7 +82,7 @@ public class CarEventServiceImplTest {
 
     @Test(expected = DatabaseItemNotFoundException.class)
     public void getCarEventsByCustomerCarID_ShouldThrow_WhenInvalidArgsPassed() {
-        when(carEventRepository.findAllByCustomerCar_CustomerCarID(anyLong())).thenReturn(testCarEventList);
+        when(carEventRepository.findAllByCustomerCar_CustomerCarIDAndCarEventDeletedFalse(anyLong())).thenReturn(testCarEventList);
 
         List<CarEvent> result = carEventServiceImpl.getCarEventsByCustomerCarID(0L);
         assertEquals(testCarEvent, result.get(0));
@@ -90,7 +90,7 @@ public class CarEventServiceImplTest {
 
     @Test(expected = NullPointerException.class)
     public void deleteCarEvent_ShouldThrow_WhenValidArgsPassed() {
-        when(carEventRepository.findCarEventByCarEventID(anyLong())).thenReturn(testCarEvent);
+        when(carEventRepository.findCarEventByCarEventIDAndCarEventDeletedFalse(anyLong())).thenReturn(testCarEvent);
         carEventServiceImpl.deleteCarEvent(testCarEvent.getCarEventID());
         assertNull(carEventServiceImpl.getAllCarEvents());
     }

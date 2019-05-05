@@ -24,7 +24,7 @@ public class CustomerCarsServiceImpl implements CustomerCarsService {
 
     @Override
     public List<CustomerCars> getAllCustomerCars() {
-        List<CustomerCars> result = customerCarsRepository.findAll();
+        List<CustomerCars> result = customerCarsRepository.findAllByCustomerCarDeletedFalse();
         if (result.size() == 0) {
             throw new DatabaseItemNotFoundException("No customer cars found.");
         }
@@ -33,7 +33,7 @@ public class CustomerCarsServiceImpl implements CustomerCarsService {
 
     @Override
     public List<CustomerCars> getAllCustomerCarsByCustomerId(Long id) {
-        List<CustomerCars> result = customerCarsRepository.findCustomerCarsByCustomer_CustomerId(id);
+        List<CustomerCars> result = customerCarsRepository.findCustomerCarsByCustomer_CustomerIdAndCustomerCarDeletedFalse(id);
         if (result.size() == 0) {
             throw new DatabaseItemNotFoundException(String.format("No customer cars found for customer with id %d", id));
         }

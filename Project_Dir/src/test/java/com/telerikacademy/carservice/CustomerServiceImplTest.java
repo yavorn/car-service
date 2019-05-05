@@ -66,7 +66,7 @@ public class CustomerServiceImplTest {
 
     @Test
     public void getAllCustomers_ShouldReturn_WhenValidArgsPassed() {
-        when(customerRepository.findAllByIsDeletedFalse()).thenReturn(Arrays.<Customer>asList(
+        when(customerRepository.findAllByIsDeletedFalseOrderByNameAsc()).thenReturn(Arrays.<Customer>asList(
                 new Customer("email", "phone", "name", false),
                 new Customer("email1", "phone", "name1", false)));
 
@@ -202,7 +202,7 @@ public class CustomerServiceImplTest {
 
     @Test
     public void getCustomerCarById_ShouldReturn_WhenValidArgsPassed() {
-        when(customerCarsRepository.findCustomerCarsByCustomerCarID(anyLong())).thenReturn(new CustomerCars(customer, new Models(new Make("makeName"), "modelName"), Integer.valueOf(0), "licensePlate", "VINnumber"));
+        when(customerCarsRepository.findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(anyLong())).thenReturn(new CustomerCars(customer, new Models(new Make("makeName"), "modelName"), Integer.valueOf(0), "licensePlate", "VINnumber"));
 
         CustomerCars car = customerServiceImpl.getCustomerCarById(0L);
         List<CustomerCars> result = new ArrayList<>();
@@ -212,7 +212,7 @@ public class CustomerServiceImplTest {
 
     @Test(expected = DatabaseItemNotFoundException.class)
     public void getCustomerCarById_ShouldThrow_WhenInvalidArgsPassed() {
-        when(customerCarsRepository.findCustomerCarsByCustomerCarID(anyLong())).thenReturn(null);
+        when(customerCarsRepository.findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(anyLong())).thenReturn(null);
         CustomerCars car = customerServiceImpl.getCustomerCarById(0L);
     }
 
