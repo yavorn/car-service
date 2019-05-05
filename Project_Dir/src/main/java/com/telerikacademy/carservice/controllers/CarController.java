@@ -15,7 +15,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/cars")
-@Api(value = "Cars management system", description = "Shows methods for managing cars in the service.")
+@Api(value = "Cars management system", description = "Contains methods for managing cars in the service.")
 public class CarController {
 
     private CarService carService;

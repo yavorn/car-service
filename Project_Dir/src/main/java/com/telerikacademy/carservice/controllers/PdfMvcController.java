@@ -5,6 +5,8 @@ import com.telerikacademy.carservice.models.CarEvent;
 import com.telerikacademy.carservice.models.Procedure;
 import com.telerikacademy.carservice.service.contracts.CarEventService;
 import com.telerikacademy.carservice.service.contracts.PdfService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import java.util.Set;
 
 @Controller
 @RequestMapping
+@Api(value = "Pdf creation management", description = "Contains methods for creating a pdf file.")
 public class PdfMvcController {
     private static final String NO_EVENT_FOUND_ERROR_MESSAGE = "Car event with id %d not found";
     private static final String NO_PROCEDURES_FOUND_FOR_CUSTOMER_CAR = "There are no car events for car with id %d";
@@ -36,6 +39,7 @@ public class PdfMvcController {
         this.pdfService = pdfService;
     }
 
+    @ApiOperation(value = "Method that sends information about customer and car event which info the PDF file will contain.")
     @RequestMapping(value = "/createPdf/{carEventId}", method = RequestMethod.GET)
     public void createPdf(@PathVariable long carEventId, HttpServletRequest request, HttpServletResponse response) {
 

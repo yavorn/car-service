@@ -2,6 +2,8 @@ package com.telerikacademy.carservice.controllers;
 
 import com.telerikacademy.carservice.models.*;
 import com.telerikacademy.carservice.service.contracts.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,25 +13,22 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/carevents")
+@Api(value = "Car Events management system", description = "Contains methods for managing car events in the service.")
 public class CarEventController {
     private CarEventService carEventService;
-    private CustomerService customerService;
     private CustomerCarsService customerCarsService;
     private ProcedureService procedureService;
 
 
     public CarEventController(CarEventService carEventService,
-                              CustomerService customerService,
                               CustomerCarsService customerCarsService,
                               ProcedureService procedureService   ) {
         this.carEventService = carEventService;
-        this.customerService = customerService;
         this.customerCarsService = customerCarsService;
         this.procedureService = procedureService;
     }
 
-
-
+    @ApiOperation(value = "Returns the form where a car event is added to a certain car.")
     @GetMapping("/add-carevent/{customerCarId}")
     public String addCarEventForm(Model model, @PathVariable Long customerCarId) {
 
@@ -38,6 +37,8 @@ public class CarEventController {
         model.addAttribute("car",customerCarsService.getCustomerCarById(customerCarId));
         return "add-carevent";
     }
+
+    @ApiOperation(value = "Returns the form where a car event is added to a certain car.")
     @PostMapping("/add-carevent/{customerCarId}")
     public String addCarEvent(@Valid @ModelAttribute CarEvent carEvent, BindingResult bindingErrors) {
         if(bindingErrors.hasErrors()) {
@@ -47,6 +48,7 @@ public class CarEventController {
         return "redirect:/cars";
     }
 
+    @ApiOperation(value = "Returns the form where a certain car event is edited.")
     @GetMapping("/edit-carevent/{id}")
     public String editCarEventForm(Model model, @PathVariable long id) {
 
@@ -54,6 +56,8 @@ public class CarEventController {
         model.addAttribute("allProcedures",procedureService.getAllProcedures() );
         return "edit-carevent";
     }
+
+    @ApiOperation(value = "Returns the form where a certain car event is edited.")
     @PostMapping("/edit-carevent/{id}")
     public String editCarEvent(@Valid @ModelAttribute CarEvent carEvent, @PathVariable long id) {
 

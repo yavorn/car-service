@@ -4,6 +4,8 @@ import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerCars;
 import com.telerikacademy.carservice.models.Models;
 import com.telerikacademy.carservice.service.contracts.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,13 +18,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/customers")
+@Api(value = "Customers management system", description = "Contains the methods for managing customer cars in the service.")
 public class CustomerController {
-
-
     private CustomerService customerService;
     private CarEventService carEventService;
     private CustomerCarsService customerCarsService;
-
 
     public CustomerController(CustomerService customerService,
                               CarEventService carEventService,
@@ -32,6 +32,7 @@ public class CustomerController {
         this.customerCarsService = customerCarsService;
     }
 
+    @ApiOperation(value = "Returns the form where all customers and their cars are listed.")
     @GetMapping
     public String listAllCustomersAndTheirCars(Model model) {
         model.addAttribute("allCustomers", customerService.getAllCustomers());
@@ -40,19 +41,21 @@ public class CustomerController {
         return "customers";
     }
 
+    @ApiOperation(value = "Returns a list of cars for a certain customer.")
     @GetMapping ("/{id}")
     @ResponseBody
-    public List<CustomerCars> listCustomerCarsByID(Model model, @PathVariable Long id){
+    public List<CustomerCars> listCustomerCarsByID(@PathVariable Long id){
         return customerCarsService.getAllCustomerCarsByCustomerId(id);
     }
 
+    @ApiOperation(value = "Returns a list of all cars for all customers.")
     @GetMapping("/car")
     public String listCustomersCars(Model model) {
         model.addAttribute("customersCars", customerService.getAllCustomerCars());
         return "list-customers-cars";
     }
 
-
+    @ApiOperation(value = "Returns a certain car.")
     @GetMapping("/car/{id}")
     public String customerCarByID(Model model, @PathVariable long id) {
 
