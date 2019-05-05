@@ -74,7 +74,7 @@ public class CarEventServiceImplTest {
     @Test
     public void getCarEventsByCustomerCarID_ShouldReturn_WhenValidArgsPassed() {
         testCarEventList.add(testCarEvent);
-        when(carEventRepository.findAllByCustomerCar_CustomerCarID(anyLong())).thenReturn(testCarEventList);
+        when(carEventRepository.findAllByCustomerCar_CustomerCarIDAndCarEventDeletedFalse(anyLong())).thenReturn(testCarEventList);
 
         List<CarEvent> result = carEventServiceImpl.getCarEventsByCustomerCarID(0L);
         assertEquals(testCarEvent, result.get(0));
@@ -82,7 +82,7 @@ public class CarEventServiceImplTest {
 
     @Test(expected = DatabaseItemNotFoundException.class)
     public void getCarEventsByCustomerCarID_ShouldThrow_WhenInvalidArgsPassed() {
-        when(carEventRepository.findAllByCustomerCar_CustomerCarID(anyLong())).thenReturn(testCarEventList);
+        when(carEventRepository.findAllByCustomerCar_CustomerCarIDAndCarEventDeletedFalse(anyLong())).thenReturn(testCarEventList);
 
         List<CarEvent> result = carEventServiceImpl.getCarEventsByCustomerCarID(0L);
         assertEquals(testCarEvent, result.get(0));

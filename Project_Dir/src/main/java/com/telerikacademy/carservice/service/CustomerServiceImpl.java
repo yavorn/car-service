@@ -114,7 +114,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerCars getCustomerCarById(long id) {
-        CustomerCars carToFind = customerCarsRepository.findCustomerCarsByCustomerCarID(id);
+        CustomerCars carToFind = customerCarsRepository.findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(id);
 
         if (carToFind == null) {
             throw new DatabaseItemNotFoundException(String.format(CAR_NOT_FOUND_ERROR_MESSAGE, id));
@@ -124,7 +124,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerCars> getAllCustomerCars() {
-        List<CustomerCars> allCars = customerCarsRepository.findAll();
+        List<CustomerCars> allCars = customerCarsRepository.findAllByCustomerCarDeletedFalse();
 
         if (allCars.size() == 0) {
             throw new DatabaseItemNotFoundException(NO_CARS_FOUND_ERROR_MESSAGE);
@@ -172,7 +172,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void createCustomerCar(CustomerCars carToAdd, String email) {
         Customer customer = customerRepository.findCustomerByEmail(email);
 
-        if (customerCarsRepository.findAll().contains(carToAdd)) {
+        if (customerCarsRepository.findAllByCustomerCarDeletedFalse().contains(carToAdd)) {
             throw new DatabaseItemAlreadyExistsException(String.format(CUSTOMER_ALREADY_HAS_CAR_ERROR_MESSAGE,
                     carToAdd.getCustomerCarID(), email));
         }

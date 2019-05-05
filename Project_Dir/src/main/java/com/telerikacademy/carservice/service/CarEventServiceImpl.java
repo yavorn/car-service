@@ -48,7 +48,7 @@ public class CarEventServiceImpl implements CarEventService {
 
     @Override
     public List<CarEvent> getCarEventsByCustomerCarID(long id) {
-        List<CarEvent> result = carEventRepository.findAllByCustomerCar_CustomerCarID(id);
+        List<CarEvent> result = carEventRepository.findAllByCustomerCar_CustomerCarIDAndCarEventDeletedFalse(id);
         if (result.size() == 0) {
             throw new DatabaseItemNotFoundException(String.format(CAR_EVENT_BY_CAR_ID_EXCEPTION, id));
         }

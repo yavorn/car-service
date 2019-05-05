@@ -68,7 +68,7 @@ public class CustomerCarsServiceImplTest {
 
     @Test
     public void getAllCustomerCarsByCustomerId_ShouldReturn_WhenValidArgsPassed() {
-        when(customerCarsRepository.findCustomerCarsByCustomer_CustomerId(1L)).thenReturn(carsList);
+        when(customerCarsRepository.findCustomerCarsByCustomer_CustomerIdAndCustomerCarDeletedFalse(1L)).thenReturn(carsList);
 
         List<CustomerCars> result = customerCarsServiceImpl.getAllCustomerCarsByCustomerId(1L);
         assertEquals(2, result.size());
@@ -76,7 +76,7 @@ public class CustomerCarsServiceImplTest {
 
     @Test(expected = DatabaseItemNotFoundException.class)
     public void getAllCustomerCarsByCustomerId_ShouldThrow_WhenNoCarsFound() {
-        when(customerCarsRepository.findCustomerCarsByCustomer_CustomerId(1L)).thenReturn(new ArrayList<CustomerCars>());
+        when(customerCarsRepository.findCustomerCarsByCustomer_CustomerIdAndCustomerCarDeletedFalse(1L)).thenReturn(new ArrayList<CustomerCars>());
         List<CustomerCars> result = customerCarsServiceImpl.getAllCustomerCarsByCustomerId(1L);
         assertEquals(1, result.size());
     }
