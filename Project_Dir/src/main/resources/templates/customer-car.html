@@ -46,7 +46,7 @@
 <br>
 
 <tr th:each="event : ${listCustomerCarEvents}">
-    <table>
+    <table class="table-bordered">
         <thead>
         <tr>
             <th align="left" th:text="#{label.date}"></th>
@@ -55,7 +55,6 @@
 
         <tr th:each="procedure : ${event.getProcedures()}">
             <table>
-
                 <tr>
                     <th align="left" th:text="#{label.procedure}"></th>
                     <td  th:text="${procedure.getProcedureName()}">Procedure</td>
