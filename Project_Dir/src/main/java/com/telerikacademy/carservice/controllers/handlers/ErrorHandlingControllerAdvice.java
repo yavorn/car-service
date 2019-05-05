@@ -1,4 +1,4 @@
-package com.telerikacademy.carservice.controllers.exception_handler;
+package com.telerikacademy.carservice.controllers.handlers;
 
 import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
 import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyExistsException;

@@ -1,10 +1,4 @@
-package com.telerikacademy.carservice.controllers.exception_handler;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Scanner;
+package com.telerikacademy.carservice.controllers.handlers;
 
 public class ErrorHandler {
 
