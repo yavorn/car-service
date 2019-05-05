@@ -20,27 +20,7 @@
         <a class="btn btn-warning btn-lg" th:href="@{/password}" role="button">Change Password</a>
     </p>
 </div>
-
-
-<!--<p>-->
-    <!--User: <span sec:authentication="name"/><br/>-->
-    <!--Role(s): <span sec:authentication="principal.authorities"/>-->
-<!--</p>-->
-<!--<p sec:authorize="hasRole('ROLE_ADMIN')">-->
-    <!--<a th:href="@{/admin-portal}">Admin Portal</a>-->
-<!--</p>-->
-<!--<p>-->
-    <!--<a th:href="@{/password}">Change password</a>-->
-<!--</p>-->
-<!--<form th:action="@{/logout}" method="post">-->
-    <!--<input type="submit" value="Logout">-->
-<!--</form>-->
-
-
 <footer th:replace="fragments/components :: footer"></footer>
-
-
 <div th:replace="fragments/components :: js"></div>
-
 </body>
 </html>
