@@ -1,12 +1,11 @@
-$(document).ready(function () {
-    $('#customers-dropdown').on('change', (function (){
-        let userID = $('#customers-dropdown').val();
+'use strict';
 
-        
-        $('#test2').text(userID);
-    }))
-
+$(function () {
+    $('[data-toggle="popover"]').popover({
+        trigger: 'focus'
+    })
 });
+
 //
 // //return select user ID and list him cars
 // $('#selectCustomer').on('change', (function () {

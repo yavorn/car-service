@@ -5,8 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Customer Car Details</title>
+    <div th:replace="fragments/components :: head"></div>
 </head>
 <body>
+<header th:replace="fragments/components :: navbar"></header>
 
 <p>
 <h2>Customer Car Details</h2>
@@ -91,6 +93,7 @@
     <br>
 </tr>
 
-
+<footer th:replace="fragments/components :: footer"></footer>
+<div th:replace="fragments/components :: js"></div>
 </body>
 </html>

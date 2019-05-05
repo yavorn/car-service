@@ -2,10 +2,15 @@
 
 
 let carsTable = $('#cars-table').dataTable({
-    "columnDefs": [{
-        "visible": false, "targets": [0],
-        "bProcessing": true
-    }
+    "columnDefs": [
+        {
+            "orderable": false, "targets": [6,7],
+            "searchable": false
+        },
+        {
+            "targets": [ 0 ],
+            "visible": false
+        }
     ]
 });
 
@@ -14,6 +19,20 @@ $('#select-customer').on('change',function(){
     carsTable.fnFilter("^"+selectedValue+"$", 0, true); //Exact value, column, reg
 });
 
+
+function addProcedure(customerCarId){
+    window.location.replace('/carevents/add-carevent/' + customerCarId);
+}
+
+function viewProcedures(customerCarId) {
+    window.location.replace('/customers/car/' + customerCarId);
+}
+
+$(function () {
+    $('[data-toggle="popover"]').popover({
+        trigger: 'focus'
+    })
+});
 
 
 // $(document).ready(function() {

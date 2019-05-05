@@ -42,6 +42,11 @@ function deleteProcedure(procedureID) {
     })
 }
 
+$(function () {
+    $('[data-toggle="popover"]').popover({
+        trigger: 'focus'
+    })
+});
 
 // function addProcedure() {
 //     $('#add-procedure-modal').modal();

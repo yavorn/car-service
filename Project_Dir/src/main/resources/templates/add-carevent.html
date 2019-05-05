@@ -3,46 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Car Event</title>
+    <div th:replace="fragments/components :: head"></div>
 </head>
 <body>
-
+<header th:replace="fragments/components :: navbar"></header>
 <p>
 <h2>Add New Car Event</h2>
 </p>
 
 
 <table>
-<thead>
-<tr>
-<th align="left" th:text="#{label.customerName}"></th>
-<td  th:text="${car.getCustomer().getName()}">name</td>
-</tr>
+    <thead>
+    <tr>
+        <th align="left" th:text="#{label.customerName}"></th>
+        <td th:text="${car.getCustomer().getName()}">name</td>
+    </tr>
 
-<tr>
-<th align="left" th:text="#{label.makeName}"></th>
-<td  th:text="${car.getModel().getMake().getMakeName()}">name</td>
-</tr>
-<tr>
-<th align="left" th:text="#{label.modelName}"></th>
-<td  th:text="${car.getModel().getModelName()}">name</td>
-</tr>
+    <tr>
+        <th align="left" th:text="#{label.makeName}"></th>
+        <td th:text="${car.getModel().getMake().getMakeName()}">name</td>
+    </tr>
+    <tr>
+        <th align="left" th:text="#{label.modelName}"></th>
+        <td th:text="${car.getModel().getModelName()}">name</td>
+    </tr>
 
-<tr>
-<th align="left" th:text="#{label.year}"></th>
-<td  th:text="${car.getYearOfProduction()}">name</td>
-</tr>
+    <tr>
+        <th align="left" th:text="#{label.year}"></th>
+        <td th:text="${car.getYearOfProduction()}">name</td>
+    </tr>
 
-<tr>
-<th align="left" th:text="#{label.licensePlate}"></th>
-<td  th:text="${car.getLicensePlate()}">name</td>
-</tr>
+    <tr>
+        <th align="left" th:text="#{label.licensePlate}"></th>
+        <td th:text="${car.getLicensePlate()}">name</td>
+    </tr>
 
-<tr>
-<th align="left" th:text="#{label.VINnumber}"></th>
-<td  th:text="${car.getVinNumber()}">name</td>
-</tr>
+    <tr>
+        <th align="left" th:text="#{label.VINnumber}"></th>
+        <td th:text="${car.getVinNumber()}">name</td>
+    </tr>
 
-</thead>
+    </thead>
 </table>
 
 <br>
@@ -50,7 +51,8 @@
 <p>
 <h4>Choose Procedures</h4>
 </p>
-<form action="#" th:action="@{'/carevents/add-carevent/' + ${car.getCustomerCarID()}}" th:object="${carEvent}" method="post">
+<form action="#" th:action="@{'/carevents/add-carevent/' + ${car.getCustomerCarID()}}" th:object="${carEvent}"
+      method="post">
 
     <table>
 
@@ -67,7 +69,7 @@
         </div>
 
         <tr>
-        <td><input type="hidden" th:value="${car.getCustomerCarID()}" th:attr="name= 'customerCar'"/></td>
+            <td><input type="hidden" th:value="${car.getCustomerCarID()}" th:attr="name= 'customerCar'"/></td>
         </tr>
 
         <tr>
@@ -78,6 +80,10 @@
 
 </form>
 
+
+<footer th:replace="fragments/components :: footer"></footer>
+<div th:replace="fragments/components :: js"></div>
+<script th:src="@{/js/add-carevent.js}"></script>
 
 </body>
 </html>

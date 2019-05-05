@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Customers</title>
+    <title>Cars</title>
     <div th:replace="fragments/components :: head"></div>
 </head>
 <body>
-<footer th:replace="fragments/components :: navbar"></footer>
+<header th:replace="fragments/components :: navbar"></header>
 
 
 <div class="container body-content">
@@ -37,6 +37,9 @@
                                 <th>Year</th>
                                 <th>License Plate</th>
                                 <th>VIN</th>
+                                <th></th>
+                                <th></th>
+
                             </tr>
                             </thead>
                             <tbody id="customer">
@@ -47,6 +50,21 @@
                                 <td th:text="${car.getYearOfProduction()}"></td>
                                 <td th:text="${car.getLicensePlate()}"></td>
                                 <td th:text="${car.vinNumber}"></td>
+                                <td>
+                                    <button class="btn btn-outline-primary" title="View Procedures"
+                                            id="view-procedures" th:value="${car.getCustomerCarID()}"
+                                            th:onclick="|viewProcedures(value)|">
+                                        <i class="fas fa-wrench"></i> View Procedures
+                                    </button>
+                                </td>
+
+                                <td>
+                                <button class="btn btn-outline-success" title="View Procedures"
+                                        id="add-procedures" th:value="${car.getCustomerCarID()}"
+                                        th:onclick="|addProcedure(value)|">
+                                    <i class="fas fa-wrench"></i> Add Procedure
+                                </button>
+                                </td>
 
                             </tr>
                             </tbody>
@@ -58,7 +76,6 @@
         <hr/>
     </div>
 </div>
-
 
 
 <footer th:replace="fragments/components :: footer"></footer>

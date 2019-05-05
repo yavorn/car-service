@@ -37,3 +37,9 @@ function deleteUser(email) {
         table.reset();
     })
 }
+
+$(function () {
+    $('[data-toggle="popover"]').popover({
+        trigger: 'focus'
+    })
+});
