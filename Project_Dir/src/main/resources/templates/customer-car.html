@@ -6,77 +6,92 @@
     <meta charset="UTF-8">
     <title>Customer Car Details</title>
     <div th:replace="fragments/components :: head"></div>
+
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+    </style>
 </head>
 <body>
 <header th:replace="fragments/components :: navbar"></header>
 
 <div class="container">
     <h2>Customer Car Details</h2>
-<table class="table table-striped table-dark">
-    <tbody>
-    <tr>
-        <th th:text="#{label.customerName}">Customer Name</th>
-        <td th:text="${customerCar.getCustomer().getName()}">Customer Name</td>
-    </tr>
-    <tr>
-        <th th:text="#{label.makeName}">Make</th>
-        <td th:text="${customerCar.getModel().getMake().getMakeName()}">Make</td>
-    </tr>
-    <tr>
-        <th th:text="#{label.modelName}">Model</th>
-        <td th:text="${customerCar.getModel().getModelName()}">Model</td>
-    </tr>
-    <tr>
-        <th th:text="#{label.year}">Year</th>
-        <td th:text="${customerCar.getYearOfProduction()}">Year</td>
-    </tr>
-    <tr>
-        <th th:text="#{label.licensePlate}">License Plate</th>
-        <td th:text="${customerCar.getLicensePlate()}">License Plate</td>
-    </tr>
-    <tr>
-        <th th:text="#{label.VINnumber}">VIN</th>
-        <td th:text="${customerCar.getVinNumber()}">VIN</td>
-    </tr>
-    </tbody>
-</table>
-
-
-<h1>Car Events</h1>
-<br>
-
-<tr th:each="event : ${listCustomerCarEvents}">
-    <table class="table-bordered">
-        <thead>
+    <table class="table table-striped table-dark">
+        <tbody>
         <tr>
-            <th align="left" th:text="#{label.date}"></th>
-            <td  th:text="${event.getDate()}">Date</td>
-        </tr>
-
-        <tr th:each="procedure : ${event.getProcedures()}">
-            <table>
-                <tr>
-                    <th align="left" th:text="#{label.procedure}"></th>
-                    <td  th:text="${procedure.getProcedureName()}">Procedure</td>
-                </tr>
-
-                <tr>
-                    <th align="left" th:text="#{label.price}"></th>
-                    <td  th:text="${procedure.getProcedurePrice()}">Price</td>
-                </tr>
-            </table>
+            <th th:text="#{label.customerName}">Customer Name</th>
+            <td th:text="${customerCar.getCustomer().getName()}">Customer Name</td>
         </tr>
         <tr>
-            <th align="left" th:text="#{label.totalPrice}"></th>
-            <td  th:text="${event.getTotalPrice()}">TotalPrice</td>
+            <th th:text="#{label.makeName}">Make</th>
+            <td th:text="${customerCar.getModel().getMake().getMakeName()}">Make</td>
         </tr>
-        </thead>
+        <tr>
+            <th th:text="#{label.modelName}">Model</th>
+            <td th:text="${customerCar.getModel().getModelName()}">Model</td>
+        </tr>
+        <tr>
+            <th th:text="#{label.year}">Year</th>
+            <td th:text="${customerCar.getYearOfProduction()}">Year</td>
+        </tr>
+        <tr>
+            <th th:text="#{label.licensePlate}">License Plate</th>
+            <td th:text="${customerCar.getLicensePlate()}">License Plate</td>
+        </tr>
+        <tr>
+            <th th:text="#{label.VINnumber}">VIN</th>
+            <td th:text="${customerCar.getVinNumber()}">VIN</td>
+        </tr>
+        </tbody>
     </table>
 
+
+    <h1>Car Events</h1>
     <br>
-    <br>
-    <br>
-</tr>
+
+    <tr th:each="event : ${listCustomerCarEvents}">
+        <div align="left">
+            <th align="right" th:text="#{label.date}" ></th>
+            <td width="20%" th:text="${event.getDate()}">Date</td>
+        </div>
+        <table width="100%">
+
+            <thead>
+            <tr style="font-weight:bold">
+                <th width="80%" align="left" th:text="#{label.procedure}"></th>
+                <th width="20%" align="left" th:text="#{label.price}"></th>
+            </tr>
+            <tr th:each="procedure : ${event.getProcedures()}">
+                <table>
+                    <tr>
+                        <td width="80%" th:text="${procedure.getProcedureName()}">Procedure</td>
+                        <td width="20%" th:text="${procedure.getProcedurePrice() + ' lv.'}">Price</td>
+                    </tr>
+                </table>
+            </tr>
+            <div align="right" style="font-weight:bold">
+                <th align="right" th:text="#{label.totalPrice}"></th>
+                <td  width="20%" th:text="${event.getTotalPrice() + ' lv.'}">TotalPrice</td>
+            </div>
+            </thead>
+        </table>
+
+        <br>
+        <br>
+        <hr>
+        <br>
+    </tr>
 
 </div>
 <footer th:replace="fragments/components :: footer"></footer>
