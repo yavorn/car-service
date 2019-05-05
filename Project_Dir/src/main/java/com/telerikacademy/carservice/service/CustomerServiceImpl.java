@@ -26,6 +26,11 @@ import java.util.List;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
+    private static final String CUSTOMER_NOT_FOUND_ERROR_MESSAGE = "Customer with email %s not found.";
+    private static final String USER_ALREADY_EXISTS_ERROR_MESSAGE = "User with username %s already exists";
+    private static final String CAR_NOT_FOUND_ERROR_MESSAGE = "Car with id %d not found";
+    private static final String NO_CARS_FOUND_ERROR_MESSAGE = "No cars found";
+    private static final String CUSTOMER_ALREADY_HAS_CAR_ERROR_MESSAGE = "Car with id %d is already added to customer %s";
     private CustomerRepository customerRepository;
     private CustomerCarsRepository customerCarsRepository;
     private UserDetailsManager userDetailsManager;
@@ -53,12 +58,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+        return customerRepository.findAllByIsDeletedFalse();
     }
 
     @Override
     public Customer findByEmail(String email) {
-        return customerRepository.findCustomerByEmail(email);
+        return customerRepository.findCustomerByEmail(String.format(CUSTOMER_NOT_FOUND_ERROR_MESSAGE, email));
     }
 
     @Override
@@ -76,7 +81,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerRepository.findCustomerByEmail(email);
 
         if (customer == null) {
-            throw new DatabaseItemNotFoundException(email);
+            throw new DatabaseItemNotFoundException(String.format(CUSTOMER_NOT_FOUND_ERROR_MESSAGE, email));
         }
 
         String generatedNewPassword = passwordService.generateRandomPassword();
@@ -105,7 +110,6 @@ public class CustomerServiceImpl implements CustomerService {
         String newEncodedPassword = passwordEncoder.encode(newPassword);
         customerRepository.updatePassword(newEncodedPassword, currentPrincipalName);
         customerRepository.saveAndFlush(customer);
-
     }
 
     @Override
@@ -113,7 +117,7 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerCars carToFind = customerCarsRepository.findCustomerCarsByCustomerCarID(id);
 
         if (carToFind == null) {
-            throw new DatabaseItemNotFoundException(String.format("Car with id %d not found", id));
+            throw new DatabaseItemNotFoundException(String.format(CAR_NOT_FOUND_ERROR_MESSAGE, id));
         }
         return carToFind;
     }
@@ -123,7 +127,7 @@ public class CustomerServiceImpl implements CustomerService {
         List<CustomerCars> allCars = customerCarsRepository.findAll();
 
         if (allCars.size() == 0) {
-            throw new DatabaseItemNotFoundException("No cars found");
+            throw new DatabaseItemNotFoundException(NO_CARS_FOUND_ERROR_MESSAGE);
         }
         return allCars;
     }
@@ -169,11 +173,11 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerRepository.findCustomerByEmail(email);
 
         if (customerCarsRepository.findAll().contains(carToAdd)) {
-            throw new DatabaseItemAlreadyExistsException(String.format("Car with id %d is already added to customer %s",
+            throw new DatabaseItemAlreadyExistsException(String.format(CUSTOMER_ALREADY_HAS_CAR_ERROR_MESSAGE,
                     carToAdd.getCustomerCarID(), email));
         }
         if (customer == null) {
-            throw new DatabaseItemNotFoundException(String.format("Customer with username %s not found.", email));
+            throw new DatabaseItemNotFoundException(String.format(CUSTOMER_NOT_FOUND_ERROR_MESSAGE, email));
         }
 
         carToAdd.setCustomer(customer);
@@ -195,7 +199,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer existingCustomer = customerRepository.findCustomerByEmail(customerDto.getEmail());
 
         if (existingCustomer != null) {
-            throw new DatabaseItemAlreadyExistsException(String.format("User with username %s already exists", customerDto.getEmail()));
+            throw new DatabaseItemAlreadyExistsException(String.format(USER_ALREADY_EXISTS_ERROR_MESSAGE, customerDto.getEmail()));
         }
 
         String password = passwordService.generateRandomPassword();
