@@ -34,7 +34,7 @@ public class PdfServiceImpl implements PdfService {
         String dateParagraphText = "Date: " + carEvent.getDate();
         String carParagraphText = String.format("Vehicle: %s %s, %d", carEvent.getCustomerCar().getModel().getMake().getMakeName(), carEvent.getCustomerCar().getModel().getModelName(), carEvent.getCustomerCar().getYearOfProduction());
         String licensePlateParagraphText = String.format("Car plate number: %s", carEvent.getCustomerCar().getLicensePlate());
-        String totalPriceParagraphText = "Total price: " + carEvent.getTotalPrice();
+        String totalPriceParagraphText = "Total price: " + carEvent.getTotalPrice() + " lv.";
 
         try {
             Document document = new Document(PageSize.A4, pageMarginLeft, pageMarginRight, pageMarginTop, pageMarginBottom);
@@ -99,7 +99,7 @@ public class PdfServiceImpl implements PdfService {
                 setPdfPCellTextAlignment(procedure, Element.ALIGN_LEFT);
                 eventTable.addCell(procedure);
 
-                PdfPCell price = new PdfPCell(new Paragraph(String.valueOf(p.getProcedurePrice()), tableBody));
+                PdfPCell price = new PdfPCell(new Paragraph(p.getProcedurePrice() + " lv.", tableBody));
                 setPdfPCellTextAlignment(price, Element.ALIGN_RIGHT);
                 eventTable.addCell(price);
             }
