@@ -3,37 +3,28 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <title>Car</title>
+	<meta charset="UTF-8">
+	<title>Car</title>
 </head>
 <body>
 <p>
 <h2>Car Details</h2>
 </p>
-
 <table>
-<thead >
-<tr>
-    <th align="left" th:text="#{label.makeName}"></th>
-    <td  th:text="${modelOfCar.getMake().getMakeName()}">name</td>
-</tr>
-<tr>
-    <th align="left" th:text="#{label.modelName}"></th>
-    <td  th:text="${modelOfCar.getModelName()}">name</td>
-</tr>
-
-
-
-</thead>
-
-
-
-<tbody>
-<tr th:object="${modelOfCar}">
-
-
-</tr>
-</tbody>
+	<thead>
+	<tr>
+		<th align="left" th:text="#{label.makeName}"></th>
+		<td th:text="${modelOfCar.getMake().getMakeName()}">name</td>
+	</tr>
+	<tr>
+		<th align="left" th:text="#{label.modelName}"></th>
+		<td th:text="${modelOfCar.getModelName()}">name</td>
+	</tr>
+	</thead>
+	<tbody>
+	<tr th:object="${modelOfCar}">
+	</tr>
+	</tbody>
 </table>
 </body>
 </html>

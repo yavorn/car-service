@@ -165,6 +165,10 @@ body {
     margin-top: 250px;
 }
 
+#reset-password-text-box{
+    margin-top: 250px;
+}
+
 footer {
     position: fixed;
     height: 50px;
