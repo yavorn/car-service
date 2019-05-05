@@ -58,7 +58,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> getAllCustomers() {
-        return customerRepository.findAllByIsDeletedFalse();
+        return customerRepository.findAllByIsDeletedFalseOrderByNameAsc();
     }
 
     @Override

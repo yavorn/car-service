@@ -39,7 +39,7 @@ public class CarEventServiceImpl implements CarEventService {
 
     @Override
     public CarEvent getCarEventByID(long id) {
-        CarEvent eventToFind = carEventRepository.findCarEventByCarEventID(id);
+        CarEvent eventToFind = carEventRepository.findCarEventByCarEventIDAndCarEventDeletedFalse(id);
         if (eventToFind == null) {
             throw new DatabaseItemNotFoundException(String.format(CAR_EVENT_BY_ID_EXCEPTION, id));
         }
@@ -71,7 +71,7 @@ public class CarEventServiceImpl implements CarEventService {
 
     @Override
     public void deleteCarEvent(long id) {
-        CarEvent eventToDelete = carEventRepository.findCarEventByCarEventID(id);
+        CarEvent eventToDelete = carEventRepository.findCarEventByCarEventIDAndCarEventDeletedFalse(id);
         if (eventToDelete == null) {
             throw new DatabaseItemNotFoundException(String.format(CAR_EVENT_BY_ID_EXCEPTION, id));
         }
@@ -80,7 +80,7 @@ public class CarEventServiceImpl implements CarEventService {
 
     @Override
     public void editCarEvent(CarEvent carEvent, long id) {
-        CarEvent eventToChange = carEventRepository.findCarEventByCarEventID(id);
+        CarEvent eventToChange = carEventRepository.findCarEventByCarEventIDAndCarEventDeletedFalse(id);
         if (eventToChange == null) {
             throw new DatabaseItemNotFoundException(String.format(CAR_EVENT_BY_ID_EXCEPTION, id));
         }

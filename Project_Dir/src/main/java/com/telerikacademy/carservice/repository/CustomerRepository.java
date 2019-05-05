@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    List<Customer> findAllByIsDeletedFalse();
+    List<Customer> findAllByIsDeletedFalseOrderByNameAsc();
 
     Customer findCustomerByEmail(String email);
 
