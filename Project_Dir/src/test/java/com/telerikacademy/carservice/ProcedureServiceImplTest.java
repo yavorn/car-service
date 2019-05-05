@@ -1,6 +1,8 @@
 package com.telerikacademy.carservice;
 
+import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
 import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyExistsException;
+import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import com.telerikacademy.carservice.models.Procedure;
 import com.telerikacademy.carservice.repository.ProcedureRepository;
 import com.telerikacademy.carservice.service.ProcedureServiceImpl;
@@ -36,6 +38,8 @@ public class ProcedureServiceImplTest {
         testProcedureTwo.setProcedureName("procedureNameTwo");
         testProcedure.setProcedurePrice(0);
         testProcedureTwo.setProcedurePrice(1);
+        testProcedure.setProcedureID(0L);
+        testProcedureTwo.setProcedureID(1L);
         testProcedureThree.setProcedureDeleted();
     }
 
@@ -74,7 +78,7 @@ public class ProcedureServiceImplTest {
         Assert.assertEquals(testProcedure, result);
     }
 
-    @Test(expected = ResponseStatusException.class)
+    @Test(expected = DatabaseItemNotFoundException.class)
     public void getProcedureByID_shouldReturn_WhenInvalidArgsPassed() {
         when(mockProcedureRepository.findProcedureByProcedureID(anyLong()))
                 .thenReturn(null);
@@ -92,7 +96,7 @@ public class ProcedureServiceImplTest {
                 .save(Mockito.any(Procedure.class));
     }
 
-    //TO DO
+
     @Test(expected = DatabaseItemAlreadyExistsException.class)
     public void addProcedure_shouldReturn_WhenDuplicateNamePassed() {
         when(mockProcedureRepository.findProcedureByProcedureName(testProcedure.getProcedureName()))
@@ -108,7 +112,7 @@ public class ProcedureServiceImplTest {
         procedureServiceImpl.deleteProcedure(1L);
     }
 
-    @Test (expected = ResponseStatusException.class)
+    @Test (expected = DatabaseItemNotFoundException.class)
     public void deleteProcedure_shouldReturn_WhenInvalidArgsPassed()  {
         when(mockProcedureRepository.findProcedureByProcedureID(anyLong()))
                 .thenReturn(null);
@@ -116,12 +120,27 @@ public class ProcedureServiceImplTest {
         procedureServiceImpl.deleteProcedure(1L);
     }
 
-    @Test (expected = ResponseStatusException.class)
+    @Test (expected = DatabaseItemAlreadyDeletedException.class)
     public void deleteProcedure_shouldReturn_WhenItemAlreadyDeleted()  {
         when(mockProcedureRepository.findProcedureByProcedureID(anyLong()))
                 .thenReturn(testProcedureThree);
 
         procedureServiceImpl.deleteProcedure(1L);
+    }
+
+    @Test
+    public void editProcedure_shouldReturn_WhenValidArgsPassed() {
+        when(mockProcedureRepository.findProcedureByProcedureID(anyLong())).thenReturn(testProcedure);
+
+        procedureServiceImpl.editProcedure(new Procedure("procedureNameFour", 0d), 1L);
+    }
+
+
+    @Test (expected = DatabaseItemNotFoundException.class)
+    public void editProcedure_shouldThrow_WhenInvalidArgsPassed(){
+        when(mockProcedureRepository.findProcedureByProcedureID(anyLong())).thenReturn(null);
+
+        procedureServiceImpl.editProcedure(testProcedure, testProcedure.getProcedureID());
     }
 
 
