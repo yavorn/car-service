@@ -33,27 +33,58 @@
                 <a class="nav-link" th:href="@{/procedures}">Procedures</a>
             </li>
 
-            <li class="nav-item dropdown navbar-hidden" th:classappend="${#httpServletRequest.getRequestURI() == '/procedures' ? 'navbar-visible':''}">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    Manage Procedures
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownProcedures">
-                    <a class="dropdown-item" onclick="addProcedure()">Add Procedure</a>
-                    <!--<div class="dropdown-divider"></div>-->
-
-                </div>
+            <li class="nav-item navbar-hidden"
+                th:classappend="${#httpServletRequest.getRequestURI() == '/procedures' ? 'navbar-visible':''}">
+                <a class="nav-link btn btn-outline-secondary" onclick="addProcedure()">Add Procedure</a>
             </li>
 
-            <li class="nav-item dropdown navbar-hidden" th:classappend="${#httpServletRequest.getRequestURI() == '/customers' ? 'navbar-visible':''}">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCustomers" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    Manage Customers
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" onclick="addUser()">Add customer</a>
-                </div>
+            <li class="nav-item dropdown navbar-hidden"
+                th:classappend="${#httpServletRequest.getRequestURI() == '/customers' ? 'navbar-visible':''}">
+                <a class="nav-link btn btn-outline-secondary" onclick="addUser()">Add customer</a>
             </li>
+
+        </ul>
+
+        <ul class="navbar-nav mr-auto">
+
+            <li class="nav-item navbar-hidden"
+                th:classappend="${#httpServletRequest.getRequestURI() == '/procedures' ? 'navbar-visible':''}">
+                <button class="btn btn-outline-secondary nav-link" data-toggle="popover" data-placement="right"
+                        title="HELP"
+                        data-content="This page lets you view and manage all the procedures in your car shop.">
+                    <i class="fas fa-question"></i>
+                </button>
+            </li>
+
+            <li class="nav-item navbar-hidden"
+                th:classappend="${#httpServletRequest.getRequestURI() == '/customers' ? 'navbar-visible':''}">
+                <button class="btn btn-outline-secondary nav-link" data-toggle="popover" data-placement="right"
+                        title="HELP"
+                        data-content="This page lets you view and manage all the customers in your car shop.
+                                        You can add or delete a vehicle from a user.">
+                    <i class="fas fa-question"></i>
+                </button>
+            </li>
+
+            <li class="nav-item navbar-hidden"
+                th:classappend="${#httpServletRequest.getRequestURI() == '/cars' ? 'navbar-visible':''}">
+                <button class="btn btn-outline-secondary nav-link" data-toggle="popover" data-placement="right"
+                        title="HELP"
+                        data-content="On this page you can view the cars of each customer
+                        and add all the procedures that have been performed on it.">
+                    <i class="fas fa-question"></i>
+                </button>
+            </li>
+
+            <li class="nav-item navbar-hidden"
+                th:classappend="${#httpServletRequest.getRequestURI() == '/carevents/add-carevent/*' ? 'navbar-visible':''}">
+                <button class="btn btn-outline-secondary nav-link" data-toggle="popover" data-placement="right"
+                        title="HELP"
+                        data-content="On this page you can add one or more procedures to the selected car.">
+                    <i class="fas fa-question"></i>
+                </button>
+            </li>
+
 
         </ul>
 
@@ -63,6 +94,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="#"><span class="fas fa-user"></span> <span sec:authentication="name"/></a>
             </li>
+
             <li class="nav-item">
                 <form th:action="@{/logout}" method="post">
                     <a class="nav-link"><span class="fas fa-sign-in-alt"></span>
@@ -72,6 +104,8 @@
 
                 </form>
             </li>
+
+
         </ul>
 
     </div>
@@ -92,8 +126,10 @@
 <!-- Java Scrpit Files Fragment -->
 <div th:fragment="js">
     <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js}"></script>
     <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
     <script th:src="@{https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js}"></script>
+
 </div>
 
 <!-- Information Modal Fragment -->
