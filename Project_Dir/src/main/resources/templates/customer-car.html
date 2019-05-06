@@ -61,7 +61,7 @@
     <tr th:each="event : ${listCustomerCarEvents}">
         <div align="left">
             <th align="right" th:text="#{label.date}" ></th>
-            <td width="20%" th:text="${event.getDate()}">Date</td>
+            <td width="20%" type="date" th:text="${event.getDate()}">Date</td>
         </div>
         <table width="100%">
             <thead>
