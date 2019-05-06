@@ -63,7 +63,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer findByEmail(String email) {
-        return customerRepository.findCustomerByEmail(String.format(CUSTOMER_NOT_FOUND_ERROR_MESSAGE, email));
+        Customer customerToFind = customerRepository.findCustomerByEmailAndIsDeletedFalse(email);
+        if (customerToFind == null) {
+            throw new DatabaseItemNotFoundException(String.format(CUSTOMER_NOT_FOUND_ERROR_MESSAGE, email));
+        }
+        return customerToFind;
     }
 
     @Override
@@ -78,7 +82,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void resetPassword(String email) {
-        Customer customer = customerRepository.findCustomerByEmail(email);
+        Customer customer = customerRepository.findCustomerByEmailAndIsDeletedFalse(email);
 
         if (customer == null) {
             throw new DatabaseItemNotFoundException(String.format(CUSTOMER_NOT_FOUND_ERROR_MESSAGE, email));
@@ -103,7 +107,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void changePassword(CustomerDto customerDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        Customer customer = customerRepository.findCustomerByEmail(currentPrincipalName);
+        Customer customer = customerRepository.findCustomerByEmailAndIsDeletedFalse(currentPrincipalName);
 
         String newPassword = customerDto.getPasswordConfirmation();
 
@@ -135,7 +139,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void enableCustomer(CustomerDto customerDto) {
-        Customer customerToEnable = customerRepository.findCustomerByEmail(customerDto.getEmail());
+        Customer customerToEnable = customerRepository.findCustomerByEmailAndIsDeletedFalse(customerDto.getEmail());
 
         if (customerToEnable == null) {
             throw new DatabaseItemNotFoundException(customerDto.getEmail());
@@ -153,7 +157,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void disableCustomer(CustomerDto customerDto) {
-        Customer customerToDisable = customerRepository.findCustomerByEmail(customerDto.getEmail());
+        Customer customerToDisable = customerRepository.findCustomerByEmailAndIsDeletedFalse(customerDto.getEmail());
 
         if (customerToDisable == null) {
             throw new DatabaseItemNotFoundException(customerDto.getName());
@@ -170,7 +174,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void createCustomerCar(CustomerCars carToAdd, String email) {
-        Customer customer = customerRepository.findCustomerByEmail(email);
+        Customer customer = customerRepository.findCustomerByEmailAndIsDeletedFalse(email);
 
         if (customerCarsRepository.findAllByCustomerCarDeletedFalse().contains(carToAdd)) {
             throw new DatabaseItemAlreadyExistsException(String.format(CUSTOMER_ALREADY_HAS_CAR_ERROR_MESSAGE,
@@ -195,8 +199,17 @@ public class CustomerServiceImpl implements CustomerService {
         return listYears;
     }
 
+    @Override
+    public String getLoggedUserEmail(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        Customer customer = findByEmail(currentPrincipalName);
+
+        return customer.getEmail();
+    }
+
     private void createCustomerOrAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) {
-        Customer existingCustomer = customerRepository.findCustomerByEmail(customerDto.getEmail());
+        Customer existingCustomer = customerRepository.findCustomerByEmailAndIsDeletedFalse(customerDto.getEmail());
 
         if (existingCustomer != null) {
             throw new DatabaseItemAlreadyExistsException(String.format(USER_ALREADY_EXISTS_ERROR_MESSAGE, customerDto.getEmail()));

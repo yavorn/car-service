@@ -4,31 +4,36 @@
 	<meta charset="UTF-8">
 	<title>Admin</title>
 	<link rel="stylesheet" th:href="@{/css/main.css}">
-
+	<link rel="stylesheet" th:href="@{/css/admin-portal.js}">
+	<div th:replace="fragments/components :: head"></div>
 </head>
-<body>
+<body id="admin-portal">
+<div th:replace="fragments/components :: navbar"></div>
 <h1>Admin Portal</h1>
-<p>Hello to the admin portal!</p>
-<form th:action="@{/customer}" th:method="get">
-	<input type="submit" value="Add customer">
-</form>
-<form th:action="@{/customer}" th:method="get">
-	<input type="submit" value="Disable customer access">
-</form>
-<form th:action="@{/customer}" th:method="get">
-	<input type="submit" value="Enable customer access">
-</form>
-<form th:action="@{/admin}" th:method="get">
-	<input type="submit" value="Add admin">
-</form>
-<form th:action="@{/cars/add-make}" th:method="get">
-	<input type="submit" value="Add new Make"/>
-</form>
-<form th:action="@{/cars/add-car}" th:method="get">
-	<input type="submit" value="Add new Car Model"/>
-</form>
-<p>
-	<a th:href="@{/}">Home</a>
-</p>
+<div id="admin-portal-forms">
+	<form class="admin-portal-forms" th:action="@{/customer}" th:method="get">
+		<input type="submit" value="Add customer">
+	</form>
+	<form class="admin-portal-forms" th:action="@{/customer}" th:method="get">
+		<input type="submit" value="Disable customer access">
+	</form>
+	<form class="admin-portal-forms" th:action="@{/customer}" th:method="get">
+		<input type="submit" value="Enable customer access">
+	</form>
+	<form class="admin-portal-forms" th:action="@{/admin}" th:method="get">
+		<input type="submit" value="Add admin">
+	</form>
+	<form class="admin-portal-forms" th:action="@{/cars/add-make}" th:method="get">
+		<input type="submit" value="Add new Make"/>
+	</form>
+	<form class="admin-portal-forms" th:action="@{/cars/add-car}" th:method="get">
+		<input type="submit" value="Add new Car Model"/>
+	</form>
+	<p class="lead">
+		<a class="btn btn-warning btn-lg" th:href="@{/password}" role="button">Change Password</a>
+	</p>
+</div>
+<footer th:replace="fragments/components :: footer"></footer>
+<div th:replace="fragments/components :: js"></div>
 </body>
 </html>

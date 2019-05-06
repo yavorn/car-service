@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface CustomerCarsRepository extends JpaRepository<CustomerCars, Long> {
 
-    CustomerCars findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(Long id);
+    CustomerCars findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(long id);
 
     List<CustomerCars> findCustomerCarsByCustomer_CustomerIdAndCustomerCarDeletedFalse(long id);
+
+    List<CustomerCars> findCustomerCarsByCustomerEmailAndCustomerCarDeletedFalse(String email);
 
     List<CustomerCars> findAllByCustomerCarDeletedFalse();
 }
