@@ -75,7 +75,9 @@ public class CarEventServiceImpl implements CarEventService {
         if (eventToDelete == null) {
             throw new DatabaseItemNotFoundException(String.format(CAR_EVENT_BY_ID_EXCEPTION, id));
         }
-        carEventRepository.deleteById(id);
+        eventToDelete.setCarEventDeleted();
+
+        carEventRepository.save(eventToDelete);
     }
 
     @Override

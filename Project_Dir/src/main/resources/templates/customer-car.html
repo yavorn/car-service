@@ -61,7 +61,8 @@
     <tr th:each="event : ${listCustomerCarEvents}">
         <div align="left">
             <th align="right" th:text="#{label.date}" ></th>
-            <td width="20%" th:text="${event.getDate()}">Date</td>
+            <td width="20%" th:text="${#temporals.format(event.getDate(), 'dd.MM.yyyy HH:mm')}">Date</td>
+
         </div>
         <table width="100%">
             <thead>
@@ -80,6 +81,13 @@
             <div align="right" style="font-weight:bold">
                 <th align="right" th:text="#{label.totalPrice}"></th>
                 <td  width="20%" th:text="${event.getTotalPrice() + ' lv.'}">TotalPrice</td>
+
+                <button class="btn btn-outline-secondary" title="Create car"
+                        id="view-cars" th:value="${event.getCarEventID()}"
+                        th:onclick="|editCarEvent(value)|">
+                    <i class="fas fa-wrench"></i> Edit
+                </button>
+
                 <a th:href="@{'/createPdf/' + ${event.getCarEventID()}}">
                     <img src="/images/pdf-icon-png-2079-65x65.png" width="40px" alt="Download PDF">
                 </a>
@@ -96,5 +104,7 @@
 </div>
 <footer th:replace="fragments/components :: footer"></footer>
 <div th:replace="fragments/components :: js"></div>
+<script th:src="@{/js/car-event.js}"></script>
+
 </body>
 </html>

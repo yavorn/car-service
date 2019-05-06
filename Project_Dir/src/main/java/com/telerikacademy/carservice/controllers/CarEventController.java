@@ -65,4 +65,11 @@ public class CarEventController {
         return "redirect:/cars";
     }
 
+    @ApiOperation(value = "Returns the form where customer car event is deleted in the database.")
+    @GetMapping("/delete-carevent/{id}")
+    public String deleteCarEventByID(@PathVariable long id) {
+        carEventService.deleteCarEvent(id);
+        return "redirect:/cars";
+    }
+
 }

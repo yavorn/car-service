@@ -32,6 +32,7 @@
                             <thead>
                             <tr>
                                 <th></th>
+                                <th></th>
                                 <th>Make</th>
                                 <th>Model</th>
                                 <th>Year</th>
@@ -45,6 +46,7 @@
                             <tbody id="customer">
                             <tr th:each="car : ${allCustomersCars}">
                                 <td th:text="${car.getCustomer().getCustomerId()}"></td>
+                                <td th:text="${car.getCustomer().getName()}"></td>
                                 <td th:text="${car.getModel().getMake().getMakeName()}"></td>
                                 <td th:text="${car.getModel().getModelName()}"></td>
                                 <td th:text="${car.getYearOfProduction()}"></td>

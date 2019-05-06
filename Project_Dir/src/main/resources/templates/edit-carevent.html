@@ -3,85 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Car Event</title>
+    <div th:replace="fragments/components :: head"></div>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/multi-select.css}"/>
 </head>
 <body>
+<header th:replace="fragments/components :: navbar"></header>
 
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h4>Customer car details:</h4>
+            <table class="table table-striped table-dark">
+                <tbody>
+                <tr>
+                    <th align="left" th:text="#{label.customerName}"></th>
+                    <td th:text="${carEvent.getCustomerCar().getCustomer().getName()}">name</td>
+                </tr>
 
-<p>
-<h2>Edit Car Event</h2>
-</p>
+                <tr>
+                    <th align="left" th:text="#{label.makeName}"></th>
+                    <td th:text="${carEvent.getCustomerCar().getModel().getMake().getMakeName()}">name</td>
+                </tr>
+                <tr>
+                    <th align="left" th:text="#{label.modelName}"></th>
+                    <td th:text="${carEvent.getCustomerCar().getModel().getModelName()}">name</td>
+                </tr>
 
+                <tr>
+                    <th align="left" th:text="#{label.year}"></th>
+                    <td th:text="${carEvent.getCustomerCar().getYearOfProduction()}">name</td>
+                </tr>
 
-<table>
-    <thead>
-    <tr>
-        <th align="left" th:text="#{label.customerName}"></th>
-        <td  th:text="${carEvent.getCustomerCar().getCustomer().getName()}">name</td>
-    </tr>
+                <tr>
+                    <th align="left" th:text="#{label.licensePlate}"></th>
+                    <td th:text="${carEvent.getCustomerCar().getLicensePlate()}">name</td>
+                </tr>
 
-    <tr>
-        <th align="left" th:text="#{label.makeName}"></th>
-        <td  th:text="${carEvent.getCustomerCar().getModel().getMake().getMakeName()}">name</td>
-    </tr>
-    <tr>
-        <th align="left" th:text="#{label.modelName}"></th>
-        <td  th:text="${carEvent.getCustomerCar().getModel().getModelName()}">name</td>
-    </tr>
-
-    <tr>
-        <th align="left" th:text="#{label.year}"></th>
-        <td  th:text="${carEvent.getCustomerCar().getYearOfProduction()}">name</td>
-    </tr>
-
-    <tr>
-        <th align="left" th:text="#{label.licensePlate}"></th>
-        <td  th:text="${carEvent.getCustomerCar().getLicensePlate()}">name</td>
-    </tr>
-
-    <tr>
-        <th align="left" th:text="#{label.VINnumber}"></th>
-        <td  th:text="${carEvent.getCustomerCar().getVinNumber()}">name</td>
-    </tr>
-
-    </thead>
-</table>
-
-<br>
-<br>
-<p>
-<h4>Choose Procedures</h4>
-</p>
-<form action="#" th:action="@{'/carevents/edit-carevent/' + ${carEvent.getCarEventID()}}" th:object="${carEvent}" method="post">
-
-    <table>
-
-        <div class="col-sm-4">
-
-            <select class="form-group" name="procedures" id="procedures" multiple="multiple">
-
-                <option
-                        th:each="procedure :${allProcedures}"
-                        th:value="${procedure.getProcedureID()}"
-                        th:text="${procedure.getProcedureName()}"
-                        th:selected="${carEvent.getProcedures().contains(procedure)}">
-                </option>
-            </select>
+                <tr>
+                    <th align="left" th:text="#{label.VINnumber}"></th>
+                    <td th:text="${carEvent.getCustomerCar().getVinNumber()}">name</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
 
-        <tr>
-            <td><input type="hidden" th:value="${carEvent.getCustomerCar().getCustomerCarID()}" th:attr="name= 'customerCar'"/></td>
-            <td><input type="hidden" th:value="${carEvent.getCarEventID()}" th:attr="name= 'carEventID'"/></td>
-            <td><input type="hidden" th:value="${carEvent.getTotalPrice()}" th:attr="name= 'totalPrice'"/></td>
-        </tr>
+        <div class="col">
+            <h4>Choose procedures to apply</h4>
+            <form action="#" th:action="@{'/carevents/edit-carevent/' + ${carEvent.getCarEventID()}}"
+                  th:object="${carEvent}" method="post">
 
-        <tr>
-            <td><input type="submit" value="Save"/></td>
-        </tr>
-    </table>
+                <table>
+
+                    <div class="col-sm-4">
+
+                        <select class="form-group" name="procedures" multiple="multiple" id="my-select">
+
+                            <option
+                                    th:each="procedure :${allProcedures}"
+                                    th:value="${procedure.getProcedureID()}"
+                                    th:text="${procedure.getProcedureName()}"
+                                    th:selected="${carEvent.getProcedures().contains(procedure)}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <tr>
+                        <td><input type="hidden" th:value="${carEvent.getCustomerCar().getCustomerCarID()}"
+                                   th:attr="name= 'customerCar'"/></td>
+                        <td><input type="hidden" th:value="${carEvent.getCarEventID()}" th:attr="name= 'carEventID'"/>
+                        </td>
+                        <td><input type="hidden" th:value="${carEvent.getTotalPrice()}" th:attr="name= 'totalPrice'"/>
+                        </td>
+                    </tr>
+                    <br>
+                    <tr>
+                        <td><input class="btn btn-success" type="submit" value="Save"/></td>
+                    </tr>
+                </table>
 
 
-</form>
+            </form>
+        </div>
+    </div>
 
+
+</div>
+<footer th:replace="fragments/components :: footer"></footer>
+<div th:replace="fragments/components :: js"></div>
+<script th:src="@{/js/jquery.multi-select.js}"></script>
+<script th:src="@{/js/edit-carevent.js}"></script>
 
 </body>
 </html>

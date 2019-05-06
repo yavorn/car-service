@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 @Service
@@ -31,7 +32,8 @@ public class PdfServiceImpl implements PdfService {
         int pageMarginBottom= 30;
         String visitIdParagraphText = "Visit No: " + carEvent.getCarEventID();
         String customerParagraphText = String.format("Customer: %s, %s, %s", carEvent.getCustomerCar().getCustomer().getName(), carEvent.getCustomerCar().getCustomer().getEmail(), carEvent.getCustomerCar().getCustomer().getPhone());
-        String dateParagraphText = "Date: " + carEvent.getDate();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        String dateParagraphText = "Date: " + carEvent.getDate().format(dateTimeFormatter);
         String carParagraphText = String.format("Vehicle: %s %s, %d", carEvent.getCustomerCar().getModel().getMake().getMakeName(), carEvent.getCustomerCar().getModel().getModelName(), carEvent.getCustomerCar().getYearOfProduction());
         String licensePlateParagraphText = String.format("Car plate number: %s", carEvent.getCustomerCar().getLicensePlate());
         String totalPriceParagraphText = "Total price: " + carEvent.getTotalPrice() + " lv.";
