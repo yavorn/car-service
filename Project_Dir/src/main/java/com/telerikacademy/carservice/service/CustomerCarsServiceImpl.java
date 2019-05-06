@@ -1,6 +1,7 @@
 package com.telerikacademy.carservice.service;
 
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
+import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerCars;
 import com.telerikacademy.carservice.repository.CustomerCarsRepository;
 import com.telerikacademy.carservice.service.contracts.CustomerCarsService;
@@ -47,5 +48,14 @@ public class CustomerCarsServiceImpl implements CustomerCarsService {
             throw new DatabaseItemNotFoundException(String.format(CUSTOMER_CAR_NOT_FOUND_EXCEPTION_MSG, id));
         }
         return customerCarsRepository.findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(id);
+    }
+
+    @Override
+    public List<CustomerCars> getAllCustomerCarsByCustomerEmail(String email){
+        List<CustomerCars> result = customerCarsRepository.findCustomerCarsByCustomerEmailAndCustomerCarDeletedFalse(email);
+        if (result.size() == 0) {
+            throw new DatabaseItemNotFoundException(String.format("No customer cars found for customer with username %s", email));
+        }
+        return result;
     }
 }

@@ -199,6 +199,15 @@ public class CustomerServiceImpl implements CustomerService {
         return listYears;
     }
 
+    @Override
+    public String getLoggedUserEmail(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        Customer customer = findByEmail(currentPrincipalName);
+
+        return customer.getEmail();
+    }
+
     private void createCustomerOrAdmin(CustomerDto customerDto, List<GrantedAuthority> authorities) {
         Customer existingCustomer = customerRepository.findCustomerByEmailAndIsDeletedFalse(customerDto.getEmail());
 

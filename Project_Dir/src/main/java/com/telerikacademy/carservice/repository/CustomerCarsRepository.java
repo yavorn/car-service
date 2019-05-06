@@ -11,5 +11,7 @@ public interface CustomerCarsRepository extends JpaRepository<CustomerCars, Long
 
     List<CustomerCars> findCustomerCarsByCustomer_CustomerIdAndCustomerCarDeletedFalse(long id);
 
+    List<CustomerCars> findCustomerCarsByCustomerEmailAndCustomerCarDeletedFalse(String email);
+
     List<CustomerCars> findAllByCustomerCarDeletedFalse();
 }

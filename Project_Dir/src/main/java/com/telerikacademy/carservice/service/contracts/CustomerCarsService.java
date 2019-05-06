@@ -10,5 +10,7 @@ public interface CustomerCarsService {
 
     List<CustomerCars> getAllCustomerCarsByCustomerId(Long id);
 
+    List<CustomerCars> getAllCustomerCarsByCustomerEmail(String email);
+
     CustomerCars getCustomerCarById(Long id);
 }
