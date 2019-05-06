@@ -86,16 +86,16 @@ public class CustomerServiceImplTest {
 
     @Test
     public void findByEmail_ShouldReturn_WhenValidArgsPassed() {
-        when(customerRepository.findCustomerByEmail(anyString()))
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString()))
                 .thenReturn(customer);
 
         Customer result = customerServiceImpl.findByEmail("email");
         assertEquals("email", result.getEmail());
     }
 
-    @Test
+    @Test(expected = DatabaseItemNotFoundException.class)
     public void findByEmail_ShouldReturn_WhenInvalidArgsPassed() {
-        when(customerRepository.findCustomerByEmail("email"))
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse("email"))
                 .thenReturn(customer);
 
         Customer customerToFind = customerServiceImpl.findByEmail("aaa@aa.aa");
@@ -104,7 +104,7 @@ public class CustomerServiceImplTest {
 
     @Test(expected = DatabaseItemAlreadyExistsException.class)
     public void customer_ShouldThrow_WhenUserExists() {
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(customer);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
         when(passwordEncoder.encode("generateRandomPasswordResponse")).thenReturn("$2y$10$SWb8bU0QIEb067afKMIj6.nTSNXDUDTKLNye/jXi7WBBpXfv8Izg6");
         customerServiceImpl.addCustomer(customerDto, userAuthorities);
@@ -112,7 +112,7 @@ public class CustomerServiceImplTest {
 
     @Test
     public void addCustomer_ShouldReturn_WhenValidArgsPassed() {
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(null);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
         when(passwordEncoder.encode("generateRandomPasswordResponse")).thenReturn("$2y$10$SWb8bU0QIEb067afKMIj6.nTSNXDUDTKLNye/jXi7WBBpXfv8Izg6");
         customerServiceImpl.addCustomer(customerDto, userAuthorities);
@@ -125,7 +125,7 @@ public class CustomerServiceImplTest {
 
     @Test
     public void addAdmin_ShouldReturn_WhenValidArgsPassed() throws Exception {
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(null);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
         when(passwordEncoder.encode("generateRandomPasswordResponse")).thenReturn("$2y$10$SWb8bU0QIEb067afKMIj6.nTSNXDUDTKLNye/jXi7WBBpXfv8Izg6");
         customerServiceImpl.addCustomer(customerDto, adminAuthorities);
@@ -138,7 +138,7 @@ public class CustomerServiceImplTest {
 
     @Test(expected = DatabaseItemAlreadyExistsException.class)
     public void addAdmin_ShouldThrow_WhenUserExists() {
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(customer);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
         when(passwordEncoder.encode("generateRandomPasswordResponse")).thenReturn("$2y$10$SWb8bU0QIEb067afKMIj6.nTSNXDUDTKLNye/jXi7WBBpXfv8Izg6");
         customerServiceImpl.addCustomer(customerDto, adminAuthorities);
@@ -146,7 +146,7 @@ public class CustomerServiceImplTest {
 
     @Test
     public void resetPassword_ShouldReturn_WhenValidArgsPassed() {
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(customer);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
 
         customerServiceImpl.resetPassword("email");
@@ -154,7 +154,7 @@ public class CustomerServiceImplTest {
 
     @Test(expected = DatabaseItemNotFoundException.class)
     public void resetPassword_ShouldThrow_WhenInvalidArgsPassed() {
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(null);
         when(passwordService.generateRandomPassword()).thenReturn("generateRandomPasswordResponse");
 
         customerServiceImpl.resetPassword("email");
@@ -162,7 +162,7 @@ public class CustomerServiceImplTest {
 
     @Test(expected = NullPointerException.class)
     public void changePassword_ShouldThrow_WhenNullPassed() {
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(customer);
         customerServiceImpl.changePassword(new CustomerDto());
     }
 
@@ -218,7 +218,7 @@ public class CustomerServiceImplTest {
 
     @Test
     public void disableCustomer_ShouldReturn_WhenValidArgsPassed(){
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(customer);
         customerServiceImpl.disableCustomer(customerDto);
 
         assertTrue(customer.getIsDeleted());
@@ -226,7 +226,7 @@ public class CustomerServiceImplTest {
 
     @Test(expected = DatabaseItemNotFoundException.class)
     public void disableCustomer_ShouldThrow_WhenNullPassed(){
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(null);
         customerServiceImpl.disableCustomer(customerDto);
 
         assertEquals(1, customer.getIsDeleted());
@@ -234,14 +234,14 @@ public class CustomerServiceImplTest {
 
     @Test(expected = DatabaseItemAlreadyDeletedException.class)
     public void disableCustomer_ShouldThrow_WhenUserAlreadyDisabled(){
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(customer);
         customer.setIsDeleted(true);
         customerServiceImpl.disableCustomer(customerDto);
     }
 
     @Test
     public void enableCustomer_ShouldReturn_WhenValidArgsPassed() {
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(customer);
         customer.setIsDeleted(true);
         customerServiceImpl.enableCustomer(customerDto);
 
@@ -250,7 +250,7 @@ public class CustomerServiceImplTest {
 
     @Test(expected = DatabaseItemNotFoundException.class)
     public void enableCustomer_ShouldThrow_WhenNullPassed(){
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(null);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(null);
         customerServiceImpl.enableCustomer(customerDto);
 
         assertTrue(customer.getIsDeleted());
@@ -258,7 +258,7 @@ public class CustomerServiceImplTest {
 
     @Test(expected = DatabaseItemAlreadyUnDeletedException.class)
     public void enableCustomer_ShouldThrow_WhenUserAlreadyEnabled(){
-        when(customerRepository.findCustomerByEmail(anyString())).thenReturn(customer);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(customer);
         customer.setIsDeleted(false);
         customerServiceImpl.enableCustomer(customerDto);
     }
@@ -266,20 +266,20 @@ public class CustomerServiceImplTest {
     @Test(expected = DatabaseItemAlreadyExistsException.class)
     public void createCustomerCar_ShouldThrow_WhenCustomerHasThisCarAlready(){
         cars.add(car);
-        when(customerRepository.findCustomerByEmail(customerDto.getEmail())).thenReturn(customer);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(customerDto.getEmail())).thenReturn(customer);
         when(customerCarsRepository.findAllByCustomerCarDeletedFalse()).thenReturn(cars);
         customerServiceImpl.createCustomerCar(car, customer.getEmail());
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
     public void createCustomerCar_ShouldThrow_WhenCustomerDoesNotExist(){
-        when(customerRepository.findCustomerByEmail(customerDto.getEmail())).thenReturn(null);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(customerDto.getEmail())).thenReturn(null);
         customerServiceImpl.createCustomerCar(car, customer.getEmail());
     }
 
     @Test
     public void createCustomerCar_ShouldReturn_WhenValidArgsPassed(){
-        when(customerRepository.findCustomerByEmail(customerDto.getEmail())).thenReturn(customer);
+        when(customerRepository.findCustomerByEmailAndIsDeletedFalse(customerDto.getEmail())).thenReturn(customer);
         customerServiceImpl.createCustomerCar(car, customer.getEmail());
         assertNotNull(customerCarsRepository.findAll());
     }
