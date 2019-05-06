@@ -186,3 +186,36 @@ footer {
 footer p {
     padding: 15px;
 }
+
+#admin-portal{
+    background-image: url(/images/admin-portal-image-1.jpg);
+    background-size:cover;
+    background-position:center;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:left;
+    align-items: inherit;
+    text-align:left;
+    padding:0 35px;
+}
+
+#admin-portal-forms{
+    margin-top: 50px;
+}
+
+#access-denied-body{
+    background-image: url(/images/Access-Denied-image.png);
+    background-size:cover;
+    background-position:center;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:left;
+    align-items: center;
+    text-align:center;
+    padding:0 35px;
+    font-family: "Copperplate Gothic Bold";
+    font-size: 20px;
+    color: brown;
+}
