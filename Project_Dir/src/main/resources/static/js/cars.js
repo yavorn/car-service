@@ -8,7 +8,7 @@ let carsTable = $('#cars-table').dataTable({
             "searchable": false
         },
         {
-            "targets": [ 0 ],
+            "targets": [ 0 , 1 ],
             "visible": false
         }
     ]
