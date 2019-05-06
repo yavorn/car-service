@@ -54,7 +54,7 @@ public class CustomerCarsServiceImplTest {
 
     @Test
     public void getAllCustomerCars_ShouldReturn_WhenValidArgsPassed() {
-        when(customerCarsRepository.findAll()).thenReturn(carsList);
+        when(customerCarsRepository.findAllByCustomerCarDeletedFalse()).thenReturn(carsList);
         List<CustomerCars> result = customerCarsServiceImpl.getAllCustomerCars();
         assertEquals(2, result.size());
     }

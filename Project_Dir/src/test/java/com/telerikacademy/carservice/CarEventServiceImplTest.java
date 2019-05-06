@@ -43,7 +43,7 @@ public class CarEventServiceImplTest {
     @Test
     public void getAllCarEvents_ShouldReturn_WhenValidArgsPassed() {
         testCarEventList.add(testCarEvent);
-        when(carEventRepository.findAll()).thenReturn(testCarEventList);
+        when(carEventRepository.findAllByCarEventDeletedFalse()).thenReturn(testCarEventList);
         List<CarEvent> result = carEventServiceImpl.getAllCarEvents();
         assertEquals(testCarEvent, result.get(0));
     }
