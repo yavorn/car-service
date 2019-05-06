@@ -326,11 +326,10 @@ public class CarModelServiceTest {
 
     }
 
-
     @Test
     public void undeleteCarMakeByID_shouldInvokeSaveInMakeRepository_whenUndeleteSuccessfully() {
 
-        when(mockMakeRepository.findMakeByMakeIDAndMakeDeletedFalse((long)3))
+        when(mockMakeRepository.findMakeByMakeIDAndMakeDeletedTrue((long)3))
                 .thenReturn(carMakeOpel);
         // Act
         carService.undeleteCarMakeByID((long)3);
@@ -343,7 +342,7 @@ public class CarModelServiceTest {
     @Test(expected = DatabaseItemNotFoundException.class)
     public void undeleteCarMakeByID_shouldThrowDatabaseItemNotFoundException_whenInvalidIdIsPassed() throws DatabaseItemNotFoundException {
 
-        when(mockMakeRepository.findMakeByMakeIDAndMakeDeletedFalse((long)3))
+        when(mockMakeRepository.findMakeByMakeIDAndMakeDeletedTrue((long)3))
                 .thenReturn(null);
         // Act
         carService.undeleteCarMakeByID((long)3);

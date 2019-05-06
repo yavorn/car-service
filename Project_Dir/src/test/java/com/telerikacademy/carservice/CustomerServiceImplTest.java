@@ -182,7 +182,7 @@ public class CustomerServiceImplTest {
 
     @Test
     public void getAllCustomerCars_ShouldReturn_WhenValidArgsPassed() {
-        when(customerCarsRepository.findAll()).thenReturn(Arrays.<CustomerCars>asList(new CustomerCars(customer,
+        when(customerCarsRepository.findAllByCustomerCarDeletedFalse()).thenReturn(Arrays.<CustomerCars>asList(new CustomerCars(customer,
                 new Models(new Make("makeName"), "modelName"),
                 Integer.valueOf(0), "licensePlate", "VINnumber")));
 
@@ -267,7 +267,7 @@ public class CustomerServiceImplTest {
     public void createCustomerCar_ShouldThrow_WhenCustomerHasThisCarAlready(){
         cars.add(car);
         when(customerRepository.findCustomerByEmail(customerDto.getEmail())).thenReturn(customer);
-        when(customerCarsRepository.findAll()).thenReturn(cars);
+        when(customerCarsRepository.findAllByCustomerCarDeletedFalse()).thenReturn(cars);
         customerServiceImpl.createCustomerCar(car, customer.getEmail());
     }
 
