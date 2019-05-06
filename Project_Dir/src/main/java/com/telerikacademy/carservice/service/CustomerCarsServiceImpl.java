@@ -1,5 +1,6 @@
 package com.telerikacademy.carservice.service;
 
+import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerCars;
@@ -14,6 +15,7 @@ import java.util.List;
 public class CustomerCarsServiceImpl implements CustomerCarsService {
 
     private static final String CUSTOMER_CAR_NOT_FOUND_EXCEPTION_MSG = "Customer Car with ID: %s not found!";
+    private static final String CAR_ALREADY_DELETED_MSG = "Car with ID %d is already deleted.";
 
 
     private CustomerCarsRepository customerCarsRepository;
@@ -33,7 +35,7 @@ public class CustomerCarsServiceImpl implements CustomerCarsService {
     }
 
     @Override
-    public List<CustomerCars> getAllCustomerCarsByCustomerId(Long id) {
+    public List<CustomerCars> getAllCustomerCarsByCustomerId(long id) {
         List<CustomerCars> result = customerCarsRepository.findCustomerCarsByCustomer_CustomerIdAndCustomerCarDeletedFalse(id);
         if (result.size() == 0) {
             throw new DatabaseItemNotFoundException(String.format("No customer cars found for customer with id %d", id));
@@ -42,7 +44,7 @@ public class CustomerCarsServiceImpl implements CustomerCarsService {
     }
 
     @Override
-    public CustomerCars getCustomerCarById(Long id) {
+    public CustomerCars getCustomerCarById(long id) {
         CustomerCars customerCar = customerCarsRepository.findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(id);
         if (customerCar == null) {
             throw new DatabaseItemNotFoundException(String.format(CUSTOMER_CAR_NOT_FOUND_EXCEPTION_MSG, id));
@@ -57,5 +59,19 @@ public class CustomerCarsServiceImpl implements CustomerCarsService {
             throw new DatabaseItemNotFoundException(String.format("No customer cars found for customer with username %s", email));
         }
         return result;
+    }
+
+    @Override
+    public void deleteCustomerCar(long id){
+        CustomerCars carToDelete = customerCarsRepository.findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(id);
+        if (carToDelete == null) {
+            throw new DatabaseItemNotFoundException(String.format(CUSTOMER_CAR_NOT_FOUND_EXCEPTION_MSG, id));
+        }
+        if (carToDelete.isCustomerCarDeleted()){
+            throw new DatabaseItemAlreadyDeletedException(String.format(CAR_ALREADY_DELETED_MSG, id));
+        }
+
+        carToDelete.setCustomerCarDeleted(true);
+        customerCarsRepository.saveAndFlush(carToDelete);
     }
 }

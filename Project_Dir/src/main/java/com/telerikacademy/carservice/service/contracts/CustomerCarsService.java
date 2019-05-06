@@ -8,9 +8,11 @@ public interface CustomerCarsService {
 
     List<CustomerCars> getAllCustomerCars();
 
-    List<CustomerCars> getAllCustomerCarsByCustomerId(Long id);
+    List<CustomerCars> getAllCustomerCarsByCustomerId(long id);
 
     List<CustomerCars> getAllCustomerCarsByCustomerEmail(String email);
 
-    CustomerCars getCustomerCarById(Long id);
+    CustomerCars getCustomerCarById(long id);
+
+    void deleteCustomerCar(long id);
 }
