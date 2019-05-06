@@ -12,7 +12,7 @@
 <div class="container body-content">
     <h1>Choose a customer</h1>
     <select class="selectpicker" id="select-customer" data-style="btn-primary">
-        <option> Choose a customer</option>
+        <option value="All"> All Customers </option>
         <option
                 th:each="customer :${allCustomers}"
                 th:value="${customer.getCustomerId()}"

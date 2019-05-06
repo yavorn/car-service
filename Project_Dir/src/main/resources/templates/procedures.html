@@ -199,6 +199,10 @@
     </div>
 </div>
 
+<script th:inline="javascript">
+    let allProcedures = /*[[${procedures}]]*/ {};
+</script>
+
 <footer th:replace="fragments/components :: footer"></footer>
 
 <div th:replace="fragments/components :: js"></div>
