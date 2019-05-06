@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Customer Panel</title>
+	<div th:replace="fragments/components :: head"></div>
+</head>
+<body>
+<header th:replace="fragments/components :: navbar"></header>
+<div class="container body-content">
+	<div class="page-header">
+		<label class="heading"><h1>Your cars</h1></label>
+		<div class="form-group">
+			<fieldset>
+				<div class="table-responsive">
+					<div class="table-responsive">
+						<table id="cars-table" class="table table-striped table-bordered display" cellspacing="0"
+						       width="100%">
+							<thead>
+							<tr>
+								<th>Make</th>
+								<th>Model</th>
+								<th>Year</th>
+								<th>License Plate</th>
+								<th>VIN</th>
+								<th></th>
+							</tr>
+							</thead>
+							<tbody id="customer">
+							<tr th:each="car : ${cars}">
+								<td th:text="${car.getModel().getMake().getMakeName()}"></td>
+								<td th:text="${car.getModel().getModelName()}"></td>
+								<td th:text="${car.getYearOfProduction()}"></td>
+								<td th:text="${car.getLicensePlate()}"></td>
+								<td th:text="${car.vinNumber}"></td>
+								<td>
+									<button class="btn btn-outline-primary" title="View Procedures"
+									        id="view-procedures" th:value="${car.getCustomerCarID()}"
+									        th:onclick="|viewProcedures(value)|">
+										<i class="fas fa-search"></i> View Procedures
+									</button>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		<hr/>
+	</div>
+</div>
+<p class="lead">
+	<a class="btn btn-warning btn-lg" th:href="@{/password}" role="button">Change Password</a>
+</p>
+<footer th:replace="fragments/components :: footer"></footer>
+<div th:replace="fragments/components :: js"></div>
+<script th:src="@{/js/cars.js}"></script>
+</body>
+</html>
