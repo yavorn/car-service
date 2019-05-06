@@ -4,7 +4,7 @@
 let carsTable = $('#customer-portal-table').DataTable({
     "columnDefs": [
         {
-            "orderable": false, "targets": [6]
+            "orderable": false, "targets": [5]
         }
     ]
 });
