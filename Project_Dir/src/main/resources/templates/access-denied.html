@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<meta charset="UTF-8" >
 	<title>Access Denied</title>
 	<link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
-<body>
-<h1>Access denied!</h1>
-<p>You are unauthorized to view this page.</p>
+<body id="access-denied-body">
 <form th:action="@{/logout}" method="post">
 	<input type="submit" value="Logout">
 </form>
 <p>
-	<a th:href="@{/}">Home</a>
+	<a sec:authorize="hasRole('ROLE_USER')" th:href="@{/customer-portal}">Home</a>
+	<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin-portal}">Home</a>
 </p>
 </body>
 </html>
