@@ -88,8 +88,8 @@
                     <i class="fas fa-wrench"></i> Edit
                 </button>
 
-                <a th:href="@{'/createPdf/' + ${event.getCarEventID()}}">
-                    <img src="/images/pdf-icon-png-2079-65x65.png" width="40px" alt="Download PDF">
+                <a  th:href="@{'/createPdf/' + ${event.getCarEventID()}}">
+                    <img id="pdf" src="/images/pdf-icon-png-2079-65x65.png" width="40px" alt="Download PDF">
                 </a>
             </div>
             </thead>
