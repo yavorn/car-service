@@ -10,7 +10,6 @@ let table = $('#procedures-table').DataTable({
     ]
 });
 
-
 function addProcedure() {
     let modal = $('#add-procedure-modal');
     modal.modal();
@@ -21,9 +20,10 @@ function addProcedure() {
 
 function editProcedure(procedureID) {
     let modal = $('#edit-procedure-modal');
+    //console.log(allProcedures);
 
     $('#edit-procedure-name-input').val();
-    $('#edit-procedure-price-input').val(procedureID);
+    $('#edit-procedure-price-input').val();
     modal.modal();
 
     $('#edit-procedure-form').attr("action", '/procedures/' + procedureID);

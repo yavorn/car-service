@@ -12,7 +12,7 @@
 <div class="container body-content">
     <h1>Choose a customer</h1>
     <select class="selectpicker" id="select-customer" data-style="btn-primary">
-        <option> Choose a customer</option>
+        <option value="All"> All Customers </option>
         <option
                 th:each="customer :${allCustomers}"
                 th:value="${customer.getCustomerId()}"
@@ -38,8 +38,9 @@
                                 <th>Year</th>
                                 <th>License Plate</th>
                                 <th>VIN</th>
-                                <th></th>
-                                <th></th>
+                                <th>View Procedures</th>
+                                <th>Add Procedure</th>
+
 
                             </tr>
                             </thead>
@@ -61,13 +62,19 @@
                                 </td>
 
                                 <td>
-                                <button class="btn btn-outline-success" title="View Procedures"
+                                <button class="btn btn-outline-success" title="Add Procedure"
                                         id="add-procedures" th:value="${car.getCustomerCarID()}"
                                         th:onclick="|addProcedure(value)|">
-                                    <i class="fas fa-wrench"></i> Add Procedure
+                                    <i class="fas fa-wrench"></i> Add Procedures
                                 </button>
                                 </td>
-
+                                <!--<td>-->
+                                    <!--<button class="btn btn-danger" title="Delete Car"-->
+                                            <!--id="delete-user" th:value="${car.getCustomerCarID()}"-->
+                                            <!--th:onclick="|deleteCar(value)|">-->
+                                        <!--<i class="fas fa-trash-alt"></i>-->
+                                    <!--</button>-->
+                                <!--</td>-->
                             </tr>
                             </tbody>
                         </table>

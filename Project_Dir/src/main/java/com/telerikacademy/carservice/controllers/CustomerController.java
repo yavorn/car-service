@@ -46,6 +46,13 @@ public class CustomerController {
         return "customers";
     }
 
+    @PostMapping ("/car")
+    public String addCustomerCar(@ModelAttribute CustomerCars customerCar, String email){
+        customerService.createCustomerCar(customerCar, email);
+        return "redirect:/customers";
+    }
+
+
     @ApiOperation(value = "Returns a list of cars for a certain customer.")
     @GetMapping ("/{id}")
     @ResponseBody
@@ -71,20 +78,8 @@ public class CustomerController {
         return "customer-car";
     }
 
-    @GetMapping("/new-customer-car")
-    public String showNewCarPage(Model model) {
 
-        model.addAttribute("customerDto", new CustomerDto());
-        model.addAttribute("customerCar", new CustomerCars());
 
-        return "new-customer-car";
-    }
-
-    @PostMapping("/new-customer-car")
-    public String addCustomerCar(@ModelAttribute CustomerCars customerCar, String email){
-        customerService.createCustomerCar(customerCar, email);
-        return "redirect:/customers/car";
-    }
 
 
 }

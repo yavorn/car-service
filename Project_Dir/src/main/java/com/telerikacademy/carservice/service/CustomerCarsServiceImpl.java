@@ -2,7 +2,6 @@ package com.telerikacademy.carservice.service;
 
 import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
-import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerCars;
 import com.telerikacademy.carservice.repository.CustomerCarsRepository;
 import com.telerikacademy.carservice.service.contracts.CustomerCarsService;
@@ -49,7 +48,7 @@ public class CustomerCarsServiceImpl implements CustomerCarsService {
         if (customerCar == null) {
             throw new DatabaseItemNotFoundException(String.format(CUSTOMER_CAR_NOT_FOUND_EXCEPTION_MSG, id));
         }
-        return customerCarsRepository.findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(id);
+        return customerCar;
     }
 
     @Override

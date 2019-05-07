@@ -42,7 +42,7 @@
                                 <button class="btn btn-danger" title="Delete User"
                                         id="delete-user" th:value="${customer.getEmail()}"
                                         th:onclick="|deleteUser(value)|">
-                                    <i class="fas fa-trash-alt"></i> Delete User
+                                    <i class="fas fa-trash-alt"></i> Delete Customer
                                 </button>
                             </td>
                         </tr>
@@ -175,6 +175,7 @@
     </div>
 </div>
 
+
 <!--Add CustomerCar Modal-->
 <div id="create-customerCar-modal" class="modal fade">
     <div class="modal-dialog" role="document">
@@ -186,10 +187,10 @@
             </div>
 
             <div class="modal-body">
-                <form id="create-customerCar-form" th:action="@{new-customer-car}" th:object="${customerCar}"
+                <form id="create-customerCar-form" th:action="@{/customers/car}" th:object="${customerCar}"
                       th:method="post">
                     <div th:object="${customerDto}">
-                        <input id="user-name" th:field="*{email}" type="text" hidden>
+                        <input id="user-name" type="text" th:field="*{email}" hidden>
                     </div>
 
                     <div class="form-group">
@@ -207,6 +208,7 @@
                         </small>
                     </div>
 
+
                     <div class="form-group">
                         <label class="control-label">Choose a model:</label>
                         <div class="input-group mb-3">
@@ -222,6 +224,17 @@
                         </small>
                     </div>
 
+
+                    <!--<div class="form-group">-->
+                        <!--<label class="control-label">Choose a model:</label>-->
+                        <!--<div class="input-group mb-3">-->
+                        <!--</div>-->
+                        <!--<input type="text" th:field="*{model}">-->
+                        <!--<small id="modelHelpBlock" class="form-text text-muted">-->
+                            <!-- Choose a car model. -->
+                        <!--</small>-->
+                    <!--</div>-->
+
                     <div class="form-group">
                         <label class="control-label">Year of manufacture:</label>
                         <div class="input-group mb-3">
@@ -230,7 +243,7 @@
                             </div>
                             <input type="number" class="form-control" aria-label="Year"
                                    minlength="4"
-                                   maxlength="4" required th:field="*{yearOfProduction}">
+                                   maxlength="4" th:field="*{yearOfProduction}" required>
                         </div>
                         <small id="yearHelpBlock" class="form-text text-muted">
                             Enter year with exactly 4 digits.
@@ -241,33 +254,25 @@
                         <label class="control-label">License plate:</label>
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" aria-label="License Plate"
-                                   minlength="5"
-                                   maxlength="6" th:field="*{licensePlate}" required>
+                                   minlength="7"
+                                   maxlength="8" th:field="*{licensePlate}" required>
                         </div>
                         <small id="licenseHelpBlock" class="form-text text-muted">
-                            Enter license plate with 5 or 6 letters and digits and no spaces.
+                            Enter license plate with 7 or 8 letters and digits and no spaces.
                         </small>
                     </div>
 
-
-                    <!--<div class="form-group">-->
-                    <!--<label class="control-label">Username</label>-->
-                    <!--<div class="input-group mb-3">-->
-                    <!--<div class="input-group-prepend">-->
-                    <!--<span class="input-group-text">@</span>-->
-                    <!--</div>-->
-                    <!--<input type="email" class="form-control" aria-label="Username"-->
-                    <!--id="username-input"-->
-                    <!--minlength="0"-->
-                    <!--maxlength="45" required th:field="*{email}">-->
-                    <!--</div>-->
-                    <!--<small id="usernameHelpBlock" class="form-text text-muted">-->
-                    <!--Please use a valid email address as your username.-->
-                    <!--</small>-->
-                    <!--</div>-->
-
-
-
+                    <div class="form-group">
+                        <label class="control-label">VIN number</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" aria-label="Year"
+                                   minlength="17"
+                                   maxlength="17" th:field="*{vinNumber}" required>
+                        </div>
+                        <small id="vinHelpBlock" class="form-text text-muted">
+                            Enter the VIN number with exactly 17 letters and digits.
+                        </small>
+                    </div>
 
                     <div class="modal-footer">
                         <div class="form-group">
