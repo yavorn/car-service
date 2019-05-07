@@ -1,5 +1,6 @@
 package com.telerikacademy.carservice;
 
+import com.telerikacademy.carservice.exceptions.DatabaseItemAlreadyDeletedException;
 import com.telerikacademy.carservice.exceptions.DatabaseItemNotFoundException;
 import com.telerikacademy.carservice.models.Customer;
 import com.telerikacademy.carservice.models.CustomerCars;
@@ -19,6 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -80,5 +83,61 @@ public class CustomerCarsServiceImplTest {
         List<CustomerCars> result = customerCarsServiceImpl.getAllCustomerCarsByCustomerId(1L);
         assertEquals(1, result.size());
     }
-}
 
+    @Test
+    public void getCustomerCarByID_ShouldReturn_WhenValidArgsPassed(){
+        when(customerCarsRepository.findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(1L))
+                .thenReturn(testCarOne);
+        CustomerCars result = customerCarsServiceImpl.getCustomerCarById(1L);
+        assertEquals(result, testCarOne);
+    }
+
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void getCustomerCarByID_ShouldThrow_WhenNoCarsFound() {
+        when(customerCarsRepository.findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(1L))
+                .thenReturn(null);
+        CustomerCars result = customerCarsServiceImpl.getCustomerCarById(1L);
+        assertEquals(result, testCarOne);
+    }
+
+    @Test
+    public void getAllCustomerCarsByCustomerEmail_ShouldReturn_WhenValidArgsPassed(){
+        when(customerCarsRepository.findCustomerCarsByCustomerEmailAndCustomerCarDeletedFalse(customer.getEmail()))
+                .thenReturn(carsList);
+        List<CustomerCars> result = customerCarsServiceImpl.getAllCustomerCarsByCustomerEmail(customer.getEmail());
+        assertEquals(2, result.size());
+    }
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void getAllCustomerCarsByCustomerEmail_ShouldThrow_WhenNoCarsFound(){
+        when(customerCarsRepository.findCustomerCarsByCustomerEmailAndCustomerCarDeletedFalse(customer.getEmail()))
+                .thenReturn(new ArrayList<>());
+        List<CustomerCars> result = customerCarsServiceImpl.getAllCustomerCarsByCustomerEmail(customer.getEmail());
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    public void deleteCustomerCar_ShouldReturn_WhenValidArgsPassed(){
+        when(customerCarsRepository.findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(1L))
+                .thenReturn(testCarOne);
+        customerCarsServiceImpl.deleteCustomerCar(1L);
+        assertTrue(testCarOne.isCustomerCarDeleted());
+    }
+
+    @Test(expected = DatabaseItemNotFoundException.class)
+    public void deleteCustomerCar_ShouldThrow_WhenNoCarsFound(){
+        when(customerCarsRepository.findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(1L))
+                .thenReturn(null);
+        customerCarsServiceImpl.deleteCustomerCar(1L);
+        assertTrue(testCarOne.isCustomerCarDeleted());
+    }
+
+    @Test(expected = DatabaseItemAlreadyDeletedException.class)
+    public void deleteCustomerCar_ShouldThrow_WhenCarDeletedAlready(){
+        testCarOne.setCustomerCarDeleted(true);
+        when(customerCarsRepository.findCustomerCarsByCustomerCarIDAndCustomerCarDeletedFalse(1L))
+                .thenReturn(testCarOne);
+        customerCarsServiceImpl.deleteCustomerCar(1L);
+        assertTrue(testCarOne.isCustomerCarDeleted());
+    }
+
+}

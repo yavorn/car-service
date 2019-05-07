@@ -14,8 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 
@@ -217,7 +219,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void disableCustomer_ShouldReturn_WhenValidArgsPassed(){
+    public void disableCustomer_ShouldReturn_WhenValidArgsPassed() {
         when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(customer);
         customerServiceImpl.disableCustomer(customerDto);
 
@@ -225,7 +227,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
-    public void disableCustomer_ShouldThrow_WhenNullPassed(){
+    public void disableCustomer_ShouldThrow_WhenNullPassed() {
         when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(null);
         customerServiceImpl.disableCustomer(customerDto);
 
@@ -233,7 +235,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test(expected = DatabaseItemAlreadyDeletedException.class)
-    public void disableCustomer_ShouldThrow_WhenUserAlreadyDisabled(){
+    public void disableCustomer_ShouldThrow_WhenUserAlreadyDisabled() {
         when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(customer);
         customer.setIsDeleted(true);
         customerServiceImpl.disableCustomer(customerDto);
@@ -249,7 +251,7 @@ public class CustomerServiceImplTest {
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
-    public void enableCustomer_ShouldThrow_WhenNullPassed(){
+    public void enableCustomer_ShouldThrow_WhenNullPassed() {
         when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(null);
         customerServiceImpl.enableCustomer(customerDto);
 
@@ -257,14 +259,14 @@ public class CustomerServiceImplTest {
     }
 
     @Test(expected = DatabaseItemAlreadyUnDeletedException.class)
-    public void enableCustomer_ShouldThrow_WhenUserAlreadyEnabled(){
+    public void enableCustomer_ShouldThrow_WhenUserAlreadyEnabled() {
         when(customerRepository.findCustomerByEmailAndIsDeletedFalse(anyString())).thenReturn(customer);
         customer.setIsDeleted(false);
         customerServiceImpl.enableCustomer(customerDto);
     }
 
     @Test(expected = DatabaseItemAlreadyExistsException.class)
-    public void createCustomerCar_ShouldThrow_WhenCustomerHasThisCarAlready(){
+    public void createCustomerCar_ShouldThrow_WhenCustomerHasThisCarAlready() {
         cars.add(car);
         when(customerRepository.findCustomerByEmailAndIsDeletedFalse(customerDto.getEmail())).thenReturn(customer);
         when(customerCarsRepository.findAllByCustomerCarDeletedFalse()).thenReturn(cars);
@@ -272,13 +274,13 @@ public class CustomerServiceImplTest {
     }
 
     @Test(expected = DatabaseItemNotFoundException.class)
-    public void createCustomerCar_ShouldThrow_WhenCustomerDoesNotExist(){
+    public void createCustomerCar_ShouldThrow_WhenCustomerDoesNotExist() {
         when(customerRepository.findCustomerByEmailAndIsDeletedFalse(customerDto.getEmail())).thenReturn(null);
         customerServiceImpl.createCustomerCar(car, customer.getEmail());
     }
 
     @Test
-    public void createCustomerCar_ShouldReturn_WhenValidArgsPassed(){
+    public void createCustomerCar_ShouldReturn_WhenValidArgsPassed() {
         when(customerRepository.findCustomerByEmailAndIsDeletedFalse(customerDto.getEmail())).thenReturn(customer);
         customerServiceImpl.createCustomerCar(car, customer.getEmail());
         assertNotNull(customerCarsRepository.findAll());
