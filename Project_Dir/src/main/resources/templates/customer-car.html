@@ -82,7 +82,7 @@
                 <th align="right" th:text="#{label.totalPrice}"></th>
                 <td  width="20%" th:text="${event.getTotalPrice() + ' lv.'}">TotalPrice</td>
 
-                <button class="btn btn-outline-secondary" title="Edit event"
+                <button sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-outline-secondary" title="Edit event"
                         id="view-cars" th:value="${event.getCarEventID()}"
                         th:onclick="|editCarEvent(value)|">
                     <i class="fas fa-wrench"></i> Edit
