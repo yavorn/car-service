@@ -40,6 +40,7 @@ public class CustomerController {
         model.addAttribute("allCustomersCars", customerService.getAllCustomerCars());
         model.addAttribute("allMakes", carService.getAllMakes());
         model.addAttribute("allModels", carService.getAllModels());
+        model.addAttribute("listOfYears", customerService.listOfYears());
         model.addAttribute("customerDto", new CustomerDto());
         model.addAttribute("customer", new Customer());
         model.addAttribute("customerCar", new CustomerCars());
