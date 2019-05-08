@@ -34,6 +34,14 @@ function addUser() {
     })
 }
 
+function addAdmin() {
+    let modal = $('#add-admin-modal');
+    modal.modal();
+    modal.on('hidden.bs.modal', function () {
+        table.reset();
+    })
+}
+
 function deleteUser(email) {
     let modal = $('#confirmation-modal');
     modal.modal();

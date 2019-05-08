@@ -69,6 +69,7 @@ carsTable.dataTable tbody td {
 }
 
 .navbar-visible{
+    margin-left: 10px;
     display:inline;
     color: #1BBBF5;
 }

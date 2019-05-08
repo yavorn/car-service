@@ -1,12 +1,18 @@
 'use strict';
 let apiUrl = 'http://localhost:8080/';
 
-function addCustomer(){
+function addUser() {
     let modal = $('#add-customer-modal');
+    modal.modal();
+}
 
-    $('#add-username-input').val();
-    $('#add-phone-input').val();
-    $('#add-name-input').val();
+function addAdmin() {
+    let modal = $('#add-admin-modal');
+    modal.modal();
+}
+
+function deleteUser(){
+    let modal = $('#delete-user-modal');
     modal.modal();
 }
 
