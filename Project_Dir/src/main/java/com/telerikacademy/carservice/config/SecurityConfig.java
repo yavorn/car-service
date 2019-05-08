@@ -26,7 +26,7 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource securityDataSource;
     private final String[] ADMIN_RIGHTS = {"/admin-portal", "/customer", "/customers", "/procedures", "/cars", "/admin", "/cars/edit-make/*", "/new-customer-car", "/carevents/createPdf/*"};
-    private final String[] USER_RIGHTS = {"/carevents/createPdf/*", "/customer-portal"};
+    private final String[] USER_RIGHTS = {"/", "/carevents/createPdf/*", "/customer-portal"};
 
     @Autowired
     public SecurityConfig(DataSource dataSource) {
