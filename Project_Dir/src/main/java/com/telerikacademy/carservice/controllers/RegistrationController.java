@@ -37,7 +37,7 @@ public class RegistrationController {
     public String registerNewCustomer(@ModelAttribute CustomerDto customerDto) {
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
         customerService.addCustomer(customerDto, authorities);
-        return "new-customer-confirmation";
+        return "redirect:customers";
     }
 
     @ApiOperation(value = "Method that disables user access to the system.")
@@ -66,6 +66,6 @@ public class RegistrationController {
     public String registerAdministrator(@ModelAttribute CustomerDto customerDto) {
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_ADMIN");
         customerService.addAdmin(customerDto, authorities);
-        return "new-customer-confirmation";
+        return "redirect:customers";
     }
 }
