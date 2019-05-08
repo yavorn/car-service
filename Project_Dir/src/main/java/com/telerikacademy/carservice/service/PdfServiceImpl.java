@@ -86,7 +86,7 @@ public class PdfServiceImpl implements PdfService {
             document.add(carParagraph);
             document.add(licensePlateParagraph);
 
-            Font tableBody = FontFactory.getFont("Arial", 15, BaseColor.WHITE);
+            Font tableBody = FontFactory.getFont("Arial", 15, BaseColor.BLACK);
 
             PdfPTable eventTable = new PdfPTable(2);
             eventTable.setWidthPercentage(100);
@@ -146,11 +146,11 @@ public class PdfServiceImpl implements PdfService {
     }
 
     private void setPdfPCellTextAlignment(PdfPCell procedure, int textAlign) {
-        procedure.setBorderColor(BaseColor.BLACK);
+        procedure.setBorderColor(BaseColor.WHITE);
         procedure.setPaddingLeft(10);
         procedure.setHorizontalAlignment(textAlign);
         procedure.setVerticalAlignment(textAlign);
-        procedure.setBackgroundColor(BaseColor.GRAY);
+        procedure.setBackgroundColor(BaseColor.WHITE);
         procedure.setExtraParagraphSpace(5);
     }
 
