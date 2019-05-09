@@ -40,8 +40,6 @@
                                 <th>VIN</th>
                                 <th>View Procedures</th>
                                 <th>Add Procedure</th>
-
-
                             </tr>
                             </thead>
                             <tbody id="customer">
@@ -60,7 +58,6 @@
                                         <i class="fas fa-search"></i> View Procedures
                                     </button>
                                 </td>
-
                                 <td>
                                     <button class="btn btn-outline-success" title="Add Procedure"
                                             id="add-procedures" th:value="${car.getCustomerCarID()}"
@@ -68,13 +65,6 @@
                                         <i class="fas fa-wrench"></i> Add Procedures
                                     </button>
                                 </td>
-                                <!--<td>-->
-                                <!--<button class="btn btn-danger" title="Delete Car"-->
-                                <!--id="delete-user" th:value="${car.getCustomerCarID()}"-->
-                                <!--th:onclick="|deleteCar(value)|">-->
-                                <!--<i class="fas fa-trash-alt"></i>-->
-                                <!--</button>-->
-                                <!--</td>-->
                             </tr>
                             </tbody>
                         </table>
@@ -131,7 +121,7 @@
         <div class="modal-content">
             <div class="modal-header">
 
-                <h1 class="modal-title" id="add-model-title">Add New Make</h1>
+                <h1 class="modal-title" id="add-model-title">Add New Model</h1>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
@@ -140,14 +130,12 @@
 
                     <div class="form-group">
                         <select th:field="*{make}" class="form-control" id="style">
-                            <!--<option th:text="NONE" th:value="0">-&#45;&#45; Select -&#45;&#45;</option>-->
                             <option th:each="make : ${allMakes}"
                                     th:value="${make.getMakeID()}"
-                                    th:text="${make.getMakeName()}">Wireframe
+                                    th:text="${make.getMakeName()}">
                             </option>
                         </select>
                     </div>
-
 
                     <div class="form-group">
                         <label class="control-label">
@@ -155,7 +143,7 @@
                         <div>
                             <input type="text" class="form-control input-lg" minlength="3"
                                    maxlength="45"
-                                   required th:field="*{makeName}">
+                                   required th:field="*{modelName}">
                             <small id="nameModelHelp" class="form-text text-muted">
                                 Model name must be 3-45 characters long.
                             </small>
