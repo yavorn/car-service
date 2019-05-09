@@ -33,6 +33,23 @@ function viewProcedures(customerCarId) {
     window.location.href = '/customers/car/' + customerCarId;
 }
 
+function addMake(){
+    let modal = $('#add-make-modal');
+    modal.modal();
+    modal.on('hidden.bs.modal', function () {
+        table.reset();
+    })
+}
+
+function addModel(){
+    let modal = $('#add-model-modal');
+    modal.modal();
+    modal.on('hidden.bs.modal', function () {
+        table.reset();
+    })
+}
+
+
 $(function () {
     $('[data-toggle="popover"]').popover({
         trigger: 'focus'

@@ -40,6 +40,9 @@ public class CarController {
     public String listCustomerCars(Model model){
         model.addAttribute("allCustomers", customerService.getAllCustomers());
         model.addAttribute("allCustomersCars", customerService.getAllCustomerCars());
+        model.addAttribute("make", new Make());
+        model.addAttribute("car", new Models());
+        model.addAttribute("allMakes", carService.getAllMakes());
         return "cars";
     }
 

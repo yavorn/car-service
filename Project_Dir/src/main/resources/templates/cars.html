@@ -12,7 +12,7 @@
 <div class="container body-content">
     <h1>Choose a customer</h1>
     <select class="selectpicker" id="select-customer" data-style="btn-primary">
-        <option value="All"> All Customers </option>
+        <option value="All"> All Customers</option>
         <option
                 th:each="customer :${allCustomers}"
                 th:value="${customer.getCustomerId()}"
@@ -62,18 +62,18 @@
                                 </td>
 
                                 <td>
-                                <button class="btn btn-outline-success" title="Add Procedure"
-                                        id="add-procedures" th:value="${car.getCustomerCarID()}"
-                                        th:onclick="|addProcedure(value)|">
-                                    <i class="fas fa-wrench"></i> Add Procedures
-                                </button>
+                                    <button class="btn btn-outline-success" title="Add Procedure"
+                                            id="add-procedures" th:value="${car.getCustomerCarID()}"
+                                            th:onclick="|addProcedure(value)|">
+                                        <i class="fas fa-wrench"></i> Add Procedures
+                                    </button>
                                 </td>
                                 <!--<td>-->
-                                    <!--<button class="btn btn-danger" title="Delete Car"-->
-                                            <!--id="delete-user" th:value="${car.getCustomerCarID()}"-->
-                                            <!--th:onclick="|deleteCar(value)|">-->
-                                        <!--<i class="fas fa-trash-alt"></i>-->
-                                    <!--</button>-->
+                                <!--<button class="btn btn-danger" title="Delete Car"-->
+                                <!--id="delete-user" th:value="${car.getCustomerCarID()}"-->
+                                <!--th:onclick="|deleteCar(value)|">-->
+                                <!--<i class="fas fa-trash-alt"></i>-->
+                                <!--</button>-->
                                 <!--</td>-->
                             </tr>
                             </tbody>
@@ -86,6 +86,94 @@
     </div>
 </div>
 
+<!-- Add Make Modal -->
+<div id="add-make-modal" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h1 class="modal-title" id="add-modal-title">Add New Make</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="add-make-form" th:action="@{/cars/add-make}" th:object="${make}" th:method="post">
+
+                    <div class="form-group">
+                        <label class="control-label">
+                            Name</label>
+                        <div>
+                            <input type="text" class="form-control input-lg" id="" minlength="3"
+                                   maxlength="45"
+                                   required th:field="*{makeName}">
+                            <small id="nameHelp" class="form-text text-muted">
+                                Make name must be 3-45 characters long.
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Model Modal -->
+<div id="add-model-modal" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h1 class="modal-title" id="add-model-title">Add New Make</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="add-model-form" th:action="@{/cars/add-car}" th:object="${car}" th:method="post">
+
+                    <div class="form-group">
+                        <select th:field="*{make}" class="form-control" id="style">
+                            <!--<option th:text="NONE" th:value="0">-&#45;&#45; Select -&#45;&#45;</option>-->
+                            <option th:each="make : ${allMakes}"
+                                    th:value="${make.getMakeID()}"
+                                    th:text="${make.getMakeName()}">Wireframe
+                            </option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label">
+                            Name</label>
+                        <div>
+                            <input type="text" class="form-control input-lg" minlength="3"
+                                   maxlength="45"
+                                   required th:field="*{makeName}">
+                            <small id="nameModelHelp" class="form-text text-muted">
+                                Model name must be 3-45 characters long.
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 <footer th:replace="fragments/components :: footer"></footer>
 <div th:replace="fragments/components :: js"></div>
