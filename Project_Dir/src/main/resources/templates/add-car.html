@@ -5,9 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Car</title>
+    <div th:replace="fragments/components :: head"></div>
 </head>
 <body>
-
+<header th:replace="fragments/components :: navbar"></header>
 <p>
 <h2>Add New Car</h2>
 </p>
@@ -51,6 +52,7 @@
 </form>
 
 
-
+<footer th:replace="fragments/components :: footer"></footer>
+<div th:replace="fragments/components :: js"></div>
 </body>
 </html>

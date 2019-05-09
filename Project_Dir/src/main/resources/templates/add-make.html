@@ -5,9 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Add new Make</title>
+    <div th:replace="fragments/components :: head"></div>
 </head>
 <body>
-
+<header th:replace="fragments/components :: navbar"></header>
 <p>
 <h2>Add New Make</h2>
 </p>
@@ -27,6 +28,7 @@
         </tr>
     </table>
 </form>
-
+<footer th:replace="fragments/components :: footer"></footer>
+<div th:replace="fragments/components :: js"></div>
 </body>
 </html>
