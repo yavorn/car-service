@@ -226,3 +226,49 @@ footer p {
 #pdf{
     margin-top: 10px;
 }
+
+.login-button{
+    background-color: #948F8F;
+    border: none;
+    border-radius: 12px;
+    color: #000;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+}
+
+.login-button{
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+
+.login-button:hover{
+    background-color: #000;
+    color: silver;
+    border: 5px silver;
+}
+
+.change-pass-button{
+    background-color: silver;
+    border: none;
+    border-radius: 12px;
+    color: #000;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+}
+
+.change-pass-button{
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+
+.change-pass-button:hover{
+    background-color: silver;
+    color: black;
+    border: 5px silver;
+}

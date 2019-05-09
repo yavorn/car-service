@@ -1,4 +1,6 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <!-- HEAD Fragment (Style sheets) -->
 <div th:fragment="head">
@@ -13,9 +15,9 @@
 
 
 <!-- Navbar Fragment -->
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" th:fragment="navbar"
-     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <a class="navbar-brand" th:href="@{/admin-portal}">Car Service</a>
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" th:fragment="navbar">
+    <a sec:authorize="hasRole('ROLE_ADMIN')" class="navbar-brand" th:href="@{/admin-portal}">Car Service</a>
+    <a sec:authorize="hasRole('ROLE_USER')" class="navbar-brand" th:href="@{/}">Car Service</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -23,17 +25,17 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
 
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/customers' ? 'active':''}">
+            <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/customers' ? 'active':''}">
                 <a class="nav-link" th:href="@{/customers}">Customers</a>
             </li>
-            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/cars' ? 'active':''}">
+            <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/cars' ? 'active':''}">
                 <a class="nav-link" th:href="@{/cars}">Cars</a>
             </li>
-            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/procedures' ? 'active':''}">
+            <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/procedures' ? 'active':''}">
                 <a class="nav-link" th:href="@{/procedures}">Procedures</a>
             </li>
 
-            <li class="nav-item navbar-hidden"
+            <li  class="nav-item navbar-hidden"
                 th:classappend="${#httpServletRequest.getRequestURI() == '/procedures' ? 'navbar-visible':''}">
                 <a class="nav-link btn btn-outline-secondary" onclick="addProcedure()">Add Procedure</a>
             </li>
