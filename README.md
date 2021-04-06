@@ -1,7 +1,4 @@
 
-[![N|Solid](https://i2.wp.com/www.kaldata.com/wp-content/uploads/2018/06/Telerik_Academy_Logo2x.png)](https://telerikacademy.com)
-
-[![N|Solid](https://fitsmallbusiness.com/wp-content/uploads/2018/11/Paysafe-logo.gif)](https://www.paysafe.com/na-en/)
 # Car service | Final Project Assignment
 
 ## General Project Requirements
